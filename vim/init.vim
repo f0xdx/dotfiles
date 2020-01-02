@@ -100,14 +100,14 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
 
     " code folding settings
     set foldmethod=syntax " fold based on syntax
-    set foldlevelstart=99
     set foldnestmax=10    " deepest fold is 10 levels
-    set nofoldenable      " fold by default (no folde: nofoldenable)
+    set foldenable        " fold by default (no folde: nofoldenable)
+    set foldlevelstart=1
     set foldlevel=1
 
     " editing settings for this file
     augroup initvim
-      autocmd BufRead init.vim,.vimrc set foldmethod=marker
+      autocmd BufRead init.vim,.vimrc set foldmethod=marker foldlevel=0
       autocmd BufWritePost init.vim,.vimrc source %
     augroup END
 
