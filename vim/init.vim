@@ -43,7 +43,7 @@
 
 " plugins
 
-call plug#begin('~/AppData/Local/nvim/plugged')
+call plug#begin(expand(stdpath('config') . '/plugged'))
 
   " {{{ basic config
     Plug 'tpope/vim-sensible' " sensible default settings for nvim
