@@ -238,6 +238,7 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
   " }}}
   
   " TODO improve fzf configuration similarly to https://github.com/nicknisi/dotfiles/blob/master/config/nvim/init.vim
+  " TODO integrate bat preview into fzf results
   " TODO check whether to replace gitgutter w/ https://github.com/mhinz/vim-signify
   " TODO neomake vs ALE for linting https://github.com/neomake/neomake
   " TODO check whether to use multiple cursors: Plug 'terryma/vim-multiple-cursors'
