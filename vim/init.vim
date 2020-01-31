@@ -243,12 +243,17 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
   " TODO neomake vs ALE for linting https://github.com/neomake/neomake
   " TODO check whether to use multiple cursors: Plug 'terryma/vim-multiple-cursors'
   " TODO check indent guides: Plug 'nathanaelkane/vim-indent-guides'
-  " TODO rust based lsp client: https://github.com/autozimu/LanguageClient-neovim
-  " TODO asynchronous completion in neovim: https://github.com/ncm2/ncm2
   " TODO check inspiration at
   "  * https://github.com/zenbro/dotfiles/blob/master/.nvimrc
   "  * https://github.com/nicknisi/dotfiles/blob/master/config/nvim/init.vim
   
+  " TODO some suggestions on how to provide: https://jacky.wtf/weblog/language-client-and-neovim/
+  " TODO rust based lsp client: https://github.com/autozimu/LanguageClient-neovim
+  " TODO asynchronous completion in neovim: https://github.com/ncm2/ncm2
+  " {{{ code completion
+  " TODO complete code completion
+  " }}}
+  "
   " {{{ keybindings
     let mapleader="\<space>"
     nnoremap <silent> <leader>c :Commands<Cr>
