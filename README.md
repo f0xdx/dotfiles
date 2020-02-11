@@ -2,7 +2,9 @@
 
 Personal configuration to be used on different devices. These are base settings
 for various tools in my personal workflow. Feel free to use, adapt or laugh at
-them. Most of their contents are not my own creative work, but stem from
+them.
+
+Most of their contents are not my own creative work, but stem from
 various sources, in fact far to many for me to recall. All I can do to thank
 those anonymous authors which have put time and effort into figuring out what
 works and what doesn't, is to contribute my patchwork back to the community and
@@ -27,19 +29,23 @@ These are my basic parameters:
 
 Tools supporting my daily work:
 
- * neovim and vscode
+ * neovim and/or vscode
  * alacritty, zsh and powershell ... yep, it's way cooler than we linux nerds
    care to admit
- * fzf, ripgrep, bat and exa (maybe lsd or broot might replace exa in the not
-   so far future)
+ * fzf (TODO try [skim](https://github.com/lotabout/skim)), ripgrep, bat and broot
 
 
 ## Requirements
 
-TBD (nerdfonts, powershell, zsh installed, rustup installed)
-
+ * FuraCode NF
+ * zsh on Linux, powershell on windows
+ * rustup and cargo (?) 
 
 ## Installation
+
+### Linux
+
+TBD
 
 ### Windows
 
@@ -57,11 +63,16 @@ elevated command line (admin):
 Set-ExecutionPolicy -Scope Process RemoteSigned; .\setup.ps1
 ```
 
+This will create symlinks to the files contained and versioned in this repo and
+backup your previous configuration files (if any).
+
+**Note** For a complete experience, I recommend to check out the awesome
+[oh-my-posh](https://github.com/JanDeDobbeleer/oh-my-posh) project. 
+
 ## Future Work 
 
  * [ ] add script and installation instructions for linux
  * [ ] adapt scripts to prepare environment, point out missing programs
    initiate installs etc.
- * [ ] configure [Alacritty](https://github.com/jwilm/alacritty)
  * [ ] configure tmux / vim for tmux
- * [ ] configure zsh / oh-my-zsh and oh-my-posh
+ * [ ] configure zsh / oh-my-zsh
