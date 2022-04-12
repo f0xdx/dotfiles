@@ -8,6 +8,11 @@
 "  * 256 color terminal 
 "  * nerdfont, e.g., Fira Code NF or Hack NF
 "  * neovim
+"  * fzf 
+"  * lf
+"  * ripgrep (otional)
+"  * bat (otional)
+"  * delta (otional)
 
 " {{{ platform config
   if (has('nvim'))
@@ -48,8 +53,8 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
   " {{{ basic config
     Plug 'tpope/vim-sensible' " sensible default settings for nvim
 
-    set textwidth=79
-    set colorcolumn=80
+    set textwidth=80
+    set colorcolumn=81
     set encoding=utf8
     set spelllang=en,de
     set splitright
@@ -89,7 +94,7 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
     set signcolumn=yes
     set shortmess+=c
     set formatoptions+=j      " delete comment character when joining commented lines
-    " set shell=$SHELL
+    set shell=$SHELL
 
     " tabs
     set tabstop=2     " the visible width of tabs
@@ -112,7 +117,7 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
     augroup END
 
     " toggle invisible characters
-    set list
+    " set list
     set listchars=tab:→\ ,eol:¬,trail:⋅,extends:❯,precedes:❮
     set showbreak=↪
 
@@ -127,12 +132,14 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
       " Disables number lines on terminal buffers
       autocmd TermOpen * :set nonumber norelativenumber
     augroup END
+
+    autocmd BufNewFile,BufRead *.go setlocal ts=2 sw=2 sts=2 noexpandtab
   " }}}
 
   " {{{ dev goodies (surround, repeat, commentary etc.)
     Plug 'junegunn/vim-easy-align' " align text visually
     Plug 'tpope/vim-repeat'        " repeat plugin actions with .
-    Plug 'tpope/vim-commentary'    " easy commenting motions
+    Plug 'b3nj5m1n/kommentary'     " toggle comments (gcc and friends), alternativ: Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-ragtag'        " endings for html, xml, etc. - ehances surround
     Plug 'tpope/vim-surround'      " surround motions with ( etc.
     Plug 'tpope/vim-endwise'       " add end, endif, etc. automatically
@@ -145,49 +152,13 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
 
   " {{{ git (fugitive)
     Plug 'tpope/vim-fugitive'      " git support, alternative: https://github.com/jreybert/vimagit
-    Plug 'airblade/vim-gitgutter'  " show status in gutter, alternative: vim-signify
   " }}}
 
-  " {{{ easy access (nerdtree, startify, etc.)
-    Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
-    Plug 'Xuyuanp/nerdtree-git-plugin' " git on a nerdtree
-    Plug 'mhinz/vim-startify'          " add a nice startup screen for fast navigation
+  " {{{ easy access (netrw)
+    Plug 'tpope/vim-vinegar'        " improve netrw (file explorer) setup
 
-    " nerdtree config
-    augroup nerdtree
-      autocmd!
-      autocmd FileType nerdtree setlocal nolist       " turn off whitespace characters
-      autocmd FileType nerdtree setlocal nocursorline " turn off line highlighting for performance
-    augroup END
-
-    let NERDTreeShowHidden=1
-    nmap <silent> <A-1> :NERDTreeToggle<cr>
-
-    " startify config
-    let g:startify_files_number = 5
-    let g:startify_change_to_dir = 0
-    let g:startify_relative_path = 1
-    let g:startify_use_env = 1
-    let g:startify_session_dir = expand(stdpath('data') . '/sessions/')
-    let g:startify_lists = [
-        \  { 'type': 'dir',       'header': [ 'Files '. getcwd() ] },
-        \  { 'type': 'sessions',  'header': [ 'Sessions' ]       },
-        \  { 'type': 'bookmarks', 'header': [ 'Bookmarks' ]      },
-        \  { 'type': 'commands',  'header': [ 'Commands' ]       },
-        \ ]
-
-    let g:startify_commands = [
-        \   { 'up': [ 'Update Plugins', ':PlugUpdate' ] },
-        \   { 'ug': [ 'Upgrade Plugin Manager', ':PlugUpgrade' ] },
-        \ ]
-
-    let g:startify_bookmarks = [
-        \ { 'c': expand($MYVIMRC)},
-        \ { 'g': '~/.gitconfig' },
-        \ ]
-        " \ { 'c': '~/.config/nvim/init.vim' },
-
-    autocmd User Startified setlocal cursorline
+    let g:netrw_liststyle = 3       " use tree view
+    let g:netrw_browse_split = 4    " open files in previous window
   " }}}
 
   " {{{ markdown support
@@ -235,27 +206,36 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
     let g:fzf_buffers_jump = 1
 
     let $FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+  " TODO improve fzf configuration similarly to https://github.com/nicknisi/dotfiles/blob/master/config/nvim/init.vim
   " }}}
   
-  " TODO improve fzf configuration similarly to https://github.com/nicknisi/dotfiles/blob/master/config/nvim/init.vim
-  " TODO integrate bat preview into fzf results
-  " TODO check whether to replace gitgutter w/ https://github.com/mhinz/vim-signify
-  " TODO neomake vs ALE for linting https://github.com/neomake/neomake
+  " {{{ LSP and code completion
+    " Plug 'neovim/nvim-lspconfig'
+    " TODO add nvim-cmp https://github.com/hrsh7th/nvim-cmp
+    Plug 'neovim/nvim-lspconfig'
+    " Plug 'hrsh7th/cmp-nvim-lsp'
+    " Plug 'hrsh7th/cmp-buffer'
+    " Plug 'hrsh7th/cmp-path'
+    " Plug 'hrsh7th/cmp-cmdline'
+    " Plug 'hrsh7th/nvim-cmp'
+
+    " Plug 'hrsh7th/cmp-vsnip'
+    " Plug 'hrsh7th/vim-vsnip' 
+    " Plug 'onsails/lspkind-nvim'     " add icons showing the completion source
+    " Plug 'ray-x/lsp_signature.nvim' " display hints on function signature
+
+  " }}}
+
+  " TODO nvm-lint + configuration: https://github.com/mfussenegger/nvim-lint
   " TODO check whether to use multiple cursors: Plug 'terryma/vim-multiple-cursors'
-  " TODO check indent guides: Plug 'nathanaelkane/vim-indent-guides'
   " TODO check inspiration at
   "  * https://github.com/zenbro/dotfiles/blob/master/.nvimrc
   "  * https://github.com/nicknisi/dotfiles/blob/master/config/nvim/init.vim
   
-  " TODO some suggestions on how to provide: https://jacky.wtf/weblog/language-client-and-neovim/
-  " TODO rust based lsp client: https://github.com/autozimu/LanguageClient-neovim
-  " TODO asynchronous completion in neovim: https://github.com/ncm2/ncm2
-  " {{{ code completion
-  " TODO complete code completion
-  " }}}
   "
   " {{{ keybindings
     let mapleader="\<space>"
+    nnoremap <silent> <leader><leader> :Explore<Cr>
     nnoremap <silent> <leader>c :Commands<Cr>
     nnoremap <silent> <leader>f :Files<Cr>
     nnoremap <silent> <leader>b :Buffers<Cr>
@@ -275,24 +255,173 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
   "}}}
   
   " {{{ appearance (onedark, airline, devicons)
-    Plug 'joshdick/onedark.vim'    " onedark, what else?
+    Plug 'chriskempson/base16-vim'    " base 16 themes
     Plug 'vim-airline/vim-airline' " airline for overview
     Plug 'vim-airline/vim-airline-themes'
     Plug 'ryanoasis/vim-devicons'  " add icons to different filetypes
+    Plug 'edkolev/tmuxline.vim'
 
     " color scheme config
-    let g:airline_theme='onedark'
-    let g:onedark_hide_endofbuffer=1
-    let g:onedark_terminal_italics=1
+    let g:airline_theme='base16'
+    " let g:onedark_hide_endofbuffer=1
+    " let g:onedark_terminal_italics=1
     let g:airline_powerline_fonts = 1
 
-    let g:WebDevIconsOS = 'Linux'
+    let g:WebDevIconsOS = 'Darwin'
     let g:WebDevIconsUnicodeDecorateFolderNodes = 1
     let g:DevIconsEnableFoldersOpenClose = 1
     let g:DevIconsEnableFolderExtensionPatternMatching = 1
 
   " }}}
+  " {{{ Other
+  Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+  " }}}
 call plug#end()
 
 " must be called after plugin load
-colorscheme onedark
+colorscheme base16-github
+
+" {{{ code completion (Part II)
+set completeopt=menu,menuone,noselect
+
+lua <<EOF
+
+  -- LSP setup
+  local lspconfig = require'lspconfig'
+  local util = require 'lspconfig/util'
+
+  -- Mappings.
+  -- See `:help vim.diagnostic.*` for documentation on any of the below functions
+  local opts = { noremap=true, silent=true }
+  vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+  -- Use an on_attach function to only map the following keys
+  -- after the language server attaches to the current buffer
+  local on_attach = function(client, bufnr)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- Mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xwa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xwr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xD', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xrn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  end
+
+  -- Use a loop to conveniently call 'setup' on multiple servers and
+  -- map buffer local keybindings when the language server attaches
+  local servers = { 'elmls', 'gopls' }
+  for _, lsp in pairs(servers) do
+    require('lspconfig')[lsp].setup {
+      on_attach = on_attach,
+      flags = {
+        -- This will be the default in neovim 0.7+
+        debounce_text_changes = 150,
+      }
+    }
+  end
+
+  -- setup gopls
+  lspconfig.gopls.setup{
+    on_attach = on_attach,
+    cmd = {"gopls", "serve"},
+    filetypes = {"go", "gomod"},
+    root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+    settings = {
+      gopls = {
+        analyses = {
+          unusedparams = true,
+        },
+        staticcheck = true,
+      },
+    },
+    flags = {
+      -- This will be the default in neovim 0.7+
+      debounce_text_changes = 150,
+    }
+  }
+
+  -- Setup nvim-cmp.
+-- local cmp = require'cmp'
+-- local lspkind = require('lspkind')
+-- require "lsp_signature".setup(cfg)
+--
+-- cmp.setup({
+--   snippet = {
+--     -- REQUIRED - you must specify a snippet engine
+--     expand = function(args)
+--       vim.fn["vsnip#anonymous"](args.body) 
+--     end,
+--   },
+--   mapping = {
+--     ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+--     ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+--     ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+--     ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+--     ['<C-e>'] = cmp.mapping({
+--       i = cmp.mapping.abort(),
+--       c = cmp.mapping.close(),
+--     }),
+--     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+--   },
+--   sources = cmp.config.sources({
+--     { name = 'nvim_lsp' },
+--     { name = 'vsnip' },
+--   }, {
+--     { name = 'buffer' },
+--   }),
+--   formatting = {
+--     format = lspkind.cmp_format({
+--       mode = 'symbol_text', -- show only symbol annotations
+--       maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+--     })
+--   }
+-- })
+--
+-- -- Set configuration for specific filetype.
+-- cmp.setup.filetype('gitcommit', {
+--   sources = cmp.config.sources({
+--     { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+--   }, {
+--     { name = 'buffer' },
+--   })
+-- })
+--
+-- -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+-- cmp.setup.cmdline('/', {
+--   sources = {
+--     { name = 'buffer' }
+--   }
+-- })
+--
+-- -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+-- cmp.setup.cmdline(':', {
+--   sources = cmp.config.sources({
+--     { name = 'path' }
+--   }, {
+--     { name = 'cmdline' }
+--   })
+-- })
+--
+-- -- Setup lspconfig.
+-- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+-- require('lspconfig')['elmls'].setup {
+--   capabilities = capabilities
+-- }
+EOF
+
+" }}}
