@@ -136,39 +136,42 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
     autocmd BufNewFile,BufRead *.go setlocal ts=2 sw=2 sts=2 noexpandtab
   " }}}
 
-  " {{{ dev goodies (surround, repeat, commentary etc.)
+  " {{{ added comfort (surround, repeat, commentary, git etc.)
     Plug 'junegunn/vim-easy-align' " align text visually
     Plug 'tpope/vim-repeat'        " repeat plugin actions with .
-    Plug 'b3nj5m1n/kommentary'     " toggle comments (gcc and friends), alternativ: Plug 'tpope/vim-commentary'
+    Plug 'tpope/vim-commentary'    " toggle comments (gcc and friends)
     Plug 'tpope/vim-ragtag'        " endings for html, xml, etc. - ehances surround
     Plug 'tpope/vim-surround'      " surround motions with ( etc.
     Plug 'tpope/vim-endwise'       " add end, endif, etc. automatically
+    Plug 'tpope/vim-sleuth'        " detect indentation config etc. automatically
     Plug 'jiangmiao/auto-pairs'    " never forget a closing parenthesis
+
+    Plug 'voldikss/vim-floaterm'   " floating terminal windows
+                                   " netrw fine tuning
+    Plug 'tpope/vim-vinegar'       " improve netrw (file explorer) setup
+
+    let g:netrw_liststyle = 3      " use tree view
+    let g:netrw_browse_split = 4   " open files in previous window
 
     let g:AutoPairsMapSpace=0
     xmap ga <Plug>(EasyAlign)
     nmap ga <Plug>(EasyAlign)
   " }}}
 
-  " {{{ git (fugitive)
-    Plug 'tpope/vim-fugitive'      " git support, alternative: https://github.com/jreybert/vimagit
-  " }}}
-
-  " {{{ easy access (netrw)
-    Plug 'tpope/vim-vinegar'        " improve netrw (file explorer) setup
-
-    let g:netrw_liststyle = 3       " use tree view
-    let g:netrw_browse_split = 4    " open files in previous window
-  " }}}
-
-  " {{{ markdown support
+  " {{{ dev setup (git, testing, etc.)
+    Plug 'skywind3000/asyncrun.vim' " async running of tasks, e.g., make and friends
+    Plug 'tpope/vim-fugitive'       " git support, alternative: https://github.com/jreybert/vimagit
+    
+    " {{{ markdown support
     Plug 'vim-pandoc/vim-pandoc'
     Plug 'vim-pandoc/vim-pandoc-syntax'
+    Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+    " }}}
+    Plug 'hashivim/vim-terraform'
   " }}}
   
   " {{{ fzf + rgrep
     Plug 'junegunn/fzf', { 'dir': expand(stdpath('config') . '/fzf/'), 'do': './install --bin' }
-    " Plug 'C:\ProgramData\chocolatey\bin\fzf.exe'
     Plug 'junegunn/fzf.vim'
 
     let g:fzf_action = {
@@ -210,32 +213,32 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
   " }}}
   
   " {{{ LSP and code completion
-    " Plug 'neovim/nvim-lspconfig'
     " TODO add nvim-cmp https://github.com/hrsh7th/nvim-cmp
     Plug 'neovim/nvim-lspconfig'
-    " Plug 'hrsh7th/cmp-nvim-lsp'
-    " Plug 'hrsh7th/cmp-buffer'
-    " Plug 'hrsh7th/cmp-path'
-    " Plug 'hrsh7th/cmp-cmdline'
-    " Plug 'hrsh7th/nvim-cmp'
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/cmp-path'
+    Plug 'hrsh7th/cmp-cmdline'
+    Plug 'hrsh7th/nvim-cmp'
 
-    " Plug 'hrsh7th/cmp-vsnip'
-    " Plug 'hrsh7th/vim-vsnip' 
-    " Plug 'onsails/lspkind-nvim'     " add icons showing the completion source
-    " Plug 'ray-x/lsp_signature.nvim' " display hints on function signature
-
+    Plug 'hrsh7th/cmp-vsnip'
+    Plug 'hrsh7th/vim-vsnip' 
+    Plug 'onsails/lspkind-nvim'     " add icons showing the completion source
+    Plug 'ray-x/lsp_signature.nvim' " display hints on function signature
+    Plug 'nanotee/sqls.nvim'        " sqls is configured with the lsp, this add relevant commands
   " }}}
 
   " TODO nvm-lint + configuration: https://github.com/mfussenegger/nvim-lint
   " TODO check whether to use multiple cursors: Plug 'terryma/vim-multiple-cursors'
   " TODO check inspiration at
   "  * https://github.com/zenbro/dotfiles/blob/master/.nvimrc
-  "  * https://github.com/nicknisi/dotfiles/blob/master/config/nvim/init.vim
-  
-  "
+  "  * https://github.com/nicknisi/dotfiles/blob/master/config/nvim/init.vim"
+  " TODO exchange the custom lsp setup we do with https://github.com/ray-x/navigator.lua
+  "      (which brings required integrations out of the box)
   " {{{ keybindings
     let mapleader="\<space>"
-    nnoremap <silent> <leader><leader> :Explore<Cr>
+    " nnoremap <silent> <leader><leader> :Explore<Cr>
+    nnoremap <silent> <leader><leader> :FloatermNew xplr<Cr>
     nnoremap <silent> <leader>c :Commands<Cr>
     nnoremap <silent> <leader>f :Files<Cr>
     nnoremap <silent> <leader>b :Buffers<Cr>
@@ -248,23 +251,21 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
     nnoremap <silent> <leader>gf :GitFiles<Cr>
     nnoremap <silent> <leader>gc :Commits<Cr>
     nnoremap <silent> <leader>gC :BCommits<Cr>
-    nnoremap <silent> <leader>" :vnew +terminal<Cr>
-    " nnoremap <silent> <leader>' :new +terminal<Cr>
-    " nnoremap <silent> <leader>' :new +terminal <Bar> exe "resize " . (winheight(0) * 2/3)<CR>
-    nnoremap <silent> <leader>' :exe (winheight(0) * 1/3). "new +terminal"<CR>
+    nnoremap <silent> <leader>" :FloatermNew<Cr>
+    " nnoremap <silent> <C-w> % :vsplit<Cr>
+    " TODO maybe something like that as well https://rafaelleru.github.io/blog/quickfix-autocomands/
+    " (toggle quickfix, location list)
   "}}}
   
-  " {{{ appearance (onedark, airline, devicons)
-    Plug 'chriskempson/base16-vim'    " base 16 themes
-    Plug 'vim-airline/vim-airline' " airline for overview
+  " {{{ appearance (base16, airline, devicons)
+    Plug 'base16-project/base16-vim' " base 16 themes
+    Plug 'vim-airline/vim-airline'   " airline for overview
     Plug 'vim-airline/vim-airline-themes'
-    Plug 'ryanoasis/vim-devicons'  " add icons to different filetypes
+    Plug 'ryanoasis/vim-devicons'    " add icons to different filetypes
     Plug 'edkolev/tmuxline.vim'
 
     " color scheme config
     let g:airline_theme='base16'
-    " let g:onedark_hide_endofbuffer=1
-    " let g:onedark_terminal_italics=1
     let g:airline_powerline_fonts = 1
 
     let g:WebDevIconsOS = 'Darwin'
@@ -273,18 +274,151 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
     let g:DevIconsEnableFolderExtensionPatternMatching = 1
 
   " }}}
+
   " {{{ Other
-  Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+    Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' } " beautiful color previews
+    Plug 'christoomey/vim-tmux-navigator'                     " work nicely with tmux C-h, C-j, C-k, C-l, C-\
+    Plug 'liuchengxu/graphviz.vim'                            " graphviz support
   " }}}
 call plug#end()
 
 " must be called after plugin load
-colorscheme base16-github
+if exists('$BASE16_THEME')
+    \ && (!exists('g:colors_name') 
+    \ || g:colors_name != 'base16-$BASE16_THEME')
+  let base16colorspace=256
+  colorscheme base16-$BASE16_THEME
+else
+  colorscheme base16-github
+" colorscheme base16-tokyo-city-terminal-dark
+endif
 
 " {{{ code completion (Part II)
 set completeopt=menu,menuone,noselect
 
 lua <<EOF
+
+  -- Setup nvim-cmp.
+  local cmp = require'cmp'
+  local lspkind = require('lspkind')
+  require "lsp_signature".setup({
+    handler_opts = {
+      border = "none"   -- double, rounded, single, shadow, none
+    }
+  })
+  
+  local has_words_before = function()
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  end
+
+  local feedkey = function(key, mode)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+  end
+
+
+  cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) 
+      end,
+    },
+
+    mapping = {
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      ["<Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif vim.fn["vsnip#available"](1) == 1 then
+          feedkey("<Plug>(vsnip-expand-or-jump)", "")
+        elseif has_words_before() then
+          cmp.complete()
+        else
+          fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+        end
+      end, { "i", "s" }),
+      ["<S-Tab>"] = cmp.mapping(function()
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+          feedkey("<Plug>(vsnip-jump-prev)", "")
+        end
+      end, { "i", "s" }),
+    },
+    -- mapping = {
+    --   ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    --   ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    --   ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+    --   ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+    --   ['<C-e>'] = cmp.mapping({
+    --     i = cmp.mapping.abort(),
+    --     c = cmp.mapping.close(),
+    --   }),
+    --   ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    -- },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'vsnip' },
+    }, {
+      { name = 'buffer' },
+    }),
+    formatting = {
+      format = lspkind.cmp_format({
+        mode = 'symbol_text', -- show only symbol annotations
+        maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+      })
+    },
+    completion = {
+      autocomplete = false -- disable auto-completion
+    }
+  })
+  
+  -- Set configuration for specific filetype.
+  cmp.setup.filetype('gitcommit', {
+    sources = cmp.config.sources({
+      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+  
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+  
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+  _G.vimrc = _G.vimrc or {}
+  _G.vimrc.cmp = _G.vimrc.cmp or {}
+  _G.vimrc.cmp.complete = function()
+    cmp.complete()
+  end
+
+  --vim.cmd([[
+  --  inoremap <C-x><C-o> <Cmd>lua vimrc.cmp.complete()<CR>
+  --]])
+  vim.cmd([[
+    inoremap <C-space> <Cmd>lua vimrc.cmp.complete()<CR>
+  ]])
+  
+  -- Setup lspconfig.
+  local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+  -- require('lspconfig')['elmls'].setup {
+  --   capabilities = capabilities
+  -- }
 
   -- LSP setup
   local lspconfig = require'lspconfig'
@@ -293,10 +427,13 @@ lua <<EOF
   -- Mappings.
   -- See `:help vim.diagnostic.*` for documentation on any of the below functions
   local opts = { noremap=true, silent=true }
-  vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+  vim.api.nvim_set_keymap('n', 'gP', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  vim.api.nvim_set_keymap('n', 'gp', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  vim.api.nvim_set_keymap('n', '<space>p', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+  vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
+  vim.api.nvim_set_keymap('n', '<space>P', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  -- need to set workspace diagnostics, but how?
+  -- vim.api.nvim_set_keymap('n', '<space>P', '<cmd>lua vim.diagnostic.setloclist({workspace = true})<CR>', opts)
 
   -- Use an on_attach function to only map the following keys
   -- after the language server attaches to the current buffer
@@ -306,122 +443,96 @@ lua <<EOF
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xwa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xwr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xD', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xrn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gvD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gvd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gvr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gvi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gvv', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gvV', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>s', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>d', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '=', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xa', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>xf', '<cmd>lua vim.lsp.buf.format()<CR>', opts)
   end
 
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
-  local servers = { 'elmls', 'gopls' }
+  -- requires the following language servers:
+  -- npm i -g bash-language-server
+  local servers = { 'elmls', 'gopls', 'terraformls', 'tsserver', 'jsonls', 'eslint', 'html', 'yamlls', 'bashls' }
   for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup {
       on_attach = on_attach,
       flags = {
         -- This will be the default in neovim 0.7+
         debounce_text_changes = 150,
-      }
+      },
+      capabilities = capabilities
     }
   end
 
   -- setup gopls
-  lspconfig.gopls.setup{
+  require('lspconfig').gopls.setup{
     on_attach = on_attach,
-    cmd = {"gopls", "serve"},
-    filetypes = {"go", "gomod"},
-    root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+    cmd = {'gopls', 'serve'},
+    capabilities = capabilities,
+    filetypes = {'go', 'gomod', 'gowork', 'gotmpl'},
+    root_dir = util.root_pattern('go.work', 'go.mod', '.git'),
     settings = {
       gopls = {
+        experimentalPostfixCompletions = true,
         analyses = {
           unusedparams = true,
+          shadow = true,
         },
         staticcheck = true,
+        gofumpt = true,
+        env = {GOFLAGS="-tags=it"},
       },
     },
     flags = {
       -- This will be the default in neovim 0.7+
       debounce_text_changes = 150,
+    },
+    init_options = {
+      usePlaceholders = true,
     }
   }
 
-  -- Setup nvim-cmp.
--- local cmp = require'cmp'
--- local lspkind = require('lspkind')
--- require "lsp_signature".setup(cfg)
---
--- cmp.setup({
---   snippet = {
---     -- REQUIRED - you must specify a snippet engine
---     expand = function(args)
---       vim.fn["vsnip#anonymous"](args.body) 
---     end,
---   },
---   mapping = {
---     ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
---     ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
---     ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
---     ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
---     ['<C-e>'] = cmp.mapping({
---       i = cmp.mapping.abort(),
---       c = cmp.mapping.close(),
---     }),
---     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
---   },
---   sources = cmp.config.sources({
---     { name = 'nvim_lsp' },
---     { name = 'vsnip' },
---   }, {
---     { name = 'buffer' },
---   }),
---   formatting = {
---     format = lspkind.cmp_format({
---       mode = 'symbol_text', -- show only symbol annotations
---       maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
---     })
---   }
--- })
---
--- -- Set configuration for specific filetype.
--- cmp.setup.filetype('gitcommit', {
---   sources = cmp.config.sources({
---     { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
---   }, {
---     { name = 'buffer' },
---   })
--- })
---
--- -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
--- cmp.setup.cmdline('/', {
---   sources = {
---     { name = 'buffer' }
---   }
--- })
---
--- -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
--- cmp.setup.cmdline(':', {
---   sources = cmp.config.sources({
---     { name = 'path' }
---   }, {
---     { name = 'cmdline' }
---   })
--- })
---
--- -- Setup lspconfig.
--- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
--- -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
--- require('lspconfig')['elmls'].setup {
---   capabilities = capabilities
--- }
+  -- the sqls language server is only setup if/when there is a DB_CONNECTION
+  -- configured
+  -- if os.getenv('DATABASE_URL') then
+  --   require('lspconfig').sqls.setup{
+  --     on_attach = function(client, bufnr)
+  --       require('sqls').on_attach(client, bufnr)
+  --       -- check whether this is not overriding some keybindings
+  --       on_attach(client, bufnr)
+  --     end,
+  --     capabilities = capabilities,
+  --     flags = {
+  --       -- This will be the default in neovim 0.7+
+  --       debounce_text_changes = 150,
+  --     },
+  --     settings = {
+  --       sqls = {
+  --         connections = {
+  --           {
+  --             driver = 'postgresql',
+  --             dataSourceName = os.getenv('DATABASE_URL')
+  --           },
+  --         },
+  --       },
+  --     },
+  --   }
+  -- end
+
+
 EOF
+" TODO rework the key mappings for the nvim-lspconfig setup above - the current
+" mappings are hardly usable and require tweaking
 
 " }}}
