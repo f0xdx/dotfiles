@@ -1,0 +1,17 @@
+set editing-mode vi
+# set keymap vi-command
+
+# cycle through suggestions
+set colored-completion-prefix    on
+set colored-stats                on
+set menu-complete-display-prefix on
+set show-all-if-ambiguous        on
+set completion-ignore-case       on
+# set show-all-if-unmodified on
+
+# TAB: menu-complete
+"\t":   menu-complete
+"\e[Z": menu-complete-backward
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
