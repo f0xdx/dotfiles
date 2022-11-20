@@ -24,12 +24,6 @@
     set mouse=a
   endif
 
-  " TODO fix the cursor mess on windows terminal
-  " switch cursor to line when in insert mode, and block when not
-  " set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-    " \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-    " \,sm:block-blinkwait175-blinkoff150-blinkon175
-
   set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors
   if &term =~ '256color'
     " disable background color erase
@@ -235,6 +229,7 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
   "  * https://github.com/nicknisi/dotfiles/blob/master/config/nvim/init.vim"
   " TODO exchange the custom lsp setup we do with https://github.com/ray-x/navigator.lua
   "      (which brings required integrations out of the box)
+  
   " {{{ keybindings
     let mapleader="\<space>"
     " nnoremap <silent> <leader><leader> :Explore<Cr>
@@ -252,7 +247,8 @@ call plug#begin(expand(stdpath('config') . '/plugged'))
     nnoremap <silent> <leader>gc :Commits<Cr>
     nnoremap <silent> <leader>gC :BCommits<Cr>
     nnoremap <silent> <leader>" :FloatermNew<Cr>
-    " nnoremap <silent> <C-w> % :vsplit<Cr>
+    nnoremap <silent> <C-w>% :vsplit<Cr>
+    nnoremap <silent> <C-w>" :split<Cr>
     " TODO maybe something like that as well https://rafaelleru.github.io/blog/quickfix-autocomands/
     " (toggle quickfix, location list)
   "}}}
@@ -439,7 +435,8 @@ lua <<EOF
   -- after the language server attaches to the current buffer
   local on_attach = function(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- omnifunc should be disabled when used with nvim-cmp
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -467,10 +464,6 @@ lua <<EOF
   for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup {
       on_attach = on_attach,
-      flags = {
-        -- This will be the default in neovim 0.7+
-        debounce_text_changes = 150,
-      },
       capabilities = capabilities
     }
   end
