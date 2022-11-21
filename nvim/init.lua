@@ -17,3 +17,5 @@
 -- TODO fzf-lua https://github.com/ibhagwan/fzf-lua
 -- TODO mason for lsp management https://github.com/williamboman/mason.nvim
 -- TODO lua line https://github.com/nvim-lualine/lualine.nvim
+
+require "user.options"
