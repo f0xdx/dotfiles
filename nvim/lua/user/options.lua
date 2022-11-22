@@ -72,6 +72,7 @@ vim.cmd [[set iskeyword+=-]]
 -- vim.opt.foldlevel=1
 
 -- netrw setup
+-- also take a look at: https://thevaluable.dev/vim-browsing-remote-netrw/
 vim.g.netrw_banner = 0
 vim.g.netrw_liststyle = 3
 vim.g.netrw_browse_split = 4

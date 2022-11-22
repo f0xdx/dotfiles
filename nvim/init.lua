@@ -1,5 +1,5 @@
 -- TODO setup packer for plugin management
--- TODO basic config
+-- TODO theming (base16, defined by shell)
 --
 --  helpers:  https://www.youtube.com/watch?v=ppMX4LHIuy4&t=475s (overview)
 --            https://www.youtube.com/watch?v=ctH-a-1eUME&list=PLhoH5vyxr6Qq41NFL4GvhFp-WLd5xzIzZ&index=1 (course)
@@ -17,6 +17,14 @@
 -- TODO fzf-lua https://github.com/ibhagwan/fzf-lua
 -- TODO mason for lsp management https://github.com/williamboman/mason.nvim
 -- TODO lua line https://github.com/nvim-lualine/lualine.nvim
+--
+-- resources
+--
+-- guided: https://www.youtube.com/playlist?list=PLhoH5vyxr6Qq41NFL4GvhFp-WLd5xzIzZ
+-- assorted: https://www.youtube.com/@teej_dv/featured
 
+-- TODO autocmd for terminalw/o linenumbers, correct size etc.
+-- https://www.youtube.com/watch?v=HR1dKKrOmDs
 require "user.options"
 require "user.keymaps"
+require "user.plugins"
