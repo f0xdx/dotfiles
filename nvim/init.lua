@@ -19,3 +19,4 @@
 -- TODO lua line https://github.com/nvim-lualine/lualine.nvim
 
 require "user.options"
+require "user.keymaps"

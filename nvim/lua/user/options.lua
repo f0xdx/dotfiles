@@ -1,5 +1,4 @@
 -- :help options
---
 
 local options = {
   textwidth=80,                            -- default 80 characters wide text rows
@@ -72,3 +71,7 @@ vim.cmd [[set iskeyword+=-]]
 -- vim.opt.foldlevelstart = 1
 -- vim.opt.foldlevel=1
 
+-- netrw setup
+vim.g.netrw_banner = 0
+vim.g.netrw_liststyle = 3
+vim.g.netrw_browse_split = 4
