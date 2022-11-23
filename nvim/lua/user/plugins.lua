@@ -41,6 +41,8 @@ packer.init {
 return packer.startup(function(use)
   use "wbthomason/packer.nvim" -- Have packer manage itself
 
+  use "RRethy/nvim-base16" -- treesitter/lsp compatible base16 themes
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
