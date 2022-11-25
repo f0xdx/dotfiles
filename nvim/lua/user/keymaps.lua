@@ -41,6 +41,10 @@ keymap("n", "<leader>e", ":Lex 30<cr>", opts)
 keymap("n", "<S-l>", ":bnext<CR>", opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
 
+-- easily remove highlights
+keymap("n", "<Esc><Esc>", ":nohls<CR>", opts)
+
+
 
 -- Insert --
 
