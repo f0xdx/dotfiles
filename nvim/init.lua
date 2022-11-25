@@ -6,18 +6,6 @@
 --            https://www.youtube.com/watch?v=HR1dKKrOmDs
 --
 --------------------------------------------------------------------------------
--- TODO FZF
--- 
--- Currently I tend to prefer the nvim-fzf* route, just because this is more
--- customiseable wrt my workflow.
---
--- Options:
---  - nvim-fzf https://github.com/vijaymarupudi/nvim-fzf w/ either
---    - fzf-lua https://github.com/ibhagwan/fzf-lua or
---    - nvim-fzf-commands https://github.com/vijaymarupudi/nvim-fzf-commands
---  - fzf-vim https://github.com/junegunn/fzf.vim - default but vimscript only
---
---------------------------------------------------------------------------------
 -- TODO Integration
 -- - create terminal with correct size etc
 -- - toggle terminal window keeping term open
@@ -69,3 +57,10 @@ require "user.keymaps"
 require "user.plugins"
 require "user.colorscheme"
 require "user.term"
+
+-- autocommand for syncing packer on any changes to the plugins file
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = { "plugins.lua" },
+  group = vim.api.nvim_create_augroup("packer_user_config", { clear = true }),
+  command = "source <afile> | PackerSync",
+})
