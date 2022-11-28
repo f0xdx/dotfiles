@@ -4,13 +4,12 @@ local opts = { noremap = true, silent = true }
 
 vim.g.fzf_buffers_jump = 1  -- jump to existin buffer if possible
 vim.g.fzf_history_dir = fn.expand(fn.stdpath("data") .. "/fzf-history/") -- store history here
+-- vim.g.fzf_layout = { down = '40%' } -- no pop up
 
-keymap("n", "<leader>f", ":Files<Cr>", opts)
-keymap("n", "<leader>b", ":Buffers<Cr>", opts)
-keymap("n", "<leader>r", ":Rg<Cr>", opts)
-keymap("n", "<leader>l", ":Lines<Cr>", opts)
-keymap("n", "<leader>L", ":BLines<Cr>", opts)
-keymap("n", "<leader>m", ":Marks<Cr>", opts)
+keymap("n", "<leader>ff", ":Files<Cr>", opts)
+keymap("n", "<leader>fb", ":Buffers<Cr>", opts)
+keymap("n", "<leader>fr", ":Rg<Cr>", opts)
+keymap("n", "<leader>fm", ":Marks<Cr>", opts)
 
 -- TODO neither of those seems to work - we need to somehow get the colors right
 vim.g.fzf_colors = {

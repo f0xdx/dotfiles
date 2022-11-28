@@ -40,6 +40,7 @@ local options = {
   title = true,                            -- set terminal title
   showmatch = true,                        -- show matching braces if visible
   mat = 2,                                 -- tenths of a second to blink when showing matching brace (showmatch)
+  laststatus = 3                           -- show global status line only (default = 2)
 }
 
 -- optional settings

@@ -11,6 +11,20 @@
 -- - toggle terminal window keeping term open
 --
 --------------------------------------------------------------------------------
+-- TODO FZF
+--
+-- current version uses the old fzf.vim plugin which is written mostly in
+-- synchronouse vim script (color configuration doesn't really work for the
+-- external previewer either). We need to replace this with something
+-- easier / faster, preview for external files not required (rg and buffers
+-- would be good)
+--
+-- Options
+--  - fzy with custom integration (like: https://www.chrisdeluca.me/article/diy-neovim-fzy-search/ )
+--    or fzy-nvim https://github.com/mfussenegger/nvim-fzy
+--  - telescope with fzy native (really?)
+--  - https://github.com/vijaymarupudi/nvim-fzf (with hand rolled commands)
+--------------------------------------------------------------------------------
 -- TODO LSP
 --
 -- Options:
@@ -57,6 +71,7 @@ require "user.keymaps"
 require "user.plugins"
 require "user.colorscheme"
 require "user.term"
+require "user.statusline"
 
 -- autocommand for syncing packer on any changes to the plugins file
 vim.api.nvim_create_autocmd("BufWritePost", {

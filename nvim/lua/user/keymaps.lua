@@ -45,11 +45,11 @@ keymap("n", "<S-h>", ":bprevious<CR>", opts)
 keymap("n", "<Esc><Esc>", ":nohls<CR>", opts)
 
 
-
 -- Insert --
 
 -- press jk fast to exit
 keymap("i", "jk", "<ESC>", opts)
+keymap("i", "<C-Space>", "<C-x><C-o>", opts)
 
 
 -- Visual --

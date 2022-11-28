@@ -13,6 +13,7 @@ end
 local packer_bootstrap = ensure_packer()
 
 
+
 -- check minimal required / not required
 local minimal =  os.getenv("MINIMAL") ~= nil and os.getenv("MINIMAL") ~= ""
 
@@ -22,10 +23,7 @@ return require("packer").startup(function(use)
   use "wbthomason/packer.nvim" -- manages itself
   use "RRethy/nvim-base16"     -- treesitter/lsp compatible base16 themes
 
-
   if not minimal then
-    vim.notify("using full featured mode")
-
     -- fzf
     use {
       "junegunn/fzf",
@@ -38,6 +36,10 @@ return require("packer").startup(function(use)
     }
 
     -- lsp
+    use {
+      "neovim/nvim-lspconfig",
+      config = function() require "user.lsp" end,
+    }
 
     -- treesitter
   end
