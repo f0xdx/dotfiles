@@ -71,7 +71,7 @@ require "user.keymaps"
 require "user.plugins"
 require "user.colorscheme"
 require "user.term"
-require "user.statusline"
+--require "user.statusline"
 
 -- autocommand for syncing packer on any changes to the plugins file
 vim.api.nvim_create_autocmd("BufWritePost", {

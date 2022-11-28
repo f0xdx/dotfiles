@@ -22,6 +22,12 @@ local minimal =  os.getenv("MINIMAL") ~= nil and os.getenv("MINIMAL") ~= ""
 return require("packer").startup(function(use)
   use "wbthomason/packer.nvim" -- manages itself
   use "RRethy/nvim-base16"     -- treesitter/lsp compatible base16 themes
+ 
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+    config = function() require "user.lualine" end
+  }
 
   if not minimal then
     -- fzf

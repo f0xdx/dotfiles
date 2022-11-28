@@ -6,6 +6,10 @@
 --  - https://github.com/feline-nvim/feline.nvimhttps://github.com/feline-nvim/feline.nvim
 --  - https://github.com/beauwilliams/statusline.lua
 --
+-- TODO figure out how we can get neartime updates for things like line numbers,
+-- while buffer specifics, e.g., encoding, type etc. are only updated on autocmd
+--
+-- TODO figure out how we cna have a status line for the qf/loclist
 
 local function GitBranch()
   return vim.fn.system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\\n'")
@@ -69,7 +73,7 @@ function StatusLine()
     "%q ",                   -- quickfix / location list marker
     vim.opt.fileencoding:get(), "  ",
     "%Y  ",                   -- file type
-    "L%l/%L C%c ",                   -- line : column [number of lines]
+    "L%l/%L C%c %C",                   -- line : column [number of lines]
   }
   --return "%f %= %l,%c %p%%"
   return table.concat(parts, "")
@@ -77,4 +81,3 @@ end
 
 
 vim.o.statusline = "%!luaeval('StatusLine()')"
-
