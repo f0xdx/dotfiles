@@ -13,7 +13,6 @@ end
 local packer_bootstrap = ensure_packer()
 
 
-
 -- check minimal required / not required
 local minimal =  os.getenv("MINIMAL") ~= nil and os.getenv("MINIMAL") ~= ""
 
@@ -23,10 +22,14 @@ return require("packer").startup(function(use)
   use "wbthomason/packer.nvim" -- manages itself
   use "RRethy/nvim-base16"     -- treesitter/lsp compatible base16 themes
  
+  use  'nvim-tree/nvim-web-devicons'
   use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
-    config = function() require "user.lualine" end
+    'tjdevries/express_line.nvim',
+    requires = {
+      { 'nvim-lua/plenary.nvim', opt=false },
+      { 'nvim-tree/nvim-web-devicons', opt=true },
+    },
+    config = function() require "user.el" end
   }
 
   if not minimal then
@@ -48,6 +51,17 @@ return require("packer").startup(function(use)
     }
 
     -- treesitter
+    
+    -- surround / comment / etc.
+    use {
+      "kylechui/nvim-surround",
+      tag = "*", 
+      config = function() require("nvim-surround").setup() end
+    }
+    use {
+      "numToStr/Comment.nvim",
+      config = function() require("Comment").setup() end
+    }
   end
 
   -- Automatically set up your configuration after cloning packer.nvim

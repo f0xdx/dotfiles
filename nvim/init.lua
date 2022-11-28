@@ -28,8 +28,6 @@
 -- TODO LSP
 --
 -- Options:
---  - lsp-config https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion
---  - optional: mason for lsp management https://github.com/williamboman/mason.nvim
 --  - add loc list and qf list toggles, something like https://rafaelleru.github.io/blog/quickfix-autocomands/
 --
 --------------------------------------------------------------------------------
@@ -39,19 +37,9 @@
 --  - https://github.com/nvim-treesitter/nvim-treesitter
 --  - treesitter text objects https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 --------------------------------------------------------------------------------
--- TODO Convenience
---
--- Options
---  - nvim surround https://github.com/kylechui/nvim-surround
---  - nvim autopairs https://github.com/windwp/nvim-autopairs
---  - comment plugin w/ treesitter support https://github.com/numToStr/Comment.nvim
---
---------------------------------------------------------------------------------
 -- TODO Status Line
 --
--- Need to decide forstatus line: decide hand rolled vs. full featured
--- (e.g., lua line)
---
+-- Integrate diagnostics and LSP status (?) into EL
 -- Options
 --  - lsp status integration https://github.com/nvim-lua/lsp-status.nvim
 --  - lua line https://github.com/nvim-lualine/lualine.nvim
@@ -71,7 +59,6 @@ require "user.keymaps"
 require "user.plugins"
 require "user.colorscheme"
 require "user.term"
---require "user.statusline"
 
 -- autocommand for syncing packer on any changes to the plugins file
 vim.api.nvim_create_autocmd("BufWritePost", {
