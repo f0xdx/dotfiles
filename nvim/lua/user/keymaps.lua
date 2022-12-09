@@ -44,6 +44,12 @@ keymap("n", "<S-h>", ":bprevious<CR>", opts)
 -- easily remove highlights
 keymap("n", "<Esc><Esc>", ":nohls<CR>", opts)
 
+-- quickfix / locationlist navigation
+keymap("n", "[l", ":lprevious<CR>", opts)
+keymap("n", "]l", ":lnext<CR>", opts)
+keymap("n", "[q", ":cprevious<CR>", opts)
+keymap("n", "]q", ":cnext<CR>", opts)
+
 
 -- Insert --
 

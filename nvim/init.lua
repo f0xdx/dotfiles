@@ -31,18 +31,11 @@
 --  - add loc list and qf list toggles, something like https://rafaelleru.github.io/blog/quickfix-autocomands/
 --
 --------------------------------------------------------------------------------
--- TODO treesitter 
---
--- Options
---  - https://github.com/nvim-treesitter/nvim-treesitter
---  - treesitter text objects https://github.com/nvim-treesitter/nvim-treesitter-textobjects
---------------------------------------------------------------------------------
 -- TODO Status Line
 --
 -- Integrate diagnostics and LSP status (?) into EL
 -- Options
 --  - lsp status integration https://github.com/nvim-lua/lsp-status.nvim
---  - lua line https://github.com/nvim-lualine/lualine.nvim
 --
 --------------------------------------------------------------------------------
 -- TODO Other 
@@ -53,7 +46,7 @@
 --    the other integration in that plugin
 --  - Toggleterm https://github.com/akinsho/toggleterm.nvim (works with
 --    Asyncrun) let's see whether this is required
---
+
 require "user.options"
 require "user.keymaps"
 require "user.plugins"

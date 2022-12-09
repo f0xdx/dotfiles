@@ -40,7 +40,8 @@ local options = {
   title = true,                            -- set terminal title
   showmatch = true,                        -- show matching braces if visible
   mat = 2,                                 -- tenths of a second to blink when showing matching brace (showmatch)
-  laststatus = 3                           -- show global status line only (default = 2)
+  laststatus = 3,                           -- show global status line only (default = 2)
+  grepprg = "rg --vimgrep --no-heading --smart-case", -- use rg for grep
 }
 
 -- optional settings
@@ -66,14 +67,29 @@ vim.cmd [[set iskeyword+=-]]
 
 -- folding
 
--- vim.opt.foldmethod = "syntax" -- fold based on syntax
--- vim.opt.foldnestmax = 10      -- deepest fold is 10 levels
--- vim.opt.foldenable = true     -- fold by default 
--- vim.opt.foldlevelstart = 1
--- vim.opt.foldlevel=1
+vim.opt.foldmethod = "syntax"  -- fold based on syntax
+vim.opt.foldnestmax = 10       -- deepest fold is 10 levels
+vim.opt.foldenable = false     -- fold by default 
+vim.opt.foldlevelstart = 0
+vim.opt.foldlevel = 1
+vim.opt.foldminlines = 2
 
 -- netrw setup
 -- also take a look at: https://thevaluable.dev/vim-browsing-remote-netrw/
 vim.g.netrw_banner = 0
 vim.g.netrw_liststyle = 3
 vim.g.netrw_browse_split = 4
+
+-- disable unused providers
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+
+-- autocommand for golang source files (the only place where we need tab
+-- indentation)
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = { "go" },
+  group = vim.api.nvim_create_augroup("go_file_config", { clear = true }),
+  command = "setlocal ts=2 sw=2 sts=2 noexpandtab",
+})

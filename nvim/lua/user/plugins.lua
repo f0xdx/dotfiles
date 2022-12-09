@@ -29,7 +29,7 @@ return require("packer").startup(function(use)
       { 'nvim-lua/plenary.nvim', opt=false },
       { 'nvim-tree/nvim-web-devicons', opt=true },
     },
-    config = function() require "user.el" end
+    config = function() require "user.el" end,
   }
 
   if not minimal then
@@ -51,16 +51,30 @@ return require("packer").startup(function(use)
     }
 
     -- treesitter
+    use "nvim-treesitter/playground"
+    use "nvim-treesitter/nvim-treesitter-textobjects"
+    use {
+      "nvim-treesitter/nvim-treesitter",
+      requires = {
+        { "nvim-treesitter/playground", opt=true },
+        { "nvim-treesitter/nvim-treesitter-textobjects", opt=true },
+      },
+      run = function()
+        local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
+        ts_update()
+      end,
+      config = function() require "user.treesitter" end,
+    }
     
     -- surround / comment / etc.
     use {
       "kylechui/nvim-surround",
       tag = "*", 
-      config = function() require("nvim-surround").setup() end
+      config = function() require("nvim-surround").setup() end,
     }
     use {
       "numToStr/Comment.nvim",
-      config = function() require("Comment").setup() end
+      config = function() require("Comment").setup() end,
     }
   end
 
