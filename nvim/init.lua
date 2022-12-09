@@ -29,6 +29,7 @@
 --
 -- Options:
 --  - add loc list and qf list toggles, something like https://rafaelleru.github.io/blog/quickfix-autocomands/
+--  - null-ls for formatting, linting and generic code action support
 --
 --------------------------------------------------------------------------------
 -- TODO Status Line
@@ -44,8 +45,7 @@
 --    we need to evaluate whether this is necessary - we may just use an async
 --    hook in lua and our normal qf window for my workflow - no need for all
 --    the other integration in that plugin
---  - Toggleterm https://github.com/akinsho/toggleterm.nvim (works with
---    Asyncrun) let's see whether this is required
+--------------------------------------------------------------------------------
 
 require "user.options"
 require "user.keymaps"
