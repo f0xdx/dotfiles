@@ -53,9 +53,3 @@ require "user.plugins"
 require "user.colorscheme"
 require "user.term"
 
--- autocommand for syncing packer on any changes to the plugins file
-vim.api.nvim_create_autocmd("BufWritePost", {
-  pattern = { "plugins.lua" },
-  group = vim.api.nvim_create_augroup("packer_user_config", { clear = true }),
-  command = "source <afile> | PackerSync",
-})

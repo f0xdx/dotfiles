@@ -13,6 +13,14 @@ end
 local packer_bootstrap = ensure_packer()
 
 
+-- autocommand for syncing packer on any changes to the plugins file
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = { "plugins.lua" },
+  group = vim.api.nvim_create_augroup("packer_user_config", { clear = true }),
+  command = "source <afile> | PackerSync",
+})
+
+
 -- check minimal required / not required
 local minimal =  os.getenv("MINIMAL") ~= nil and os.getenv("MINIMAL") ~= ""
 
@@ -84,3 +92,4 @@ return require("packer").startup(function(use)
     require("packer").sync()
   end
 end)
+
