@@ -56,6 +56,7 @@ export NVM_DIR="$HOME/.nvm"
 # Completion
 
 [ -f $(brew --prefix)/etc/profile.d/bash_completion.sh ] && . $(brew --prefix)/etc/profile.d/bash_completion.sh
+[ -f "${HOME}/.fzf.bash" ] && _fzf_setup_completion path exa lsx bat nvim.sh
 
 tools=(
   "kubectl"
