@@ -60,6 +60,7 @@ export NVM_DIR="$HOME/.nvm"
 
 tools=(
   "kubectl"
+  "kind"
   "golangci-lint"
 )
 for tool in "${tools[@]}"; do
