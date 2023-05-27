@@ -5,6 +5,10 @@ let
   home = "/home/${user}";
 in
 {
+  imports =
+    [ 
+      ./neovim/neovim.nix
+    ];
 
   home = {
     # TODO refactor those to variables when moving to a flake - they may be different across machines
@@ -297,14 +301,6 @@ in
     settings = {
       git_protocol = "ssh";
     };
-  };
-
-  programs.neovim = {
-    enable = true;
-    # defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    vimdiffAlias = true;
   };
 
 

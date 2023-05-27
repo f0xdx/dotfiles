@@ -7,6 +7,10 @@
       url = "github:nix-community/home-manager/release-22.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixneovimplugins = {
+      url = "github:NixNeovim/NixNeovimPlugins";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { nixpkgs, home-manager, ... }@inputs:
@@ -15,7 +19,14 @@
 
       pkgs = import nixpkgs {
         inherit system;
-	config = { allowUnfree = true; };
+	
+	config = {
+	  allowUnfree = true;
+	};
+
+	overlays = with inputs; [
+	  nixneovimplugins.overlays.default
+	];
       };
 
       lib = nixpkgs.lib;
