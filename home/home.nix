@@ -7,7 +7,8 @@ in
 {
   imports =
     [ 
-      ./neovim/neovim.nix
+      ./alacritty
+      ./neovim
     ];
 
   home = {
@@ -213,15 +214,6 @@ in
   programs.zoxide = {
     enable = true;
     enableBashIntegration = true;
-  };
-
-  programs.alacritty = {
-    enable = true;
-
-    # TODO configure alacritty
-    # this https://github.com/NixOS/nix/pull/7340 is what I would like to do here ...
-    # see also https://discourse.nixos.org/t/how-to-convert-yaml-nix-object/23755
-    # settings = {};
   };
 
   programs.exa = {

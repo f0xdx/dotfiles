@@ -12,8 +12,9 @@
       nvim-tree-lua
       nvim-web-devicons
       nvim-surround
-      Comment-nvim
+      comment-nvim
       express-line-nvim
+      tokyonight-nvim
     ];
   };
 
