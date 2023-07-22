@@ -49,8 +49,7 @@
 
 require "user.options"
 require "user.keymaps"
---require "user.plugins"
---require "user.colorscheme"
+require "user.colorscheme"
 require "user.term"
 require "user.el"
 
@@ -60,4 +59,8 @@ require("nvim-web-devicons").setup()
 require("nvim-surround").setup()
 require("Comment").setup()
 
--- TODO figure out how we can do a lazy loading style require+setup
+-- TODO we need a proper, fast fuzzy finder (fzf or telescope)
+-- TODO we need to configure full LSP setup, ideally with completion framework
+-- and snippets
+-- TODO we need tressitter setup, but this requires a plugin installation
+-- through home manager
