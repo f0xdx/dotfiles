@@ -9,6 +9,7 @@ in
     [ 
       ./alacritty
       ./neovim
+      ./starship
     ];
 
   home = {
@@ -226,13 +227,6 @@ in
     # extraOptions = [
     #   "--group-directories-first"
     # ];
-  };
-
-  programs.starship = {
-    enable = true;
-    enableBashIntegration = true;
-    
-    settings = builtins.fromTOML (builtins.readFile ./starship/starship.toml);
   };
 
   # dev tools
