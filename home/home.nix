@@ -31,7 +31,7 @@ in
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "22.11";
+  home.stateVersion = "23.05";
 
   home.packages = with pkgs; [
     delta
@@ -99,7 +99,7 @@ in
       completion-ignore-case =       true;
     };
   };
-
+  
   programs.fzf = {
     enable = true;
     enableBashIntegration = true;
@@ -232,8 +232,6 @@ in
   # dev tools
 
   programs.git = {
-    # TODO switch on ssh key
-    # TODO use ssh key for signing commits
     enable = true;
     userEmail = "fheinrichs@heinrichs.it";
     userName = "Dr. Felix Heinrichs";
