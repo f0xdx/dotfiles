@@ -77,15 +77,7 @@
       };
     };
 
-    # style = ''
-    #   * {
-    #     border: none;
-    #     border-radius: 0;
-    #   }
-    #   window#waybar {
-    #     background: rgba(43, 48, 59, 0.7);
-    #   }
-    # '';
+    style = builtins.readFile ./cfg/waybar/style.css;
   };
 
   # kanshi
