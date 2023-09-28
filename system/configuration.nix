@@ -59,8 +59,8 @@ in
     kernelParams = [
       # airplane mode button on msi ws65 (to fix suspend wireless deactivation)
       # activating this breaks the touchpad after resume on 5.15, fix after 5.19
-      # "acpi_osi=!" 
-      # "acpi_osi=\"Windows 2009\""
+      "acpi_osi=!" 
+      "acpi_osi=\"Windows 2009\""
     ];
     blacklistedKernelModules = [
       "i2c_nvidia_gpu"  # RTX3000 does not have a usb-c port for monitors
@@ -125,7 +125,11 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  hardware.opengl.enable = true;
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
   hardware.nvidia = {
     powerManagement.enable = true;
     modesetting.enable = true;
@@ -177,7 +181,6 @@ in
 
     # wayland/sway
 
-    bemenu                # program selection menu
     configure-gtk
     dbus-sway-environment
     glib                  # gsettings
