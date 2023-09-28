@@ -288,7 +288,6 @@ in
   };
 
 
-  # firefox
 
   home.sessionVariables = {
     # TODO refactor so that firefox only sets those relevant for firefox
@@ -298,9 +297,14 @@ in
     MOZ_USE_XINPUT2 = "1";
     
     # those are sway specific
+    # GBM_BACKEND="nvidia-drm"; # does not work, sway broken
+    # __GLX_VENDOR_LIBRARY_NAME="nvidia"; # does not work, sway broken
     XDG_CURRENT_DESKTOP = "sway"; 
-    # to make sway play with nvidia after suspend
-    # WLR_NO_HARDWARE_CURSORS = "1";
+    # to make sway play with nvidia after suspend, get mouse pointers on
+    # monitors
+    WLR_NO_HARDWARE_CURSORS = "1";
+    # WLR_RENDERER = "vulkan"; # TODO: currently still breaks, waiting for the
+    # wlroots upstream fix - this should get rid of flickering
 
     # those are generic session variables
 
@@ -308,6 +312,8 @@ in
     VISUAL = "nvim";
     PAGER = "bat";
   };
+
+  # firefox
 
   programs.firefox = {
     enable = true;
@@ -405,6 +411,65 @@ in
     # '';
   };
 
+  # kanshi
+  services.kanshi = {
+    enable = true;
+    profiles = {
+      undocked = {
+        outputs = [
+          {
+            criteria = "eDP-1";
+            mode = "1920x1080@60Hz";
+          }
+        ];
+      };
+      single_l = {
+        outputs = [
+          {
+            criteria = "eDP-1";
+            mode = "1920x1080@60Hz";
+          }
+          {
+            criteria = "HDMI-A-2 'BNQ BenQ GW2470 86G02271019'";
+            mode = "1920x1080@60Hz";
+            position = "1920,0";
+          }
+        ];
+      };
+      single_r = {
+        outputs = [
+          {
+            criteria = "eDP-1";
+            mode = "1920x1080@60Hz";
+          }
+          {
+            criteria = "DP-2 'BNQ BenQ GW2470 JBF03525SL0'";
+            mode = "1920x1080@60Hz";
+            position = "1920,0";
+          }
+        ];
+      };
+      double = {
+        outputs = [
+          {
+            criteria = "eDP-1";
+            mode = "1920x1080@60Hz";
+          }
+          {
+            criteria = "HDMI-A-2 'BNQ BenQ GW2470 86G02271019'";
+            mode = "1920x1080@60Hz";
+            position = "1920,0";
+          }
+          {
+            criteria = "DP-2 'BNQ BenQ GW2470 JBF03525SL0'";
+            mode = "1920x1080@60Hz";
+            position = "3840,0";
+          }
+        ];
+      };
+    };
+  };
+
   # enable sway window manager
   wayland.windowManager.sway = {
     enable = true;
@@ -422,27 +487,29 @@ in
       startup = [
         # { command = "dbus-sway-environment"; } # this fails currently, not sure why
         { command = "configure-gtk"; }
+        { command = "sleep 3; systemctl --user start kanshi.service"; }
       ];
       modifier = "Mod4";
       terminal = "alacritty";
       input = {
         "*" = {
-	  xkb_layout = "de,us";
-	  xkb_variant = ",intl";
+          xkb_layout = "de,us";
+          xkb_variant = ",intl";
           xkb_options = "grp:win_space_toggle,eurosign:e";	
-	};
-	"type:touchpad" = {
+        };
+        "type:touchpad" = {
           tap = "enabled";
-	  natural_scroll = "disabled";
-	  scroll_method = "two_finger";
-	  pointer_accel = "0.4";
-	};
+	        natural_scroll = "disabled";
+          scroll_method = "two_finger";
+          pointer_accel = "0.4";
+        };
       };
       bars = [
         {
-	  command = "\${pkgs.waybar}/bin/waybar";
-	}
+          command = "\${pkgs.waybar}/bin/waybar";
+        }
       ];
+      menu = "bemenu-run -c -W0.61 -l16 --fixed-height --counter always --bdr \"#000000\" -B6";
 
       keybindings = 
         let

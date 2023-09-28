@@ -142,7 +142,7 @@ in
     xkbVariant = ",intl";
     xkbOptions = "grp:win_space_toggle,eurosign:e";
     
-    # toucpad support
+    # touchpad support
     libinput.enable = true;
   };
  
@@ -168,7 +168,6 @@ in
 
     bluez
     brightnessctl
-    glib
     glxinfo
     neovim 
     pciutils
@@ -178,9 +177,12 @@ in
 
     # wayland/sway
 
+    bemenu                # program selection menu
     configure-gtk
     dbus-sway-environment
+    glib                  # gsettings
     grim                  # screenshots, works with slurp
+    kanshi                # autoload display configurations
     mako                  # notification system developed by swaywm maintainer
     matcha-gtk-theme
     paper-icon-theme
@@ -190,12 +192,30 @@ in
     swaylock
     waybar
     wayland
+    wdisplays             # tool to configure displays
     wev                   # debug wayland events, e.g., key presses
     wl-clipboard          # wl-copy and wl-paste for copy/paste from stdin / stdout
-    xdg-utils
+    xdg-utils             # open default programs when clicking links
   ];
   environment.pathsToLink = [ "/share/bash-completion" ];
 
+  # sway additional config
+  # kanshi
+  # systemd.user.services.kanshi ={
+  #   description = "kanshi daemon";
+  #   serviceConfig = {
+  #     Type= "simple";
+  #     ExecStart = ''${pkgs.kanshi}/bin/kanshi -c kanshi_config_file'';
+  #   };
+  # };
+
+  # swaylock needs unlock permissions
+  
+  security.pam.services.swaylock.text = ''
+    # PAM configuration file for the swaylock screen locker. By default, it includes
+    # the 'login' configuration file (see /etc/pam.d/login)
+    auth include login
+  '';
 
   # bluetooth
 
