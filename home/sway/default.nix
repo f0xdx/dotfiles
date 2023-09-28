@@ -147,6 +147,15 @@
     };
   };
 
+  services.mako = {
+    enable = true;
+    
+    borderRadius = 5;
+    defaultTimeout = 3000;
+
+    extraConfig = builtins.readFile ./cfg/mako/config;
+  };
+
   # wofi application launcher
   programs.wofi = {
     enable = true;

@@ -40,6 +40,7 @@ in
     openssh
     ripgrep
     fd
+    libnotify
   ];
 
   # Let Home Manager install and manage itself.
