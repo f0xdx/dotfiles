@@ -61,6 +61,9 @@ in
       # activating this breaks the touchpad after resume on 5.15, fix after 5.19
       "acpi_osi=!" 
       "acpi_osi=\"Windows 2009\""
+      # "acpi_osi=\"Windows 2018\""
+      # "acpi_osi=\"Windows 2018.2\""
+      # "acpi_osi=\"Windows 2020\""
     ];
     blacklistedKernelModules = [
       "i2c_nvidia_gpu"  # RTX3000 does not have a usb-c port for monitors
