@@ -8,8 +8,8 @@ require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
   ensure_installed = {
     "bash",
-    "css",
     "comment",
+    "css",
     "diff",
     "dockerfile",
     "elm",
@@ -17,6 +17,7 @@ require'nvim-treesitter.configs'.setup {
     "gomod",
     "gowork",
     "graphql",
+    "haskell",
     "hcl",
     "html",
     "javascript",
@@ -32,6 +33,7 @@ require'nvim-treesitter.configs'.setup {
     "terraform",
     "typescript",
     "yaml",
+    "zig",
   },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)

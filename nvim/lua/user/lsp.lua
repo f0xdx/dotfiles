@@ -42,7 +42,7 @@ end
 -- Use a loop to conveniently call "setup" on multiple servers and
 -- map buffer local keybindings when the language server attaches
 -- requires the following language servers:
-local servers = { "elmls", "gopls", "terraformls", "tsserver", "jsonls", "yamlls", "bashls" }
+local servers = { "elmls", "gopls", "terraformls", "tsserver", "jsonls", "yamlls", "bashls", "hls", "zls" }
 for _, lsp in pairs(servers) do
   require("lspconfig")[lsp].setup {
     on_attach = on_attach,
