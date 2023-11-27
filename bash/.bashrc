@@ -27,7 +27,7 @@ export DEFAULT_USER='fheinrichs'
 export TERM=xterm-256color
 export ENABLE_CORRECTION="false"
 export HIST_STAMPS="yyyy-mm-dd"
-export PATH=$PATH:$HOME/go/bin:/usr/local/sbin
+export PATH="$PATH:$HOME/go/bin:/usr/local/sbin:$HOME/.ghcup/bin:/usr/local/opt/python/libexec/bin"
 export NVM_DIR="$HOME/.nvm"
 export BAT_THEME="GitHub"
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
@@ -51,6 +51,7 @@ export HISTFILESIZE=50000
 export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+[ -s "/usr/local/opt/ghcup/etc/bash_completion.d/ghcup" ] && \. "/usr/local/opt/ghcup/etc/bash_completion.d/ghcup"  # This loads ghcup bash_completion
 
 
 # Completion
@@ -104,7 +105,8 @@ BASE16_SHELL_PATH="$HOME/.config/base16-shell"
 # Aliases
 
 alias lsx="exa -T -L1 --color always --icons -s name --group-directories-first"
-alias gbc="${HOME}/bin/branch_clean.sh"
+alias gbc="\${HOME}/bin/branch_clean.sh"
+alias x="EDITOR=\${HOME}/bin/nvim.sh xplr"
 
 [ -f "${HOME}/.config/bash/kubectl_aliases.sh" ] \
   && . "${HOME}/.config/bash/kubectl_aliases.sh" \

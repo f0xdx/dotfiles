@@ -33,13 +33,26 @@ common::check_dependencies "${dependencies[@]}"
 
 #nvim --server '/tmp/nvim.socket' --remote $(fd -tf -L | fzy)
 
-# shellcheck disable=SC2012 # ls supports order by modified timestamp
-nvim_socket="$(ls -t "${XDG_RUNTIME_DIR:-${TMPDIR}nvim.${USER}}"/*/nvim.*.0 | head -1)"
+args=()
 
-# TODO handle the case where there is no running nvim instance
-args=( 
-  '--server' "${nvim_socket}"
-  '--remote'
+
+if ls -t "${XDG_RUNTIME_DIR:-${TMPDIR}nvim.${USER}}"/*/nvim.*.0 &> /dev/null; then
+  # guard against empty args when no instance is running: nothing to do here,
+  # since the whole purpose of this script is to open a file in a running nvim
+  # instance
+  [[ $# -eq 0 ]] && exit 0 
+
+
+  # shellcheck disable=SC2012 # ls supports order by modified timestamp
+  nvim_socket="$(ls -t "${XDG_RUNTIME_DIR:-${TMPDIR}nvim.${USER}}"/*/nvim.*.0 | head -1)"
+
+  args+=(
+    '--server' "${nvim_socket}"
+    '--remote'
+  )
+fi
+
+args+=( 
   "$@"
 )
 
