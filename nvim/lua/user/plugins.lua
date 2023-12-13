@@ -27,36 +27,49 @@ local minimal =  os.getenv("MINIMAL") ~= nil and os.getenv("MINIMAL") ~= ""
 
 -- install plugins
 return require("packer").startup(function(use)
-  use "wbthomason/packer.nvim" -- manages itself
-  use "RRethy/nvim-base16"     -- treesitter/lsp compatible base16 themes
+  use "wbthomason/packer.nvim"      -- manages itself
+  use "nvim-lua/plenary.nvim"       -- basic lua lib
+  use "nvim-tree/nvim-web-devicons" -- icons
+
+  -- treesitter/lsp compatible base16 themes
+  use "RRethy/nvim-base16"       
+  -- use "folke/tokyonight.nvim"
  
-  use  'nvim-tree/nvim-web-devicons'
   use {
     'tjdevries/express_line.nvim',
     requires = {
       { 'nvim-lua/plenary.nvim', opt=false },
       { 'nvim-tree/nvim-web-devicons', opt=true },
     },
-    config = function() require "user.el" end,
   }
 
   if not minimal then
-    -- fzf
-    use {
-      "junegunn/fzf",
-      run = function() vim.fn['fzf#install'](0) end,
+    -- telescope w/ native fzf
+    use { 
+      "nvim-telescope/telescope-fzf-native.nvim",
+      run = "make",
     }
+    use "debugloop/telescope-undo.nvim"
     use {
-      "junegunn/fzf.vim",
-      requires = { "junegunn/fzf" },
-      config = function() require "user.fzf" end,
+      "nvim-telescope/telescope.nvim",
+      requires = { 
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope-fzf-native.nvim",
+        "debugloop/telescope-undo.nvim",
+      }
     }
 
     -- lsp
-    use {
-      "neovim/nvim-lspconfig",
-      config = function() require "user.lsp" end,
-    }
+    use "neovim/nvim-lspconfig" 
+    use "onsails/lspkind.nvim"
+    use "hrsh7th/cmp-nvim-lsp"
+    use "hrsh7th/cmp-buffer"
+    use "hrsh7th/cmp-path"
+    use "hrsh7th/cmp-cmdline"
+    use "hrsh7th/nvim-cmp"
+    use "L3MON4D3/LuaSnip"
+    use "saadparwaiz1/cmp_luasnip"
+    use "petertriho/cmp-git"
 
     -- treesitter
     use "nvim-treesitter/playground"
@@ -71,7 +84,6 @@ return require("packer").startup(function(use)
         local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
         ts_update()
       end,
-      config = function() require "user.treesitter" end,
     }
     
     -- surround / comment / etc.

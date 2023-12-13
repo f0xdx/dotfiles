@@ -1,5 +1,6 @@
 local ok, _ = pcall(require, "nvim-treesitter.configs")
 if not ok then
+  vim.notify("treesitter module not found")
   return
 end
 
@@ -19,6 +20,7 @@ require'nvim-treesitter.configs'.setup {
     "graphql",
     "haskell",
     "hcl",
+    "help",
     "html",
     "javascript",
     "json",
@@ -42,9 +44,6 @@ require'nvim-treesitter.configs'.setup {
   -- Automatically install missing parsers when entering buffer
   -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
   auto_install = false,
-
-  -- List of parsers to ignore installing (for "all")
-  ignore_install = {},
 
   -- If you need to change the installation directory of the parsers (see -> Advanced Setup)
   -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
@@ -195,5 +194,4 @@ vim.api.nvim_create_autocmd({'BufEnter','BufAdd','BufNew','BufNewFile','BufWinEn
 vim.api.nvim_set_hl(0, "@comment", { link = "Comment" })
 vim.api.nvim_set_hl(0, "@function.builtin", { link = "Function" })
 vim.api.nvim_set_hl(0, "@type.builtin", { link = "Type" })
-
 

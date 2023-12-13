@@ -1,3 +1,9 @@
+local ok, _ = pcall(require, 'el')
+if not ok then
+  vim.notify("el module not found")
+  return
+end
+
 local extensions = require('el.extensions')
 local subscribe = require('el.subscribe')
 local builtin = require('el.builtin')

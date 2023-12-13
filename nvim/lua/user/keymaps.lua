@@ -35,7 +35,7 @@ keymap("n", "<C-w>%", ":vspl<cr>", opts)
 keymap("n", "<C-w>\"", ":spl<cr>", opts)
 
 -- netrw as explorer
-keymap("n", "<leader>e", ":Lex 30<cr>", opts)
+keymap("n", "<leader>x", ":Lex 30<cr>", opts)
 
 -- navigate buffers
 keymap("n", "<S-l>", ":bnext<CR>", opts)
