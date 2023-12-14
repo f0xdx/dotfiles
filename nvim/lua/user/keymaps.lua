@@ -50,6 +50,9 @@ keymap("n", "]l", ":lnext<CR>", opts)
 keymap("n", "[q", ":cprevious<CR>", opts)
 keymap("n", "]q", ":cnext<CR>", opts)
 
+-- jumping without disorientation
+keymap("n", "<C-d>", "<C-d>zz", opts)
+keymap("n", "<C-u>", "<C-u>zz", opts)
 
 -- Insert --
 
