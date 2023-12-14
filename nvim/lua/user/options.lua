@@ -67,7 +67,7 @@ vim.cmd [[set iskeyword+=-]]
 
 -- folding
 
-vim.opt.foldmethod = "syntax"  -- fold based on syntax
+vim.opt.foldmethod = "indent"  -- fold based on indent / treesitter has its own autocmd
 vim.opt.foldnestmax = 10       -- deepest fold is 10 levels
 vim.opt.foldenable = false     -- fold by default 
 vim.opt.foldlevelstart = 0

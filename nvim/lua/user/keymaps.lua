@@ -2,6 +2,7 @@ local opts = { noremap = true, silent = true }
 local term_opts = { silent = true } -- do we need this?
 local keymap = vim.api.nvim_set_keymap
 
+
 -- leader key config
 keymap("", "<Space>", "<Nop>", opts)
 vim.g.mapleader = " "
@@ -55,6 +56,12 @@ keymap("n", "<C-d>", "<C-d>zz", opts)
 keymap("n", "<C-u>", "<C-u>zz", opts)
 
 -- Insert --
+
+-- fake auto-pairs
+local parens = { "{}", "[]", "()", "||", "\"\"", "''" }
+for _, p in ipairs(parens) do
+  keymap("i", p, p .. "<left>", opts)
+end
 
 -- press jk fast to exit
 keymap("i", "jk", "<ESC>", opts)

@@ -4,11 +4,11 @@
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap=true, silent=true }
-vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '<leader>df', vim.diagnostic.open_float)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-vim.keymap.set("n", "<space>q", vim.diagnostic.setqflist, opts)
-vim.keymap.set("n", "<space>l", vim.diagnostic.setloclist, opts)
+vim.keymap.set("n", "<leader>dd", vim.diagnostic.setqflist, opts)
+vim.keymap.set("n", "<leader>db", vim.diagnostic.setloclist, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -21,23 +21,25 @@ local on_attach = function(client, bufnr)
   local bufopts = { noremap=true, silent=true, buffer=bufnr }
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+  vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, bufopts)
   vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
   vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
   vim.keymap.set("n", "gc", vim.lsp.buf.incoming_calls, bufopts)
   vim.keymap.set("n", "gC", vim.lsp.buf.outgoing_calls, bufopts)
-  vim.keymap.set("n", "<space>h", vim.lsp.buf.hover, bufopts)
-  vim.keymap.set("n", "<space>k", vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set("n", "<space>s", vim.lsp.buf.document_symbol, bufopts)
-  vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
-  vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
-  vim.keymap.set("n", "<space>wl", function()
+  vim.keymap.set("i", "<C-s>", vim.lsp.buf.hover, bufopts)
+  vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, bufopts)
+  vim.keymap.set("n", "<leader>k", vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set("n", "<leader>s", vim.lsp.buf.document_symbol, bufopts)
+  vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, bufopts)
+  vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
+  vim.keymap.set("n", "<leader>wl", function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, bufopts)
-  vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set("n", "<space>xr", vim.lsp.buf.rename, bufopts)
-  vim.keymap.set("n", "<space>xa", vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set("n", "<space>xf", function() vim.lsp.buf.format { async = true } end, bufopts)
+  vim.keymap.set("n", "<leader>xr", vim.lsp.buf.rename, bufopts)
+  vim.keymap.set("n", "<leader>xa", vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set("n", "<leader>xf", function() vim.lsp.buf.format { async = true } end, bufopts)
 end
+
 
 -- cmp setup
 
@@ -77,7 +79,7 @@ cmp.setup({
     -- completion = cmp.config.window.bordered(),
     -- documentation = cmp.config.window.bordered(),
   },
-  
+
   mapping = cmp.mapping.preset.insert({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -135,12 +137,12 @@ if ok then
   -- vim.keymap.set({"i", "s"}, "<C-p>", function() luasnip.jump(1) end, opts)
   vim.keymap.set({"i", "s"}, "<C-k>", function()
     if luasnip.expand_or_jumpable() then
-      luasnip.expand_or_jump() 
+      luasnip.expand_or_jump()
     end
   end, { silent=true })
   vim.keymap.set({"i", "s"}, "<C-j>", function()
     if luasnip.jumpable(-1) then
-      luasnip.jump(-1) 
+      luasnip.jump(-1)
     end
   end, { silent=true })
 else
@@ -171,6 +173,39 @@ end
 local util = require("lspconfig/util")
 
 -- language servers (specific settings)
+
+lspconfig.lua_ls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  on_init = function(client)
+    local path = client.workspace_folders[1].name
+    if not vim.loop.fs_stat(path..'/.luarc.json') and not vim.loop.fs_stat(path..'/.luarc.jsonc') then
+      client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
+        Lua = {
+          runtime = {
+            -- Tell the language server which version of Lua you're using
+            -- (most likely LuaJIT in the case of Neovim)
+            version = 'LuaJIT'
+          },
+          -- Make the server aware of Neovim runtime files
+          workspace = {
+            checkThirdParty = false,
+            library = {
+              vim.env.VIMRUNTIME
+              -- "${3rd}/luv/library"
+              -- "${3rd}/busted/library",
+            }
+            -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+            -- library = vim.api.nvim_get_runtime_file("", true)
+          }
+        }
+      })
+
+      client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+    end
+    return true
+  end
+}
 
 lspconfig.gopls.setup{
   on_attach = on_attach,
