@@ -5,6 +5,7 @@ if not ok then
 end
 
 -- setup
+local actions = require("telescope.actions")
 
 require('telescope').setup {
   defaults = {
@@ -12,7 +13,21 @@ require('telescope').setup {
       vertical = { width = "62%", height = "62%" }
       -- other layout configuration here
     },
-    -- other defaults configuration here
+
+    mappings = {
+      i = {
+        ["<C-e>"] = actions.close,
+        ["<C-y>"] = actions.toggle_selection,
+        ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.send_to_qflist + actions.open_qflist,
+      },
+      n = {
+        ["<C-e>"] = actions.close,
+        ["<C-y>"] = actions.toggle_selection,
+        ["<C-n>"] = actions.move_selection_next,
+        ["<C-p>"] = actions.move_selection_previous,
+      },
+    },
   },
 
   extensions = {
