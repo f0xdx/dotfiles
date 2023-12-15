@@ -28,5 +28,6 @@
 require "user.options"
 require "user.keymaps"
 require "user.plugins"
+require "user.qfll"
 require "user.colorscheme"
 require "user.term"

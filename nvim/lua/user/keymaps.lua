@@ -45,7 +45,7 @@ keymap("n", "<S-h>", ":bprevious<CR>", opts)
 -- easily remove highlights
 keymap("n", "<Esc><Esc>", ":nohls<CR>", opts)
 
--- quickfix / locationlist navigation
+-- -- quickfix / locationlist navigation
 keymap("n", "[l", ":lprevious<CR>", opts)
 keymap("n", "]l", ":lnext<CR>", opts)
 keymap("n", "[q", ":cprevious<CR>", opts)
@@ -58,9 +58,12 @@ keymap("n", "<C-u>", "<C-u>zz", opts)
 -- Insert --
 
 -- fake auto-pairs
-local parens = { "{}", "[]", "()", "||", "\"\"", "''" }
+local parens = { "{}", "[]", "()", "<>", "||", "\"\"", "''" }
 for _, p in ipairs(parens) do
   keymap("i", p, p .. "<left>", opts)
+end
+for _, p in ipairs(parens) do
+  keymap("c", p, p .. "<left>", opts)
 end
 
 -- press jk fast to exit

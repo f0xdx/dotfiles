@@ -1,24 +1,42 @@
 -- TODO use a cleaner setup, similar to
+--
 --      https://github.com/LunarVim/Neovim-from-scratch/tree/06-LSP/lua/user/lsp
 --
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap=true, silent=true }
+local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<leader>df', vim.diagnostic.open_float)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<leader>dd", vim.diagnostic.setqflist, opts)
 vim.keymap.set("n", "<leader>db", vim.diagnostic.setloclist, opts)
 
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = " ",
+  },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
+
+local signs = { Error = "", Warn = "", Hint = "", Info = "" }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
+
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
   vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, bufopts)
@@ -135,16 +153,16 @@ local ok, luasnip = pcall(require, "luasnip")
 if ok then
   -- vim.keymap.set({"i", "s"}, "<C-n>", function() luasnip.jump(-1) end, opts)
   -- vim.keymap.set({"i", "s"}, "<C-p>", function() luasnip.jump(1) end, opts)
-  vim.keymap.set({"i", "s"}, "<C-k>", function()
+  vim.keymap.set({ "i", "s" }, "<C-k>", function()
     if luasnip.expand_or_jumpable() then
       luasnip.expand_or_jump()
     end
-  end, { silent=true })
-  vim.keymap.set({"i", "s"}, "<C-j>", function()
+  end, { silent = true })
+  vim.keymap.set({ "i", "s" }, "<C-j>", function()
     if luasnip.jumpable(-1) then
       luasnip.jump(-1)
     end
-  end, { silent=true })
+  end, { silent = true })
 else
   vim.notify("cmp module not found")
   return
@@ -179,7 +197,7 @@ lspconfig.lua_ls.setup {
   capabilities = capabilities,
   on_init = function(client)
     local path = client.workspace_folders[1].name
-    if not vim.loop.fs_stat(path..'/.luarc.json') and not vim.loop.fs_stat(path..'/.luarc.jsonc') then
+    if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
       client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
         Lua = {
           runtime = {
@@ -207,11 +225,11 @@ lspconfig.lua_ls.setup {
   end
 }
 
-lspconfig.gopls.setup{
+lspconfig.gopls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
-  cmd = {"gopls", "serve"},
-  filetypes = {"go", "gomod", "gowork", "gotmpl"},
+  cmd = { "gopls", "serve" },
+  filetypes = { "go", "gomod", "gowork", "gotmpl" },
   root_dir = util.root_pattern("go.work", "go.mod", ".git"),
   settings = {
     gopls = {
@@ -222,7 +240,7 @@ lspconfig.gopls.setup{
       },
       staticcheck = true,
       gofumpt = true,
-      env = {GOFLAGS="-tags=it"},
+      env = { GOFLAGS = "-tags=it" },
     },
   },
   flags = {
@@ -233,4 +251,3 @@ lspconfig.gopls.setup{
     usePlaceholders = true,
   }
 }
-
