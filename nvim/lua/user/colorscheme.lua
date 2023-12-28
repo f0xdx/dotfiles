@@ -9,3 +9,7 @@ if not status_ok then
   vim.notify("colorscheme " .. colorscheme .. " not found!")
   return
 end
+
+vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#ebbf83", bg = "#1d252c" })
+vim.api.nvim_set_hl(0, "FoldColumn", { link = "Comment" })
+

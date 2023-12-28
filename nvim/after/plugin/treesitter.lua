@@ -194,4 +194,3 @@ vim.api.nvim_create_autocmd({'BufEnter','BufAdd','BufNew','BufNewFile','BufWinEn
 vim.api.nvim_set_hl(0, "@comment", { link = "Comment" })
 vim.api.nvim_set_hl(0, "@function.builtin", { link = "Function" })
 vim.api.nvim_set_hl(0, "@type.builtin", { link = "Type" })
-
