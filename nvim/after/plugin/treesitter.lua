@@ -84,7 +84,7 @@ require'nvim-treesitter.configs'.setup {
   indent = {
     enable = true
   },
-  
+
   -- config of playground plugin: https://github.com/nvim-treesitter/playground
   playground = {
     enable = true,
@@ -104,7 +104,7 @@ require'nvim-treesitter.configs'.setup {
       show_help = '?',
     },
   },
-  
+
   -- config of textobjects plugin: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   textobjects = {
     select = {
