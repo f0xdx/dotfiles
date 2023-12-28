@@ -31,7 +31,8 @@ local options = {
   cursorline = true,                       -- highlight the current line
   number = true,                           -- set numbered lines
   relativenumber = false,                  -- set relative numbered lines
-  numberwidth = 4,                         -- set number column width to 2 {default 4}
+  numberwidth = 3,                         -- set number column width to 3 {default 4}
+  foldcolumn = "1",                          -- display folds in the fold column
   signcolumn = "yes",                      -- always show the sign column, otherwise it would shift the text each time
   wrap = false,                            -- display lines as one long line
   scrolloff = 8,                           -- scroll offset
@@ -42,6 +43,7 @@ local options = {
   mat = 2,                                 -- tenths of a second to blink when showing matching brace (showmatch)
   laststatus = 3,                           -- show global status line only (default = 2)
   grepprg = "rg --vimgrep --no-heading --smart-case", -- use rg for grep
+  fillchars = { foldopen = '', foldclose =''},
 }
 
 -- optional settings
