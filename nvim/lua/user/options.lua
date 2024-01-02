@@ -43,7 +43,7 @@ local options = {
   mat = 2,                                 -- tenths of a second to blink when showing matching brace (showmatch)
   laststatus = 3,                           -- show global status line only (default = 2)
   grepprg = "rg --vimgrep --no-heading --smart-case", -- use rg for grep
-  fillchars = { foldopen = '', foldclose =''},
+  fillchars = { eob = " ", foldopen = '', foldclose ='', fold = ' '},
 }
 
 -- optional settings
@@ -75,6 +75,20 @@ vim.opt.foldenable = false     -- fold by default
 vim.opt.foldlevelstart = 0
 vim.opt.foldlevel = 1
 vim.opt.foldminlines = 2
+
+function _G.pretty_fold_text()
+  local substitute = vim.fn.substitute
+  local trim = vim.fn.trim
+  local line = vim.fn.getline
+
+  local front_matter = substitute(line(vim.v.foldstart), "\\t", string.rep(" ", vim.o.softtabstop), "g")
+  local back_matter = trim(line(vim.v.foldend))
+  local count = vim.v.foldend - vim.v.foldstart + 1
+
+  return front_matter  .. "   (+" .. count .. " lines)  " .. back_matter
+end
+
+vim.opt.foldtext = "v:lua.pretty_fold_text()"
 
 -- netrw setup
 -- also take a look at: https://thevaluable.dev/vim-browsing-remote-netrw/
