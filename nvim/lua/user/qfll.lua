@@ -2,6 +2,9 @@ local opts = { noremap = true, silent = true }
 local keymap = vim.api.nvim_set_keymap
 
 
+-- TODO make [q and ]q cycle through the quickfix lists
+-- TODO make [q and ]q cycle through the location list lists
+
 -- quickfix
 
 keymap("n", "[q", ":cprevious<CR>", opts)
@@ -33,14 +36,39 @@ vim.keymap.set("n", "<leader>ql", function()
   end
 end, opts)
 
--- autocommand to attach to qf list
+-- -- qf_filename extracts the name of a file from the default quickfix expression
+local function qf_filename(line)
+  return vim.fn.substitute(line, "|.*$", "", "")
+end
+--
+-- -- fold_qf_expr defines a foldexpr for use in quick fix windows. It will define
+-- -- folds by filename, grouping similar folds together
+function _G.fold_qf_expr()
+  local file = qf_filename(vim.fn.getline(vim.v.lnum))
+
+  if file == nil or file == "" then
+    return -1
+  end
+
+  if file ~= qf_filename(vim.fn.getline(vim.v.lnum - 1)) then
+    return ">1"
+  end
+
+  return "="
+end
+
+-- -- autocommand to attach to qf list
 -- vim.api.nvim_create_autocmd({ "FileType" }, {
 --   pattern = { "qf" },
 --   group = vim.api.nvim_create_augroup("qf_file_config", { clear = true }),
---   callback = function(_)
---     local buf_opts = { noremap = true, silent = true, buffer = vim.api.nvim_buf_get_number(0) }
+--   callback = function(ev)
+--     -- local buf_opts = { noremap = true, silent = true, buffer = vim.api.nvim_buf_get_number(0) }
+--     -- might need window local setting, see https://github.com/ashfinal/qfview.nvim/blob/main/lua/qfview/init.lua :
+--     local qf_winid = vim.fn.bufwinnr(ev.buf)
 --
---     -- navigate through older / newer quickfixes
+--     -- TODO this errors as there is not necessarily an open window yet
+--     vim.api.nvim_win_set_option(qf_winid, "foldmethod", "expr")
+--     vim.api.nvim_win_set_option(qf_winid, "foldexpr", "v:lua.fold_qf_expr()")
 --   end
 -- })
 
