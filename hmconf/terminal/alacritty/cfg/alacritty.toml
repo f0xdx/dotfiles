@@ -1,0 +1,13 @@
+import = [
+  "~/.config/alacritty/themes/modus_operandi.toml"
+]
+
+
+[window]
+
+startup_mode = "Maximized"
+
+
+[font]
+normal = { family = "FiraCode Nerd Font", style = "Regular"}
+size = 14
