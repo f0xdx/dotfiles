@@ -1,11 +1,4 @@
-{ config, pkgs, ... }:
-
-let
-  # TODO refactor use of these variables so that we can
-  #      pass them to the package
-  user = "fheinrichs";
-  home = "/Users/${user}";
-in
+{ config, pkgs, user, home, ... }:
 {
   imports = [
     ./shell

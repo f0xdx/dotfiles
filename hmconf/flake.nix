@@ -2,7 +2,6 @@
   description = "Home Manager configuration of fheinrichs";
 
   inputs = {
-    # Specify the source of Home Manager and Nixpkgs.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -24,6 +23,11 @@
 
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix
+        extraSpecialArgs = rec {
+          user = "fheinrichs";
+          home = "/Users/${user}";
+          theme = "modus-operandi";
+        };
       };
     };
 }

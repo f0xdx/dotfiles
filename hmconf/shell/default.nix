@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ...}:
+{ config, pkgs, lib, theme, ...}:
 {
   programs.starship = {
     enable = true;
@@ -106,23 +106,7 @@
     };
   };
 
-  programs.tmux = 
-  # let
-  #   tmux-modus-theme = pkgs.tmuxPlugins.mkTmuxPlugin
-  #     {
-  #       pluginName = "tmux-modus-theme";
-  #       version = "v1.1.2";
-  #       src = pkgs.fetchgit {
-  #         url = "https://github.com/miikanissi/modus-themes.nvim.git";
-  #         rev = "refs/tags/v1.1.2";
-  #         sparseCheckout = [
-  #           "extras/tmux"
-  #         ];
-  #         hash = null;
-  #       };
-  #     };
-  # in
-  {
+  programs.tmux = {
     enable = true;
 
     historyLimit = 10000;
@@ -147,8 +131,18 @@
 
     ];
 
-    extraConfig = ''
-      
+    extraConfig = let
+      statusBarTheme = if theme == "modus-operandi" then
+      ''
+        set-option -g status-style bg=#e6e6e6,fg=#0a0a0a
+        set-window-option -g window-status-current-style fg=#3548cf
+      '' else
+      ''
+        set-option -g status-style bg=#2d2d2d,fg=#f0f0f0
+        set-window-option -g window-status-current-style fg=#79a8ff 
+      '';
+    in
+    ''
       # Set XTerm key bindings
       setw -g xterm-keys on
       
@@ -180,7 +174,7 @@
       'set-option -g default-command "exec reattach-to-user-namespace -l zsh"'
       
       # status bar
-      set-option -g status-position bottom
+      set-option -g status-position top
       bind b set-option -g status
 
       # status line style
@@ -191,9 +185,8 @@
       set-option -g window-status-current-format "#W"
       
       # TODO change this to the modus theme once location is known
-      # run ~/.config/tmux/plugins/catppuccin/catppuccin.tmux
       #set-window-option -g window-status-current-style bg=yellow,fg=black
-    '';
+    '' + statusBarTheme; 
   };
 
   programs.zoxide = {
