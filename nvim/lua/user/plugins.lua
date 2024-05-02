@@ -32,9 +32,10 @@ return require("packer").startup(function(use)
   use "nvim-tree/nvim-web-devicons" -- icons
 
   -- treesitter/lsp compatible base16 themes
-  use "RRethy/nvim-base16"       
+  -- use "RRethy/nvim-base16"       
+     use "miikanissi/modus-themes.nvim"
   -- use "folke/tokyonight.nvim"
- 
+
   use {
     'tjdevries/express_line.nvim',
     requires = {
@@ -45,14 +46,14 @@ return require("packer").startup(function(use)
 
   if not minimal then
     -- telescope w/ native fzf
-    use { 
+    use {
       "nvim-telescope/telescope-fzf-native.nvim",
       run = "make",
     }
     use "debugloop/telescope-undo.nvim"
     use {
       "nvim-telescope/telescope.nvim",
-      requires = { 
+      requires = {
         "nvim-lua/plenary.nvim",
         "nvim-telescope/telescope-fzf-native.nvim",
         "debugloop/telescope-undo.nvim",
@@ -60,7 +61,7 @@ return require("packer").startup(function(use)
     }
 
     -- lsp
-    use "neovim/nvim-lspconfig" 
+    use "neovim/nvim-lspconfig"
     use "onsails/lspkind.nvim"
     use "hrsh7th/cmp-nvim-lsp"
     use "hrsh7th/cmp-buffer"
@@ -85,11 +86,11 @@ return require("packer").startup(function(use)
         ts_update()
       end,
     }
-    
+
     -- surround / comment / etc.
     use {
       "kylechui/nvim-surround",
-      tag = "*", 
+      tag = "*",
       config = function() require("nvim-surround").setup() end,
     }
     use {
@@ -100,7 +101,7 @@ return require("packer").startup(function(use)
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
-  if PACKER_BOOTSTRAP then
+  if packer_bootstrap then
     require("packer").sync()
   end
 end)
