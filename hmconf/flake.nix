@@ -26,7 +26,7 @@
         extraSpecialArgs = rec {
           user = "fheinrichs";
           home = "/Users/${user}";
-          theme = "modus-operandi";
+          theme = "modus-vivendi";
         };
       };
     };
