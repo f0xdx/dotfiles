@@ -44,11 +44,15 @@ require('telescope').setup {
       entry_format = "#$ID, $STAT, $TIME",
       saved_only = false,
     },
+    file_browser = {
+      hijack_netrw = true,
+    },
   }
 }
 
-require('telescope').load_extension('fzf')
 require("telescope").load_extension("undo")
+require("telescope").load_extension("file_browser")
+require("telescope").load_extension("zf-native")
 
 -- keymaps
 
@@ -61,5 +65,7 @@ vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
 vim.keymap.set("n", "<leader>fm", builtin.marks, {})
 vim.keymap.set("n", "<leader>fq", builtin.quickfix, {})
-
 vim.keymap.set("n", "<leader>u", "<cmd>Telescope undo<cr>")
+vim.keymap.set("n", "<space>fd", function()
+	require("telescope").extensions.file_browser.file_browser()
+end)

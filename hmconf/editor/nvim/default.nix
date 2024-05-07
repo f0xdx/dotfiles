@@ -10,9 +10,9 @@
     plugins = (with pkgs.vimPlugins; [
       plenary-nvim
       nvim-web-devicons
-      telescope-fzf-native-nvim
-      # TODO add instead: telescope-zf-native-nvim
+      telescope-zf-native-nvim
       telescope-undo-nvim
+      telescope-file-browser-nvim
       telescope-nvim
       nvim-lspconfig
       lspkind-nvim
@@ -65,6 +65,8 @@
     ]);
 
     extraPackages = with pkgs; [
+      fd
+      ripgrep
       lua-language-server
     ];
   };
@@ -77,12 +79,8 @@
 
 # TODO Extension points
 #
-# telescope-file-browser        - get rid of netrw and use telescope for fuzzy
-#                                 search on directories and directory overview
 # nvim-treesitter-textsubjects	- do what I mean navigation and motion commands
 #                                 based on TS nodes
 # nvim-dap / nvim-dap-cmp       - debug adapter for various languages, supports
 #                                 debugging from within nvim
-# manage treesitter grammars here instead of through the plugin, something like
-# this https://gist.github.com/nat-418/d76586da7a5d113ab90578ed56069509?permalink_comment_id=4851047#gistcomment-4851047
-# although it seems to not work directly with our overlay
+# add more language servers to the list (go, zig, haskell, fennel etc.)
