@@ -8,8 +8,11 @@
     vimdiffAlias = true;
 
     plugins = (with pkgs.vimPlugins; [
+      # basic
       plenary-nvim
       nvim-web-devicons
+
+      # telescope
       telescope-zf-native-nvim
       telescope-undo-nvim
       telescope-file-browser-nvim
@@ -22,8 +25,11 @@
       cmp-path	
       cmp-cmdline
       cmp-git
-      nvim-cmp
       luasnip
+      cmp_luasnip
+      nvim-cmp
+
+      # treesitter
       nvim-treesitter-textobjects	
       nvim-treesitter-context
       playground
@@ -56,19 +62,21 @@
         yaml
         zig
       ]))
+
+      # misc
       nvim-surround
       comment-nvim
     ]) ++ (with pkgs.vimExtraPlugins; [
       modus-themes-nvim
       express-line-nvim
-      # LuaSnip
-      cmp-luasnip
     ]);
 
     extraPackages = with pkgs; [
       fd
       ripgrep
+      nixd
       lua-language-server
+      # llm-ls # broken on mac, see: https://github.com/NixOS/nixpkgs/issues/273596
     ];
   };
 
@@ -95,3 +103,5 @@
 #   [package](https://search.nixos.org/packages?channel=unstable&show=llm-ls&from=0&size=50&sort=relevance&type=packages&query=llm-ls)
 # * use [llm-nvim](https://github.com/huggingface/llm.nvim) to integrate its
 #   suggestions into the current buffer
+# * make a simple async make utility similar to this one: https://phelipetls.github.io/posts/async-make-in-nvim-with-lua/
+#   that will just populate the quickfix buffer accordingly

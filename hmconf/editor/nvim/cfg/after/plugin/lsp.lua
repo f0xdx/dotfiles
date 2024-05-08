@@ -30,7 +30,6 @@ end
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
@@ -185,7 +184,7 @@ end
 -- language servers (default settings)
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local servers = { "elmls", "terraformls", "tsserver", "jsonls", "yamlls", "bashls", "hls", "zls" }
+local servers = { "elmls", "terraformls", "tsserver", "jsonls", "nixd", "yamlls", "bashls", "hls", "zls" }
 for _, lsp in pairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities,
