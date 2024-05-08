@@ -52,6 +52,7 @@
         sql
         terraform
         typescript
+        vimdoc
         yaml
         zig
       ]))
@@ -87,8 +88,9 @@
 #
 # TODO local LLM for better coding experience: huggingface infrastructure
 #
-# * use [TGI](https://github.com/huggingface/text-generation-inference) with
-#   docker and shared volumes for running the LLM locally
+# * use [TGI](https://github.com/huggingface/text-generation-inference), needs
+#   to be built, put in a flake and then run `text-generation-launcher --model-id MODEL_HUB_ID --port 8080`
+#   locally, ideally as a systemd unit
 # * install [llm-ls](https://github.com/huggingface/llm-ls) through its nix
 #   [package](https://search.nixos.org/packages?channel=unstable&show=llm-ls&from=0&size=50&sort=relevance&type=packages&query=llm-ls)
 # * use [llm-nvim](https://github.com/huggingface/llm.nvim) to integrate its

@@ -12,6 +12,7 @@
       url = "github:NixNeovim/NixNeovimPlugins";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
   };
 
   outputs = { nixpkgs, home-manager, ... }@inputs:
