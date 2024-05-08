@@ -96,11 +96,11 @@
 #
 # TODO local LLM for better coding experience: huggingface infrastructure
 #
+# * build a flake for https://github.com/huggingface/llm-ls in order to use the
+#   llm-ls in this config
 # * use [TGI](https://github.com/huggingface/text-generation-inference), needs
 #   to be built, put in a flake and then run `text-generation-launcher --model-id MODEL_HUB_ID --port 8080`
 #   locally, ideally as a systemd unit
-# * install [llm-ls](https://github.com/huggingface/llm-ls) through its nix
-#   [package](https://search.nixos.org/packages?channel=unstable&show=llm-ls&from=0&size=50&sort=relevance&type=packages&query=llm-ls)
 # * use [llm-nvim](https://github.com/huggingface/llm.nvim) to integrate its
 #   suggestions into the current buffer
 # * make a simple async make utility similar to this one: https://phelipetls.github.io/posts/async-make-in-nvim-with-lua/
