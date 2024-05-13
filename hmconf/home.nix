@@ -50,6 +50,10 @@
     fd
     direnv
     bottom
+    kubectl
+    (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
+      gke-gcloud-auth-plugin
+    ]))
 
     # available fonts: https://github.com/NixOS/nixpkgs/blob/nixos-23.11/pkgs/data/fonts/nerdfonts/shas.nix
     (nerdfonts.override { fonts = [
