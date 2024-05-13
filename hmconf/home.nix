@@ -14,6 +14,7 @@
     shellAliases = {
       # TODO move this to the shell module that we import above
       lsx = "eza -T -L1 --color always --icons -s name --group-directories-first";
+      k = "kubectl";
     };
     
     # Home Manager can also manage your environment variables through

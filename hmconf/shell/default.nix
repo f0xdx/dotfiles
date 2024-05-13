@@ -34,7 +34,11 @@
     ];
 
     initExtra = ''
+      # fzf path completion for eza and others
       _fzf_setup_completion path eza lsx bat nvim.sh
+
+      # kubectl completion on `k` alias
+      source <(kubectl completion bash | sed 's|__start_kubectl kubectl|__start_kubectl k|g')
     '';
 
     # note: can also source complete files like this
