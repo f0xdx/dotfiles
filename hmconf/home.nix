@@ -49,6 +49,7 @@
     ripgrep
     fd
     direnv
+    bottom
 
     # available fonts: https://github.com/NixOS/nixpkgs/blob/nixos-23.11/pkgs/data/fonts/nerdfonts/shas.nix
     (nerdfonts.override { fonts = [
