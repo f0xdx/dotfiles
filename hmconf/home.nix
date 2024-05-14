@@ -48,8 +48,6 @@
     yq
     delta
     ripgrep
-    fd
-    direnv
     bottom
     kubectl
     (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
