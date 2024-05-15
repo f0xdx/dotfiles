@@ -183,8 +183,24 @@ end
 
 -- language servers (default settings)
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local servers = { "elmls", "terraformls", "tsserver", "jsonls", "nixd", "yamlls", "bashls", "hls", "zls" }
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+capabilities.workspace = {
+  didChangeWatchedFiles = {
+    dynamicRegistration = true,
+  },
+}
+local servers = {
+  "bashls",
+  "elmls",
+  "hls",
+  "jsonls",
+  "marksman",
+  "nixd",
+  "terraformls",
+  "tsserver",
+  "yamlls",
+  "zls",
+}
 for _, lsp in pairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities,

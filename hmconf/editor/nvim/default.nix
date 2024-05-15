@@ -72,11 +72,12 @@
     ]);
 
     extraPackages = with pkgs; [
-      fd
-      ripgrep
-      nixd
-      lua-language-server
       # llm-ls # broken on mac, see: https://github.com/NixOS/nixpkgs/issues/273596
+      fd
+      lua-language-server
+      marksman
+      nixd
+      ripgrep
     ];
   };
 
