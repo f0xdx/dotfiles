@@ -74,6 +74,7 @@
     extraPackages = with pkgs; [
       # llm-ls # broken on mac, see: https://github.com/NixOS/nixpkgs/issues/273596
       fd
+      gopls
       lua-language-server
       marksman
       nixd
