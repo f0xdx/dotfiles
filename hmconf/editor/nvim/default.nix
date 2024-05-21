@@ -34,7 +34,6 @@
       nvim-treesitter-context
       playground
       (nvim-treesitter.withPlugins (p: with p; [
-        bash
         comment
         css
         diff
@@ -65,7 +64,6 @@
 
       # misc
       nvim-surround
-      comment-nvim
     ]) ++ (with pkgs.vimExtraPlugins; [
       modus-themes-nvim
       express-line-nvim

@@ -6,8 +6,8 @@
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<leader>df', vim.diagnostic.open_float)
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+-- vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+-- vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<leader>dd", vim.diagnostic.setqflist, opts)
 vim.keymap.set("n", "<leader>db", vim.diagnostic.setloclist, opts)
 
@@ -44,7 +44,9 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("n", "gc", vim.lsp.buf.incoming_calls, bufopts)
   vim.keymap.set("n", "gC", vim.lsp.buf.outgoing_calls, bufopts)
   vim.keymap.set("i", "<C-s>", vim.lsp.buf.hover, bufopts)
-  vim.keymap.set("n", "<leader>h", vim.lsp.buf.hover, bufopts)
+  vim.keymap.set("n", "<leader>h", function ()
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+  end, bufopts)
   vim.keymap.set("n", "<leader>k", vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set("n", "<leader>s", vim.lsp.buf.document_symbol, bufopts)
   vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, bufopts)
@@ -184,11 +186,11 @@ end
 -- language servers (default settings)
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
--- capabilities.workspace = {
---   didChangeWatchedFiles = {
---     dynamicRegistration = true,
---   },
--- }
+capabilities.workspace = {
+  didChangeWatchedFiles = {
+    dynamicRegistration = true,
+  },
+}
 local servers = {
   "bashls",
   "elmls",
@@ -235,7 +237,10 @@ lspconfig.lua_ls.setup {
             }
             -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
             -- library = vim.api.nvim_get_runtime_file("", true)
-          }
+          },
+          hint = {
+            enable = true,
+          },
         }
       })
 
@@ -261,6 +266,15 @@ lspconfig.gopls.setup {
       staticcheck = true,
       gofumpt = true,
       env = { GOFLAGS = "-tags=it" },
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        functionTypeParameters = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
     },
   },
   flags = {
