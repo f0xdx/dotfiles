@@ -199,7 +199,7 @@ local servers = {
   "marksman",
   "nixd",
   "terraformls",
-  "tsserver",
+  "ts_ls",
   "yamlls",
   "zls",
 }

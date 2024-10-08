@@ -33,7 +33,6 @@ require('telescope').setup {
   extensions = {
     undo = {
       use_delta = false,
-      diff_context_lines = vim.o.scrolloff,
       entry_format = "#$ID, $STAT, $TIME",
       saved_only = false,
     },
