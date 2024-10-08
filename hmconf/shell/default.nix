@@ -1,4 +1,4 @@
-{ config, pkgs, lib, theme, ...}:
+{ config, pkgs, lib, theme, home, ...}:
 {
   programs.starship = {
     enable = true;
@@ -103,6 +103,8 @@
       "--tac"
       "--height 40%"
     ];
+
+    tmux.enableShellIntegration = true;
   };
 
   programs.bat = {
@@ -136,6 +138,8 @@
       }
 
     ];
+
+    shell = "${pkgs.bash}/bin/bash";
 
     extraConfig = let
       statusBarTheme = if theme == "modus-operandi" then
@@ -209,4 +213,62 @@
       "--group-directories-first"
     ];
   };
+
+  programs.git = {
+    enable = true;
+    userEmail = "felix.heinrichs@esgbook.com";
+    userName = "Dr. Felix Heinrichs";
+
+    signing = {
+      key = "${home}/.ssh/id_ed25519.pub";
+      signByDefault = true;
+    };
+
+    aliases = {
+      lg = "log --graph --oneline --decorate";
+      st = "status -s";
+      co = "checkout";
+    };
+
+    extraConfig = {
+      core = {
+        editor = "nvim";
+      };
+      push = {
+        default = "current";
+      };
+      pull = {
+        rebase = true;
+      };
+      fetch = {
+        prune = true;
+	      pruneTags = true;
+      };
+      init = {
+        defaultbranch = "main";
+      };
+      gpg = {
+        format = "ssh";
+      };
+    };
+
+    delta = {
+      enable = true;
+      options = {
+        line-numbers = true;
+	      side-by-side = true;
+	      navigate = true;
+	      # features = "GitHub";
+      };
+    };
+  };
+
+  programs.gh = {
+    enable = true;
+
+    settings = {
+      git_protocol = "ssh";
+    };
+  };
+
 }
