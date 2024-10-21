@@ -181,7 +181,7 @@
       # Enable pbcopy/pbpaste in tmux.
       if-shell \
         'test "$(uname -s)" = Darwin && type reattach-to-user-namespace > /dev/null' \
-      'set-option -g default-command "exec reattach-to-user-namespace -l zsh"'
+      'set-option -g default-command "exec reattach-to-user-namespace -l $SHELL"'
       
       # status bar
       set-option -g status-position top
@@ -207,7 +207,7 @@
   programs.eza = {
     enable = true;
     enableBashIntegration = true;
-    icons = true;
+    icons = "auto";
     git = true;
     extraOptions = [
       "--group-directories-first"
