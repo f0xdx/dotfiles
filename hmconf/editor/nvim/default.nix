@@ -73,6 +73,9 @@
       # llm-ls # broken on mac, see: https://github.com/NixOS/nixpkgs/issues/273596
       fd
       gopls
+      go
+      gofumpt
+      golangci-lint
       lua-language-server
       marksman
       nixd

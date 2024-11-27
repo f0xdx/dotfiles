@@ -54,6 +54,10 @@
       gke-gcloud-auth-plugin
     ]))
     gh
+    gopls
+    go
+    gofumpt
+    golangci-lint
     curl
     auth0-cli
 

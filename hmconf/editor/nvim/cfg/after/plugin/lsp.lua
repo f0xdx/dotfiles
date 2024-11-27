@@ -186,11 +186,11 @@ end
 -- language servers (default settings)
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-capabilities.workspace = {
-  didChangeWatchedFiles = {
-    dynamicRegistration = true,
-  },
-}
+-- capabilities.workspace = {
+--   didChangeWatchedFiles = {
+--     dynamicRegistration = true,
+--   },
+-- }
 local servers = {
   "bashls",
   "elmls",
