@@ -3,9 +3,11 @@
   programs.alacritty = {
     enable = true;
     settings = {
-      import = [
-        "${config.xdg.configHome}/alacritty/themes/${builtins.replaceStrings ["-"] ["_"] theme}.toml"
-      ];
+      general = {
+        import = [
+          "${config.xdg.configHome}/alacritty/themes/${builtins.replaceStrings ["-"] ["_"] theme}.toml"
+        ];
+      };
 
       window = {
         startup_mode = "Maximized";
@@ -15,6 +17,10 @@
         normal = {
           family = "FiraCode Nerd Font";
           style = "Regular";
+        };
+        bold = {
+          family = "FiraCode Nerd Font";
+          style = "Bold";
         };
         size = 14;
       };

@@ -139,7 +139,7 @@
 
     ];
 
-    shell = "${pkgs.bash}/bin/bash";
+    # shell = "${pkgs.bash}/bin/bash";
 
     extraConfig = let
       statusBarTheme = if theme == "modus-operandi" then

@@ -61,11 +61,12 @@
     curl
     auth0-cli
 
-    # available fonts: https://github.com/NixOS/nixpkgs/blob/nixos-23.11/pkgs/data/fonts/nerdfonts/shas.nix
-    (nerdfonts.override { fonts = [
-      "Hack"
-      "FiraCode"
-    ]; })
+    # (nerdfonts.override { fonts = [
+    #   "Hack"
+    #   "FiraCode"
+    # ]; })
+    nerd-fonts.hack
+    nerd-fonts.fira-code
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your

@@ -80,6 +80,7 @@
       marksman
       nixd
       ripgrep
+      terraform-ls
     ];
   };
 
