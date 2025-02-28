@@ -4,6 +4,7 @@
     ./shell
     ./terminal/alacritty
     ./editor/nvim
+    ./editor/zed
   ];
   
   home = {
