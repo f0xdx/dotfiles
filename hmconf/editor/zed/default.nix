@@ -7,6 +7,7 @@
 
     extensions = [
       "basher"
+      "git-firefly"
       "make"
       "marksman"
       "modus-themes"
