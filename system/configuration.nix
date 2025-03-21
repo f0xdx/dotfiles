@@ -59,8 +59,8 @@ in
     kernelParams = [
       # airplane mode button on msi ws65 (to fix suspend wireless deactivation)
       # activating this breaks the touchpad after resume on 5.15, fix after 5.19
-      "acpi_osi=!" 
-      "acpi_osi=\"Windows 2009\""
+      # "acpi_osi=!" 
+      # "acpi_osi=\"Windows 2009\""
       # "acpi_osi=\"Windows 2018\""
       # "acpi_osi=\"Windows 2018.2\""
       # "acpi_osi=\"Windows 2020\""
