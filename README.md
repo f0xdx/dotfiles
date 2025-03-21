@@ -1,78 +1,59 @@
 # dotfiles
 
 Personal configuration to be used on different devices. These are base settings
-for various tools in my personal workflow. Feel free to use, adapt or laugh at
-them.
+for various tools in my personal workflow. Configuration is rolled out through
+[nix home manager](https://github.com/nix-community/home-manager) and managed in
+a nix flake.
 
-Most of their contents are not my own creative work, but stem from
-various sources, in fact far to many for me to recall. All I can do to thank
-those anonymous authors which have put time and effort into figuring out what
-works and what doesn't, is to contribute my patchwork back to the community and
-let you guys do the same. Enjoy :)
-
-
-## Parameters
-
-To figure out whether this repo is useful for you, I will first list some of my
-base parameters. If you find yourself nodding at most of them, it might be
-a fit. If not, maybe there are better config repos out there for you.
-
-These are my basic parameters:
-
- * I work on different machines with different OS, mainly Windows 10 and Linux
-   (Fedora, Ubuntu) ... sorry MacOS fanboys
- * I love Vim, in fact neovim, and modal editing but I hate controversy around
-   editors; everybody should use what works for them
- * I love the fresh air that the rust language, community and ecosystem bring,
-   you guys are great!
- * color schemes and themes do matter, one-dark all the way!
-
-Tools supporting my daily work:
-
- * neovim and/or vscode
- * alacritty, zsh and powershell ... yep, it's way cooler than we linux nerds
-   care to admit
- * fzf (TODO try [skim](https://github.com/lotabout/skim)), ripgrep, bat and broot
+Currently, this supports the nixos config of my personal machine (buildr),
+buildrs home files for my user and my user on the work machine. Others may be
+added in the future.
 
 
-## Requirements
+## Overview
 
- * FuraCode NF
- * zsh on Linux, powershell on windows
- * rustup and cargo (?) 
+The core toolchain is
 
-## Installation
+* [alacritty](https://alacritty.org/) as terminal emulator
+* [neovim](https://neovim.io/) as CLI editor and [zed](https://zed.dev/) as IDE
+* [eza](https://eza.rocks/), [bat](https://github.com/sharkdp/bat),
+  [zoxide](https://github.com/ajeetdsouza/zoxide) and of course 
+  [fzf](https://github.com/junegunn/fzf) for a fast and modern CLI experience
+* various small utilities tailored to a mostly CLI based workflow with some
+  graphical tools where it makes sense
 
-### Linux
+Other tools will be added as needed over time. For the nixos config, those are
+run on a full wayland based custom desktop using pipewire which prioritises
+speed and utility over completeness and design.
 
-TBD
 
-### Windows
+## How to apply
 
-This repo includes a simple powershell script that will install the settings on
-your system. Note that Powershell controls script execution
-[through execution policies](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies)
-to prevent execution of scripts from dubious sources.
+In order to update the dependencies run
 
-Therefore, you will have to either set the correct execution policy or sign the
-script yourself. In order to execute the script once without permanently
-changing any settings on your system, you can run the following snippet from an
-elevated command line (admin):
-
-```powershell
-Set-ExecutionPolicy -Scope Process RemoteSigned; .\setup.ps1
+```sh
+nix flake update
 ```
 
-This will create symlinks to the files contained and versioned in this repo and
-backup your previous configuration files (if any).
+For system update then run
 
-**Note** For a complete experience, I recommend to check out the awesome
-[oh-my-posh](https://github.com/JanDeDobbeleer/oh-my-posh) project. 
+```sh
+sudo nixos-rebuild switch --flake .#
+```
 
-## Future Work 
+For home manager setup run
 
- * [ ] add script and installation instructions for linux
- * [ ] adapt scripts to prepare environment, point out missing programs
-   initiate installs etc.
- * [ ] configure tmux / vim for tmux
- * [ ] configure zsh / oh-my-zsh
+```sh
+home-manager switch --flake .#f0xdx
+```
+
+
+## Desktop Guide
+
+This section will over time be completed by explaining how to
+
+* manage WIFIs
+* manage bluetooth devices
+* manage additional screens and peripherals
+* setup screen recordings, screenshots and video calls
+
