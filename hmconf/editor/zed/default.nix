@@ -84,6 +84,17 @@
 
 
       # lsp
+      languages = {
+        "Nix" = {
+          formatter.external = {
+            command = "alejandra";
+            arguments = [
+              "--quiet"
+              "--"
+            ];
+          };
+        };
+      };
       lsp = {
           gopls = {
               path_lookup = true;
@@ -121,6 +132,7 @@
     };
 
     extraPackages = with pkgs; [
+      alejandra
       go
       gofumpt
       golangci-lint
