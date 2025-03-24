@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ... }:
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # config example: https://wiki.nixos.org/wiki/Zed#LSP_Support
 
   programs.zed-editor = {
@@ -50,38 +54,35 @@
         npm_path = getExe' pkgs.nodejs "npm";
       };
 
-
       # font settings
       ui_font_family = "FiraCode Nerd Font";
       ui_font_size = 14;
       buffer_font_family = "FiraCode Nerd Font";
       buffer_font_size = 14;
 
-
       # key bindings
 
       base_keymap = "VSCode";
       vim_mode = true;
       vim = {
-          toggle_relative_line_numbers = false;
-          use_multiline_find = true;
-          use_smartcase_find = true;
+        toggle_relative_line_numbers = false;
+        use_multiline_find = true;
+        use_smartcase_find = true;
       };
       relative_line_numbers = false;
 
       # theme
       theme = {
-          mode = "system";
-          light = "Modus Operandi";
-          dark = "Modus Vivendi";
+        mode = "system";
+        light = "Modus Operandi";
+        dark = "Modus Vivendi";
       };
 
       icon_theme = {
-          mode = "system";
-          light = "Light Icon Theme";
-          dark = "Dark Icon Theme";
+        mode = "system";
+        light = "Light Icon Theme";
+        dark = "Dark Icon Theme";
       };
-
 
       # lsp
       languages = {
@@ -96,38 +97,38 @@
         };
       };
       lsp = {
-          gopls = {
-              path_lookup = true;
-              initialization_options = {
-                  # options found here: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
-                  usePlaceholders = true;
-                  staticcheck = true;
-                  gofumpt = true;
-                  vulncheck = "Imports";
+        gopls = {
+          path_lookup = true;
+          initialization_options = {
+            # options found here: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
+            usePlaceholders = true;
+            staticcheck = true;
+            gofumpt = true;
+            vulncheck = "Imports";
 
-                  # TODO may also need hints: https://github.com/golang/tools/blob/master/gopls/doc/settings.md#inlayhint
-                  # TODO may also need analyzers: https://github.com/golang/tools/blob/master/gopls/doc/settings.md#analyses-mapstringbool
-                  # TODO need to check whether this is also needed
-                  # buildFlags = [
-                  #   "-tags=it"
-                  # ];
+            # TODO may also need hints: https://github.com/golang/tools/blob/master/gopls/doc/settings.md#inlayhint
+            # TODO may also need analyzers: https://github.com/golang/tools/blob/master/gopls/doc/settings.md#analyses-mapstringbool
+            # TODO need to check whether this is also needed
+            # buildFlags = [
+            #   "-tags=it"
+            # ];
 
-                  env = {
-                    GOFLAGS = "-tags=it";
-                  };
-              };
+            env = {
+              GOFLAGS = "-tags=it";
+            };
           };
-          nixd = {
-            # path = lib.getExe pkgs.nixd;
-            path_lookup = true; # set this for using system wide install
-          };
-          nil = {
-            # path = lib.getExe pkgs.nil;
-            path_lookup = true; # set this for using system wide install
-          };
-          shellcheck = {
-              path_lookup = true;
-          };
+        };
+        nixd = {
+          # path = lib.getExe pkgs.nixd;
+          path_lookup = true; # set this for using system wide install
+        };
+        nil = {
+          # path = lib.getExe pkgs.nil;
+          path_lookup = true; # set this for using system wide install
+        };
+        shellcheck = {
+          path_lookup = true;
+        };
       };
     };
 
