@@ -1,25 +1,64 @@
 # dotfiles
 
-This repository contains my personal dotfiles. Configuration is based on
-[home manager]().
+Personal configuration to be used on different devices. These are base settings
+for various tools in my personal workflow. Configuration is rolled out through
+[nix home manager](https://github.com/nix-community/home-manager) and managed in
+a nix flake.
 
-## Install
+Currently, this supports the nixos config of my personal machine (buildr),
+buildrs home files for my user and my user on the work machine. Others may be
+added in the future.
 
-In order to install, backup your current configuration and run
 
+## Overview
+
+The core toolchain is
+
+* [alacritty](https://alacritty.org/) as terminal emulator
+* [neovim](https://neovim.io/) as CLI editor and [zed](https://zed.dev/) as IDE
+* [eza](https://eza.rocks/), [bat](https://github.com/sharkdp/bat),
+  [zoxide](https://github.com/ajeetdsouza/zoxide) and of course
+  [fzf](https://github.com/junegunn/fzf) for a fast and modern CLI experience
+* various small utilities tailored to a mostly CLI based workflow with some
+  graphical tools where it makes sense
+
+Other tools will be added as needed over time. For the nixos config, those are
+run on a full wayland based custom desktop using pipewire which prioritises
+speed and utility over completeness and design.
+
+
+## How to apply
+
+In order to update the dependencies run
 
 ```sh
-git clone git@github.com:f0xdx/dotfiles.git
-cd dotfiles
-home-manager switch --flake hmconf/
+nix flake update
 ```
 
-> **NOTE** This is currently a work in progress. There is another branch that
-> was an earlier attempt at moving to home manger (nix), which also supports a
-> NixOS configuration. Stay tuned for further integration
+For system update then run
 
-## Future Work
+```sh
+sudo nixos-rebuild switch --flake .#
+```
 
-* [ ] consolidate with nix branch to have a single flake
-* [ ] add proper dev tooling support (git, gh, etc.)
-* [ ] add shell completions back from earlier bash file
+For home manager setup run
+
+```sh
+home-manager switch --flake .
+```
+
+
+## Desktop Guide
+
+This section will over time be completed by explaining how to
+
+* manage WIFIs
+* manage bluetooth devices
+* manage additional screens and peripherals
+* setup screen recordings, screenshots and video calls
+
+## TODOs / Ideas
+
+* [ ] bash scripts
+* [ ] automatic brightness control on wayland with [wluma](https://github.com/maximbaz/wluma)
+* [ ] tiling window manager on mac osx with [aerospace](https://github.com/nikitabobko/AeroSpace)

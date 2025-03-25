@@ -1,23 +1,30 @@
-{ config, pkgs, user, home, ... }:
 {
+  config,
+  pkgs,
+  user,
+  home,
+  ...
+}: {
   imports = [
     ./shell
     ./terminal/alacritty
     ./editor/nvim
-    ./editor/zed
+    # TODO re-enable zed once build works again
+    # ./editor/zed
   ];
-  
+
   home = {
     username = user;
     homeDirectory = home;
     preferXdgDirectories = true;
-    
+
+    shell.enableBashIntegration = true;
     shellAliases = {
       # TODO move this to the shell module that we import above
       lsx = "eza -T -L1 --color always --icons -s name --group-directories-first";
       k = "kubectl";
     };
-    
+
     # Home Manager can also manage your environment variables through
     # 'home.sessionVariables'. These will be explicitly sourced when using a
     # shell provided by Home Manager. If you don't want to manage your shell
@@ -99,7 +106,7 @@
   # You should not change this value, even if you update Home Manager. If you do
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
-  home.stateVersion = "23.11"; # Please read the comment before changing.
+  home.stateVersion = "24.11"; # Please read the comment before changing.
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
