@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -153,7 +152,7 @@
   # local LLM support
 
   # https://nix-community.github.io/home-manager/options.xhtml#opt-services.ollama.enable
-  services.ollama = {
-    enable = true;
-  };
+  # services.ollama = {
+  #   enable = true;
+  # };
 }
