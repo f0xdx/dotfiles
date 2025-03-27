@@ -28,6 +28,8 @@
           ctrl-l = "workspace::ActivatePaneRight";
           ctrl-k = "workspace::ActivatePaneUp";
           ctrl-j = "workspace::ActivatePaneDown";
+          "ctrl-w %" = "pane::SplitVertical";
+          "ctrl-w \"" = "pane::SplitHorizontal";
         };
       }
     ];
@@ -35,8 +37,9 @@
     userSettings = {
       # AI assistant
       assistant = {
-        enabled = false;
-        # TODO enable ai assistant through local ollama
+        enabled = true;
+        version = "2";
+        # TODO configure to use other providers if relevant
       };
 
       # base

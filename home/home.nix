@@ -9,8 +9,7 @@
     ./shell
     ./terminal/alacritty
     ./editor/nvim
-    # TODO re-enable zed once build works again
-    # ./editor/zed
+    ./editor/zed
   ];
 
   home = {
