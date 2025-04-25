@@ -10,11 +10,14 @@
 
     extensions = [
       "basher"
+      "dockerfile"
       "git-firefly"
+      "golangci-lint"
       "make"
       "marksman"
       "modus-themes"
       "nix"
+      "proto"
     ];
 
     userKeymaps = [
@@ -98,6 +101,11 @@
           };
         };
       };
+      file_types = {
+        Dockerfile = [
+          "Dockerfile.*"
+        ];
+      };
       lsp = {
         gopls = {
           path_lookup = true;
@@ -131,20 +139,28 @@
         shellcheck = {
           path_lookup = true;
         };
+        dockerfile-language-server = {
+          # path_lookup = true;
+          path = lib.getExe pkgs.dockerfile-language-server-nodejs;
+        };
+        golangci-lint = {
+          path_lookup = true;
+        };
       };
     };
 
     extraPackages = with pkgs; [
       alejandra
+      dockerfile-language-server-nodejs
       go
       gofumpt
       golangci-lint
       gopls
       govulncheck
       marksman
-      nodejs
-      nixd
       nil
+      nixd
+      nodejs
       shellcheck
     ];
   };
