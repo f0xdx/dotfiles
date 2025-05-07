@@ -35,16 +35,22 @@
     # create a nixos system definition
     mkNixosSystem = {
       system,
+      user,
       host,
     }: let
       pkgs = mkPkgs system;
     in {
       "${host}" = pkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit inputs;}; # pass flake inputs through
+        specialArgs = {
+          inherit inputs; # pass flake inputs through
+          inherit user;
+          inherit host;
+        }; 
 
         modules = [
-          ./system/configuration.nix # TODO refactor to use name in path
+          ./hosts/${host}/configuration.nix
+          ./system
         ];
       };
     };
@@ -74,14 +80,15 @@
       };
     };
   in {
-    # NixOS config entry point
+    # NixOS config 
     # organized by hostname, apply through 'sudo nixos-rebuild --flake .#'
     nixosConfigurations = mkNixosSystem {
       system = "x86_64-linux";
+      user = "f0xdx";
       host = "buildr";
     };
 
-    # HomeManager standalone entry point
+    # HomeManager standalone
     # organized by username, apply through 'homemanager switch --flake .'
     homeConfigurations =
       mkHomeConfig {
