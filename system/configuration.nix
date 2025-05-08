@@ -130,10 +130,10 @@ in
 
   hardware.opengl = {
     enable = true;
-    driSupport = true;
     driSupport32Bit = true;
   };
   hardware.nvidia = {
+    open = true;
     powerManagement.enable = true;
     modesetting.enable = true;
   };
@@ -237,9 +237,6 @@ in
 
 
   # sound
-
-  # disabled to not conflict with pipewire
-  sound.enable = false;
 
   # optional but recommended
   security.rtkit.enable = true;
