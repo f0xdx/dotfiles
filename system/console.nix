@@ -24,5 +24,11 @@
       nerd-fonts.fira-code
       nerd-fonts.fira-mono
     ];
+
+
+    environment.systemPackages = with pkgs; [
+      neovim 
+      tmux
+    ];
   };
 }

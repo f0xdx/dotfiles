@@ -56,9 +56,7 @@
 
   environment.systemPackages = with pkgs; [
     brightnessctl
-    neovim 
     pciutils
-    tmux
   ];
 
   security.polkit.enable = true;
