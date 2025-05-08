@@ -6,9 +6,6 @@
   };
 
   config = lib.mkIf config.sound_support.enable {
-    # disabled to not conflict with pipewire
-    sound.enable = false;
-
     # optional but recommended
     security.rtkit.enable = true;
     services.pipewire = {

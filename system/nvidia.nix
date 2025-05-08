@@ -6,17 +6,12 @@
   };
 
   config = lib.mkIf config.nvidia_support.enable {
-    nixpkgs.config = {
-      allowUnfree = true;
-    };
-
     hardware.graphics = {
       enable = true;
       extraPackages = with pkgs; [nvidia-vaapi-driver];
     };
 
     hardware.nvidia = {
-      enabled = true;
       open = true;
       powerManagement.enable = true;
       # modesetting.enable = true;

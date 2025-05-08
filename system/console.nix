@@ -11,9 +11,10 @@
     console = {
       earlySetup = true;
       packages = with pkgs; [ nerd-fonts.fira-mono ];
-      font = "FiraMono Nerd Font";
       # keyMap = "de";
       useXkbConfig = true; # use xkbOptions in tty.
+      # TODO make this depend on whether or not desktop support and hence xkb is
+      #      enabled
     };
   
 

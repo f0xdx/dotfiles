@@ -11,19 +11,21 @@
 
     services.xserver = {
       # keyboard layouts
-      layout = "de,us";
-      xkbVariant = ",intl";
-      xkbOptions = "grp:win_space_toggle,eurosign:e";
-      
-      # touchpad support
-      libinput.enable = true;
+      xkb = {
+        layout = "de,us";
+        variant = ",intl";
+        options = "grp:win_space_toggle,eurosign:e";
+      };
     };
+
+    # touchpad support
+    services.libinput.enable = true;
 
     services.greetd = {
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.greetd}/bin/agreety --cmd ${pkgs.hyprland}/bin/Hyprland";
+          command = "${pkgs.greetd.greetd}/bin/agreety --cmd ${pkgs.hyprland}/bin/Hyprland";
         };
       };
     };
@@ -31,13 +33,6 @@
 
     programs.uwsm = {
       enable = true;
-      waylandCompositors = {
-        hyprland = {
-          prettyName = "Hyprland";
-          comment = "Hyprland compositor (UWSM)";
-          binPath = "${pkgs.hyprland}/bin/Hyprland";
-        };
-      };
     };
 
     programs.hyprland = {
@@ -69,3 +64,7 @@
     };
   };
 }
+# trace: evaluation warning: The option `services.xserver.xkbVariant' defined in `/nix/store/n171h57mwf839rfkz3rzhplgiqcmk86w-source/system/desktop.nix' has been renamed to `services.xserver.xkb.variant'.
+# trace: evaluation warning: The option `services.xserver.xkbOptions' defined in `/nix/store/n171h57mwf839rfkz3rzhplgiqcmk86w-source/system/desktop.nix' has been renamed to `services.xserver.xkb.options'.
+# trace: evaluation warning: The option `services.xserver.layout' defined in `/nix/store/n171h57mwf839rfkz3rzhplgiqcmk86w-source/system/desktop.nix' has been renamed to `services.xserver.xkb.layout'.
+# trace: evaluation warning: The option `services.xserver.libinput.enable' defined in `/nix/store/n171h57mwf839rfkz3rzhplgiqcmk86w-source/system/desktop.nix' has been renamed to `services.libinput.enable'.

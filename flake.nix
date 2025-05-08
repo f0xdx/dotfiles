@@ -39,9 +39,11 @@
       host,
     }: let
       pkgs = mkPkgs system;
+      lib = nixpkgs.lib;
     in {
-      "${host}" = pkgs.lib.nixosSystem {
+      "${host}" = lib.nixosSystem {
         inherit system;
+        inherit pkgs;
         specialArgs = {
           inherit inputs; # pass flake inputs through
           inherit user;

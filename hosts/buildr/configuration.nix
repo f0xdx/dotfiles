@@ -6,8 +6,8 @@
     ];
 
   boot = {
-    # kernelPackages = pkgs.linuxPackages_latest;
-    kernelPackages = pkgs.linuxPackages_xanmod;
+    kernelPackages = pkgs.linuxPackages_latest; # YOLO
+    # kernelPackages = pkgs.linuxPackages_xanmod;
     kernelParams = [
       # airplane mode button on msi ws65 (to fix suspend wireless deactivation)
       # activating this breaks the touchpad after resume on 5.15, fix after 5.19
@@ -33,7 +33,6 @@
   networking = {
     hostName = host;
     networkmanager.enable = true;  
-    wireless.enable = true;
   };
 
 
@@ -44,7 +43,7 @@
 
   # users
 
-  "users.users.${user}" = {
+  users.users.${user} = {
     isNormalUser = true;
     initialPassword = "changeme";
     extraGroups = [ "wheel" "video" ]; # enable ‘sudo’ for the user.
@@ -75,6 +74,6 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
 
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 
 }
