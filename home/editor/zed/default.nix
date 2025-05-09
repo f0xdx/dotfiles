@@ -78,7 +78,8 @@
 
       # theme
       theme = {
-        mode = "system";
+        # mode = "system";
+        mode = "dark"; # TODO this should be system on mac, hardcoded on linux
         light = "Modus Operandi";
         dark = "Modus Vivendi";
       };

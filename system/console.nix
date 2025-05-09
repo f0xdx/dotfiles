@@ -11,20 +11,13 @@
     console = {
       earlySetup = true;
       packages = with pkgs; [ nerd-fonts.fira-mono ];
+      # font = "ter-u18n";
       # keyMap = "de";
       useXkbConfig = true; # use xkbOptions in tty.
       # TODO make this depend on whether or not desktop support and hence xkb is
       #      enabled
     };
   
-
-    # fonts
-
-    fonts.packages = with pkgs; [
-      nerd-fonts.hack
-      nerd-fonts.fira-code
-      nerd-fonts.fira-mono
-    ];
 
 
     environment.systemPackages = with pkgs; [

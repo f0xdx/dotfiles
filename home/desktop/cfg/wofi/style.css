@@ -1,0 +1,31 @@
+window {
+  border-radius: 1em;
+  padding: 1em;
+  border: 2px solid rgba(89, 89, 89, 0.62);
+  background-color: rgba(0, 0, 0, 0.62);
+}
+
+#input {
+  border-radius: 1em;
+  margin: 0.38em;
+  border: 2px solid rgba(0, 255, 153, 0.93);
+  color: #ffffff;
+  background-color: #2f3849;
+}
+
+#entry:selected {
+  background-color: #2f3849;
+}
+
+#entry {
+  margin: 0em 1em 0em 1em ;
+  border: none;
+}
+
+#img {
+  padding-right: 0.38em;
+}
+
+#expander-box {
+  background: transparent;
+}

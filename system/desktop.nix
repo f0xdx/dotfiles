@@ -14,7 +14,7 @@
       xkb = {
         layout = "de,us";
         variant = ",intl";
-        options = "grp:win_space_toggle,eurosign:e";
+        options = "grp:win_space_toggle,eurosign:e,ctrl:nocaps";
       };
     };
 
@@ -40,16 +40,36 @@
       withUWSM = true;
       xwayland.enable = false;
     };
-    
+
+    services.hypridle.enable = true;
+    programs.hyprlock.enable = true;
+    security.pam.services.hyprlock = {};
+
     environment.systemPackages = with pkgs; [
-      hyprland
+      alacritty
       glib                  # gsettings
       grim                  # screenshots, works with slurp
+      hyprpaper
+      libnotify
+      mako
       slurp                 # select regions on wayland comp
       wayland
+      waybar
       wev                   # debug wayland events, e.g., key presses
       wl-clipboard          # wl-copy and wl-paste for copy/paste from stdin / stdout
       xdg-utils             # open default programs when clicking links
+    ];
+
+    environment.sessionVariables = {
+      NIXOS_OZONE_WL = "1";
+    };
+
+    # fonts
+
+    fonts.packages = with pkgs; [
+      nerd-fonts.hack
+      nerd-fonts.fira-code
+      nerd-fonts.fira-mono
     ];
 
     xdg.portal = {
@@ -59,12 +79,8 @@
       extraPortals = with pkgs; [ 
         xdg-desktop-portal-wlr
         xdg-desktop-portal-gtk
-        xdg-desktop-portal-hyprland
+        # xdg-desktop-portal-hyprland
       ];
     };
   };
 }
-# trace: evaluation warning: The option `services.xserver.xkbVariant' defined in `/nix/store/n171h57mwf839rfkz3rzhplgiqcmk86w-source/system/desktop.nix' has been renamed to `services.xserver.xkb.variant'.
-# trace: evaluation warning: The option `services.xserver.xkbOptions' defined in `/nix/store/n171h57mwf839rfkz3rzhplgiqcmk86w-source/system/desktop.nix' has been renamed to `services.xserver.xkb.options'.
-# trace: evaluation warning: The option `services.xserver.layout' defined in `/nix/store/n171h57mwf839rfkz3rzhplgiqcmk86w-source/system/desktop.nix' has been renamed to `services.xserver.xkb.layout'.
-# trace: evaluation warning: The option `services.xserver.libinput.enable' defined in `/nix/store/n171h57mwf839rfkz3rzhplgiqcmk86w-source/system/desktop.nix' has been renamed to `services.libinput.enable'.
