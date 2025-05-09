@@ -9,6 +9,11 @@ in {
     enable = true;
   };
 
+  programs.hyprlock = {
+    enable = true;
+  };
+  # TODO as we are also abusing hyprlock to lock the session on start, we need
+  # to add a shutdown / reboot button as a clickable image widget
 
   # wofi: application launcher
 

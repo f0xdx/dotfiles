@@ -1,18 +1,4 @@
-{ pkgs, lib, config, ... }: 
-let
-  hyprland_wlgreet_shell = pkgs.writeTextFile {
-    name = "hyprland_wlgreet_shell.conf";
-    destination = "/share/hyprland_wlgreet_shell.conf";
-    text = ''
-      $mod = SUPER
-
-      exec-once = wlgreet --command hyprland; hyprctl dispatch exit
-
-      bind = $mod, Q, exec, systemctl poweroff
-      bind = $mod, R, exec, systemctl reboot
-    '';
-  };
-in {
+{ pkgs, lib, config, user, ... }: {
 
   options = {
     desktop_support.enable =
@@ -39,8 +25,8 @@ in {
       enable = true;
       settings = {
         default_session = {
-          # command = "${pkgs.greetd.greetd}/bin/agreety --cmd ${pkgs.hyprland}/bin/Hyprland";
-          command = "${pkgs.hyprland}/bin/hyprland --config ${hyprland_wlgreet_shell}/share/hyprland_wlgreet_shell.conf";
+          command = "${pkgs.hyprland}/bin/hyprland";
+          user = user;
         };
       };
     };
