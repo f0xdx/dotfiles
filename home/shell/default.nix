@@ -224,6 +224,15 @@
     ];
   };
 
+  programs.ssh = {
+    enable = true;
+    addKeysToAgent = "yes";
+  };
+
+  services.ssh-agent = {
+    enable = true;
+  };
+
   programs.git = {
     enable = true;
     userEmail = "felix.heinrichs@esgbook.com";
