@@ -1,9 +1,18 @@
-{ config, pkgs, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   bg_color = "#0000009e";
   border_color = "#595959aa";
   highlight_color = "#00ff99ee";
 in {
+  home = {
+    sessionVariables = {
+      SDL_VIDEODRIVER = "wayland";
+    };
+  };
 
   programs.waybar = {
     enable = true;
@@ -12,7 +21,6 @@ in {
   programs.hyprlock = {
     enable = true;
   };
-
 
   # wofi: application launcher
 
@@ -28,7 +36,6 @@ in {
     };
     style = builtins.readFile ./cfg/wofi/style.css;
   };
-
 
   # mako: notifications
 
@@ -54,14 +61,13 @@ in {
     };
   };
 
-
   # kanshi: automatic setup of multiple displays
 
   services.kanshi = {
     enable = true;
 
     settings = [
-      { 
+      {
         profile = {
           name = "undocked";
           outputs = [
@@ -128,7 +134,6 @@ in {
     ];
   };
 
-
   # hypridle
 
   services.hypridle = {
@@ -185,7 +190,7 @@ in {
       "$lock" = "loginctl lock-session";
 
       # See https://wiki.hyprland.org/Configuring/Monitors/
-      monitor= ",preferred, auto, 1";
+      monitor = ",preferred, auto, 1";
 
       bind = [
         "$mod, T, exec, $terminal"
@@ -211,7 +216,6 @@ in {
 
   services.mpris-proxy.enable = true;
 
-
   # gtk theme support
 
   gtk = {
@@ -234,7 +238,6 @@ in {
       };
     };
   };
-
 
   # additional packages
   home.packages = with pkgs; [

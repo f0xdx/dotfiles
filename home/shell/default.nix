@@ -6,6 +6,34 @@
   home,
   ...
 }: {
+  home = {
+    shell.enableBashIntegration = true;
+    shellAliases = {
+      # TODO move this to the shell module that we import above
+      lsx = "eza -T -L1 --color always --icons -s name --group-directories-first";
+      k = "kubectl";
+    };
+
+    packages = with pkgs; [
+      auth0-cli
+      bottom
+      curl
+      delta
+      fd
+      jq
+      kubectl
+      ripgrep
+      yq
+      (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
+        gke-gcloud-auth-plugin
+      ]))
+    ];
+
+    sessionVariables = {
+      PAGER = "bat";
+    };
+  };
+
   programs.starship = {
     enable = true;
     enableBashIntegration = true;

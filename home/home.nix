@@ -11,20 +11,13 @@
     ./editor/zed
     ./desktop
     ./browser/firefox
-# TODO need to ensure desktop is a configurable option to make this work on mac
+    # TODO need to ensure desktop is a configurable option to make this work on mac
   ];
 
   home = {
     username = user;
     homeDirectory = home;
     preferXdgDirectories = true;
-
-    shell.enableBashIntegration = true;
-    shellAliases = {
-      # TODO move this to the shell module that we import above
-      lsx = "eza -T -L1 --color always --icons -s name --group-directories-first";
-      k = "kubectl";
-    };
 
     # Home Manager can also manage your environment variables through
     # 'home.sessionVariables'. These will be explicitly sourced when using a
@@ -42,38 +35,16 @@
     #
     #  /etc/profiles/per-user/fheinrichs/etc/profile.d/hm-session-vars.sh
     #
-    sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-      PAGER = "bat";
-    };
   };
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
     # TODO find a way to append packages from imports instead of maintaining them toplevel
-    jq
-    yq
-    delta
-    ripgrep
-    bottom
-    kubectl
-    (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
-      gke-gcloud-auth-plugin
-    ]))
-    gh
     gopls
     go
     gofumpt
     golangci-lint
-    curl
-    auth0-cli
-
-    # (nerdfonts.override { fonts = [
-    #   "Hack"
-    #   "FiraCode"
-    # ]; })
     nerd-fonts.hack
     nerd-fonts.fira-code
 
