@@ -8,6 +8,11 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_latest; # YOLO
     # kernelPackages = pkgs.linuxPackages_xanmod;
+
+    # silent boot (press ESC to select)
+    consoleLogLevel = 3;
+    initrd.verbose = false;
+
     kernelParams = [
       # airplane mode button on msi ws65 (to fix suspend wireless deactivation)
       # activating this breaks the touchpad after resume on 5.15, fix after 5.19
@@ -16,15 +21,32 @@
       # "acpi_osi=\"Windows 2018\""
       # "acpi_osi=\"Windows 2018.2\""
       # "acpi_osi=\"Windows 2020\""
+      "quiet"
+      "splash"
+      "boot.shell_on_fail"
+      "udev.log_priority=3"
+      "rd.systemd.show_status=auto"
     ];
+
     blacklistedKernelModules = [
       "i2c_nvidia_gpu"  # RTX3000 does not have a usb-c port for monitors
       "psmouse"         # no ps-mouse on this system, only synaptics touchpad
     ];
+
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
+      timeout = 0; # press ESC to override
     };
+    
+    plymouth = {
+      enable = true;
+      theme = "deus_ex";
+      themePackages = with pkgs; [
+        (adi1090x-plymouth-themes.override { selected_themes = ["deus_ex"]; })
+      ];
+    };
+
   };
 
 

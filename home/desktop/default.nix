@@ -12,8 +12,7 @@ in {
   programs.hyprlock = {
     enable = true;
   };
-  # TODO as we are also abusing hyprlock to lock the session on start, we need
-  # to add a shutdown / reboot button as a clickable image widget
+
 
   # wofi: application launcher
 
@@ -60,62 +59,113 @@ in {
 
   services.kanshi = {
     enable = true;
-    profiles = {
-      undocked = {
-        outputs = [
-          {
-            criteria = "eDP-1";
-            mode = "1920x1080@60Hz";
-          }
-        ];
-      };
-      single_l = {
-        outputs = [
-          {
-            criteria = "eDP-1";
-            mode = "1920x1080@60Hz";
-          }
-          {
-            criteria = "HDMI-A-2 'BNQ BenQ GW2470 86G02271019'";
-            mode = "1920x1080@60Hz";
-            position = "1920,0";
-          }
-        ];
-      };
-      single_r = {
-        outputs = [
-          {
-            criteria = "eDP-1";
-            mode = "1920x1080@60Hz";
-          }
-          {
-            criteria = "DP-2 'BNQ BenQ GW2470 JBF03525SL0'";
-            mode = "1920x1080@60Hz";
-            position = "1920,0";
-          }
-        ];
-      };
-      double = {
-        outputs = [
-          {
-            criteria = "eDP-1";
-            mode = "1920x1080@60Hz";
-          }
-          {
-            criteria = "HDMI-A-2 'BNQ BenQ GW2470 86G02271019'";
-            mode = "1920x1080@60Hz";
-            position = "1920,0";
-          }
-          {
-            criteria = "DP-2 'BNQ BenQ GW2470 JBF03525SL0'";
-            mode = "1920x1080@60Hz";
-            position = "3840,0";
-          }
-        ];
-      };
-    };
+
+    settings = [
+      { 
+        profile = {
+          name = "undocked";
+          outputs = [
+            {
+              criteria = "eDP-1";
+              mode = "1920x1080@60Hz";
+            }
+          ];
+        };
+      }
+      {
+        profile = {
+          name = "single_l";
+          outputs = [
+            {
+              criteria = "eDP-1";
+              mode = "1920x1080@60Hz";
+            }
+            {
+              criteria = "HDMI-A-2 'BNQ BenQ GW2470 86G02271019'";
+              mode = "1920x1080@60Hz";
+              position = "1920,0";
+            }
+          ];
+        };
+      }
+      {
+        profile = {
+          name = "single_r";
+          outputs = [
+            {
+              criteria = "eDP-1";
+              mode = "1920x1080@60Hz";
+            }
+            {
+              criteria = "DP-2 'BNQ BenQ GW2470 JBF03525SL0'";
+              mode = "1920x1080@60Hz";
+              position = "1920,0";
+            }
+          ];
+        };
+      }
+      {
+        profile = {
+          name = "double";
+          outputs = [
+            {
+              criteria = "eDP-1";
+              mode = "1920x1080@60Hz";
+            }
+            {
+              criteria = "HDMI-A-2 'BNQ BenQ GW2470 86G02271019'";
+              mode = "1920x1080@60Hz";
+              position = "1920,0";
+            }
+            {
+              criteria = "DP-2 'BNQ BenQ GW2470 JBF03525SL0'";
+              mode = "1920x1080@60Hz";
+              position = "3840,0";
+            }
+          ];
+        };
+      }
+    ];
   };
 
+
+  # hypridle
+
+  services.hypridle = {
+    enable = true;
+
+    settings = {
+      general = {
+        ignore_dbus_inhibit = false;
+        lock_cmd = "pidof hyprlock || hyprlock"; # avoid multiple instances
+        before_sleep_cmd = "loginctl lock-session";
+        after_sleep_cmd = "hyprctl dispatch dpms on";
+      };
+
+      listener = [
+        {
+          timeout = 150;
+          on-timeout = "brightnessctl -s set 10";
+          on-resume = "brightnessctl -r";
+        }
+        {
+          timeout = 150;
+          on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0";
+          on-resume = "brightnessctl -rd rgb:kbd_backlight";
+        }
+        {
+          timeout = 300;
+          on-timeout = "loginctl lock-session";
+          on-resume = "notify-send -u critical \"Welcome back, \${USER}!\"";
+        }
+        {
+          timeout = 330;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on && brightnessctl -r";
+        }
+      ];
+    };
+  };
 
   # enable sway window manager
   wayland.windowManager.hyprland = {
@@ -128,6 +178,7 @@ in {
       # See https://wiki.hyprland.org/Configuring/Keywords/
       "$terminal" = "alacritty";
       "$menu" = "wofi";
+      "$lock" = "loginctl lock-session";
 
       # See https://wiki.hyprland.org/Configuring/Monitors/
       monitor= ",preferred, auto, 1";

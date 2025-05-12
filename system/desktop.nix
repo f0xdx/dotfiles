@@ -24,9 +24,12 @@
     services.greetd = {
       enable = true;
       settings = {
+        # default_session = {
+        #   command = "${pkgs.hyprland}/bin/hyprland";
+        #   user = user;
+        # };
         default_session = {
-          command = "${pkgs.hyprland}/bin/hyprland";
-          user = user;
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet -r -t --time-format '%FT%T%z' -c ${pkgs.hyprland}/bin/hyprland";
         };
       };
     };
@@ -49,14 +52,15 @@
     environment.systemPackages = with pkgs; [
       alacritty
       glib                  # gsettings
+      greetd.tuigreet
+      # greetd.wlgreet
       grim                  # screenshots, works with slurp
-      greetd.wlgreet
       hyprpaper
       libnotify
       mako
       slurp                 # select regions on wayland comp
-      wayland
       waybar
+      wayland
       wev                   # debug wayland events, e.g., key presses
       wl-clipboard          # wl-copy and wl-paste for copy/paste from stdin / stdout
       xdg-utils             # open default programs when clicking links
