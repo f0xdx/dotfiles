@@ -174,6 +174,7 @@ in {
   wayland.windowManager.hyprland = {
     enable = true;
 
+    systemd.variables = ["--all"];
     extraConfig = builtins.readFile ./cfg/hyprland.conf;
     settings = {
       "$mod" = "SUPER";
