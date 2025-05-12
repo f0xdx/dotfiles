@@ -137,6 +137,7 @@ in {
     settings = {
       general = {
         ignore_dbus_inhibit = false;
+        ignore_systemd_inhibit = false;
         lock_cmd = "pidof hyprlock || hyprlock"; # avoid multiple instances
         before_sleep_cmd = "loginctl lock-session";
         after_sleep_cmd = "hyprctl dispatch dpms on";
@@ -144,15 +145,17 @@ in {
 
       listener = [
         {
-          timeout = 150;
+          timeout = 60;
           on-timeout = "brightnessctl -s set 10";
           on-resume = "brightnessctl -r";
         }
-        {
-          timeout = 150;
-          on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0";
-          on-resume = "brightnessctl -rd rgb:kbd_backlight";
-        }
+        # NOTE not supported on the current MSI WS65 as device will
+        #      not be found; needs to be conditional on device
+        # {
+        #   timeout = 150;
+        #   on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0";
+        #   on-resume = "brightnessctl -rd rgb:kbd_backlight";
+        # }
         {
           timeout = 300;
           on-timeout = "loginctl lock-session";
