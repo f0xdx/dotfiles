@@ -24,16 +24,11 @@
     services.greetd = {
       enable = true;
       settings = {
-        # default_session = {
-        #   command = "${pkgs.hyprland}/bin/hyprland";
-        #   user = user;
-        # };
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet -r -t --time-format '%FT%T%z' -c ${pkgs.hyprland}/bin/hyprland";
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet -r -t --time-format '%FT%T%z' --asterisks -c ${pkgs.hyprland}/bin/hyprland";
         };
       };
     };
-    # TODO use wlgreet wiht hyprland to start session
 
     programs.uwsm = {
       enable = true;
@@ -53,7 +48,6 @@
       alacritty
       glib                  # gsettings
       greetd.tuigreet
-      # greetd.wlgreet
       grim                  # screenshots, works with slurp
       hyprpaper
       libnotify
