@@ -16,16 +16,18 @@ vim.diagnostic.config({
     prefix = " ",
   },
   signs = true,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN]  = "",
+      [vim.diagnostic.severity.INFO]  = "",
+      [vim.diagnostic.severity.HINT]  = "",
+    },
+  },
   underline = true,
   update_in_insert = false,
   severity_sort = true,
 })
-
-local signs = { Error = "", Warn = "", Hint = "", Info = "" }
-for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-end
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
