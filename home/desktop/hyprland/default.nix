@@ -8,23 +8,33 @@
   border_color = "#595959aa";
   highlight_color = "#00ff99ee";
 in {
+  imports = [
+    ./waybar.nix
+  ];
+
   options = {
     hyprland_support.enable =
       lib.mkEnableOption "Enables a wayland desktop based on hyprland.";
   };
 
   config = lib.mkIf config.hyprland_support.enable {
+    waybar_support.enable = lib.mkDefault true;
+
     home = {
       sessionVariables = {
         SDL_VIDEODRIVER = "wayland";
       };
     };
 
-    programs.waybar = {
+    # hyprlock: lock the screen
+
+    programs.hyprlock = {
       enable = true;
     };
 
-    programs.hyprlock = {
+    # wlogout: waland compatible logout utility
+
+    programs.wlogout = {
       enable = true;
     };
 
@@ -121,13 +131,15 @@ in {
         "$terminal" = "alacritty";
         "$menu" = "wofi";
         "$lock" = "loginctl lock-session";
+        "$exit" = "wlogout";
 
         # See https://wiki.hyprland.org/Configuring/Monitors/
         monitor = ",preferred, auto, 1";
 
         bind = [
           "$mod, T, exec, $terminal"
-          "$mod, Q, exit,"
+          # "$mod, Q, exit,"
+          "$mod, Q, exec, $exit"
           "$mod, space, exec, $menu"
         ];
 
