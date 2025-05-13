@@ -48,7 +48,7 @@
           inherit inputs; # pass flake inputs through
           inherit user;
           inherit host;
-        }; 
+        };
 
         modules = [
           ./hosts/${host}/configuration.nix
@@ -70,6 +70,7 @@
         extraSpecialArgs = {
           inherit inputs;
           inherit user;
+          inherit host;
           home =
             if pkgs.stdenv.isDarwin
             then "/Users/${user}"
@@ -82,7 +83,7 @@
       };
     };
   in {
-    # NixOS config 
+    # NixOS config
     # organized by hostname, apply through 'sudo nixos-rebuild --flake .#'
     nixosConfigurations = mkNixosSystem {
       system = "x86_64-linux";

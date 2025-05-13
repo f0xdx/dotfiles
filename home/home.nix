@@ -2,6 +2,7 @@
   pkgs,
   user,
   home,
+  lib,
   ...
 }: {
   imports = [
@@ -13,6 +14,8 @@
     ./browser/firefox
     # TODO need to ensure desktop is a configurable option to make this work on mac
   ];
+
+  firefox_support.enable = lib.mkDefault true;
 
   home = {
     username = user;
