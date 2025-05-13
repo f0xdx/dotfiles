@@ -12,9 +12,9 @@
     ./editor/zed
     ./desktop
     ./browser/firefox
-    # TODO need to ensure desktop is a configurable option to make this work on mac
   ];
 
+  desktop_support.enable = lib.mkDefault true;
   firefox_support.enable = lib.mkDefault true;
 
   home = {
