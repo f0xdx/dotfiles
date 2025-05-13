@@ -153,5 +153,17 @@ in {
     home.packages = with pkgs; [
       hyprpicker
     ];
+
+    xdg.desktopEntries = {
+      hyprpicker = {
+        type = "Application";
+        name = "Hyprpicker";
+        genericName = "Colorpicker";
+        exec = "${pkgs.hyprpicker}/bin/hyprpicker";
+        terminal = false;
+        icon = "${config.gtk.iconTheme.package}/share/icons/${config.gtk.iconTheme.name}/32/actions/color-picker.svg";
+        categories = ["Utility"];
+      };
+    };
   };
 }
