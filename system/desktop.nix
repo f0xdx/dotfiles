@@ -1,12 +1,15 @@
-{ pkgs, lib, config, user, ... }: {
-
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     desktop_support.enable =
       lib.mkEnableOption "Enables support for a wayland based desktop environment.";
   };
 
   config = lib.mkIf config.desktop_support.enable {
-
     # xserver settings (even if we use wayland)
 
     services.xserver = {
@@ -46,18 +49,18 @@
 
     environment.systemPackages = with pkgs; [
       alacritty
-      glib                  # gsettings
+      glib # gsettings
       greetd.tuigreet
-      grim                  # screenshots, works with slurp
+      grim # screenshots, works with slurp
       hyprpaper
       libnotify
       mako
-      slurp                 # select regions on wayland comp
+      slurp # select regions on wayland comp
       waybar
       wayland
-      wev                   # debug wayland events, e.g., key presses
-      wl-clipboard          # wl-copy and wl-paste for copy/paste from stdin / stdout
-      xdg-utils             # open default programs when clicking links
+      wev # debug wayland events, e.g., key presses
+      wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+      xdg-utils # open default programs when clicking links
     ];
 
     environment.sessionVariables = {
@@ -76,7 +79,7 @@
       enable = true;
       wlr.enable = true;
 
-      extraPortals = with pkgs; [ 
+      extraPortals = with pkgs; [
         xdg-desktop-portal-wlr
         xdg-desktop-portal-gtk
         # xdg-desktop-portal-hyprland

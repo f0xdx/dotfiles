@@ -3,7 +3,9 @@
   lib,
   config,
   ...
-}: {
+}: let
+  kb_name = "at-translated-set-2-keyboard";
+in {
   options = {
     waybar_support.enable =
       lib.mkEnableOption "Enables proprietary driver nvidia support.";
@@ -23,7 +25,7 @@
           position = "top";
           modules-left = ["custom/logo"];
           modules-center = ["hyprland/workspaces"];
-          modules-right = ["clock"];
+          modules-right = ["hyprland/language" "clock"];
 
           "custom/logo" = {
             "format" = "";
@@ -39,7 +41,7 @@
                   name = "${toString ws}";
                   value = "";
                 })
-                3)
+                9)
               // {
                 "active" = "";
               };
@@ -48,11 +50,20 @@
             };
           };
 
+          # NOTE this is currently not properly displaying the us variant
+          "hyprland/language" = {
+            format = "{short}";
+            on-click = "hyprctl switchxkblayout ${kb_name} next";
+            keyboard-name = kb_name;
+          };
+
           "clock" = {
-            tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+            tooltip-format = "<big>{:%FT:%T:%z}</big>\n\n<tt><small>{calendar}</small></tt>";
             format = "{:%R}";
-            format-alt = "{:%FT:%T:%z}";
             interval = 1;
+            today-format = "<span id=\"today\"><b>{}</b></span>";
+            calendar-week-pos = "right";
+            on-click = "date +'%FT%T%z' | wl-copy";
           };
         };
       };
