@@ -25,7 +25,7 @@ in {
           position = "top";
           modules-left = ["custom/logo"];
           modules-center = ["hyprland/workspaces"];
-          modules-right = ["hyprland/language" "clock"];
+          modules-right = ["group/hardware" "hyprland/language" "clock"];
 
           "custom/logo" = {
             "format" = "";
@@ -64,6 +64,26 @@ in {
             today-format = "<span id=\"today\"><b>{}</b></span>";
             calendar-week-pos = "right";
             on-click = "date +'%FT%T%z' | wl-copy";
+          };
+
+          "group/hardware" = {
+            orientation = "horizontal";
+            modules = [
+              "bluetooth"
+            ];
+          };
+
+          "bluetooth" = {
+            format-on = "";
+            format-off = "";
+            format-disabled = "󰂲";
+            format-connected = "󰂴";
+            format-connected-battery = "{device_battery_percentage}% 󰂴";
+            tooltip-format = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
+            tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
+            tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
+            tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
+            on-click = "blueman-manager";
           };
         };
       };
