@@ -62,3 +62,18 @@ This section will over time be completed by explaining how to
 * [ ] bash scripts
 * [ ] automatic brightness control on wayland with [wluma](https://github.com/maximbaz/wluma)
 * [ ] tiling window manager on mac osx with [aerospace](https://github.com/nikitabobko/AeroSpace)
+
+### Hyprland Configuration
+
+* [ ] waybar setup
+  * [ ] use wireplumber instead of pulse audio module in waybare
+  * [ ] add a system group under an icon for pop-up to show cpu/temp/mem/disk
+        elements
+  * [ ] complete styling of waybar
+* [ ] switch to Brave browser
+* [ ] theme wlgout
+* [ ] switch to fuzzel launcher
+* [ ] switch bluetooth config to [bzmenu](https://github.com/e-tho/bzmenu)
+      (flake exists)
+* [ ] switch wifi config to [iwmenu](https://github.com/e-tho/iwmenu)
+      (flake exists) - this requires [iwd](https://nixos.wiki/wiki/Iwd), configured with network manager

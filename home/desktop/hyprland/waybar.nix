@@ -70,6 +70,9 @@ in {
             orientation = "horizontal";
             modules = [
               "bluetooth"
+              "pulseaudio"
+              "network"
+              "battery"
             ];
           };
 
@@ -83,7 +86,57 @@ in {
             tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
             tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
             tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
-            on-click = "blueman-manager";
+            on-click = "notify-send 'bzmenu not installed, use bluetoothctl'";
+          };
+
+          "network" = {
+            format-wifi = " ";
+            format-ethernet = " ";
+            format-disconnected = "";
+            tooltip-format = "{ipaddr}";
+            tooltip-format-wifi = "{essid} ({signalStrength}%)  | {ipaddr}";
+            tooltip-format-ethernet = "{ifname}  | {ipaddr}";
+            on-click = "notify-send 'iwmenu not installed, use nmcli'";
+          };
+
+          "battery" = {
+            interval = 1;
+            states = {
+              good = 95;
+              warning = 30;
+              critical = 20;
+            };
+            format = "{capacity}%  {icon} ";
+            format-charging = "{capacity}% 󰂄 ";
+            format-plugged = "{capacity}% 󰂄 ";
+            format-alt = "{time} {icon}";
+            format-icons = [
+              "󰁻"
+              "󰁼"
+              "󰁾"
+              "󰂀"
+              "󰂂"
+              "󰁹"
+            ];
+          };
+
+          "pulseaudio" = {
+            format = "{volume}% {icon}";
+            format-bluetooth = "󰂰";
+            format-muted = "<span font='12'></span>";
+            format-icons = {
+              headphones = "";
+              bluetooth = "󰥰";
+              handsfree = "";
+              headset = "󱡬";
+              phone = "";
+              portable = "";
+              car = "";
+              default = ["" "" ""];
+            };
+            justify = "center";
+            on-click = "notify-send 'pavucontrol not installed, use wireplumber'";
+            tooltip-format = "{icon}  {volume}%";
           };
         };
       };

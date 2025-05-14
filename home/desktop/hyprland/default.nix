@@ -118,6 +118,10 @@ in {
       };
     };
 
+    services.hyprpolkitagent = {
+      enable = true;
+    };
+
     # enable sway window manager
     wayland.windowManager.hyprland = {
       enable = true;

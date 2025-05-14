@@ -69,7 +69,7 @@
   users.users.${user} = {
     isNormalUser = true;
     initialPassword = "changeme";
-    extraGroups = ["wheel" "video"]; # enable ‘sudo’ for the user.
+    extraGroups = ["wheel" "video" "networkmanager"];
   };
   # NOTE after install set a password with ‘passwd’.
 
