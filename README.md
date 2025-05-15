@@ -66,10 +66,10 @@ This section will over time be completed by explaining how to
 ### Hyprland Configuration
 
 * [ ] waybar setup
-  * [ ] use wireplumber instead of pulse audio module in waybare
-  * [ ] add a system group under an icon for pop-up to show cpu/temp/mem/disk
+  * [ ] use wireplumber instead of pulse audio module in waybar
+  * [x] add a system group under an icon for pop-up to show cpu/temp/mem/disk
         elements
-  * [ ] complete styling of waybar
+  * [x] complete styling of waybar
 * [ ] switch to Brave browser
 * [ ] theme wlgout
 * [ ] switch to fuzzel launcher

@@ -1,0 +1,169 @@
+/* colors */
+
+@define-color color00 rgba(0, 0, 0, 0.93);
+@define-color color01 rgba(89, 89, 89, 0.93);
+@define-color color02 rgba(51, 204, 255, 0.93);
+@define-color color03 rgba(0, 255, 153, 0.93);
+@define-color color04 rgba(255, 255, 255, 0.93);
+@define-color color05 rgba(255, 0, 102, 0.93);
+@define-color color06 rgba(242, 255, 51, 0.93);
+@define-color color07 rgba(60, 60, 60, 0.93);
+
+@define-color color-black @color00;
+@define-color color-white @color04;
+@define-color color-gray @color01;
+@define-color color-bg @color07;
+@define-color color-fg @color04;
+@define-color color-red @color05;
+@define-color color-green @color03;
+@define-color color-yellow @color06;
+@define-color color-blue @color02;
+
+* {
+    border: none;
+    font-size: 14px;
+    font-family: "FiraCode Nerd Font";
+    min-height: 1.21em;
+    color: @color-fg;
+}
+
+window#waybar {
+    background: transparent;
+    /* background: @color-bg; */
+}
+
+tooltip {
+    border-radius: 1em;
+    background: shade(@color-bg, 1.21);
+    color: @color-fg;
+}
+
+tooltip label {
+    color: @color-fg;
+}
+
+#custom-logo {
+    font-size: 1.21em;
+    font-weight: bold;
+    color: @color-blue;
+    padding: 0 0.63em;
+}
+
+.modules-right,
+.modules-left,
+.modules-center {
+    border: 0.16em solid alpha(@color-bg, 0.62);
+    border-radius: 1em;
+    background: @color-bg;
+}
+
+.modules-right {
+    padding: 0 0.38em;
+    margin: 0.1em 0.38em;
+}
+
+.modules-center {
+    padding: 0 0.38em;
+    margin: 0.1em 0;
+}
+
+.modules-left {
+    padding: 0 0.38em;
+    margin: 0.1em 0.38em;
+}
+
+#custom-system,
+#battery,
+#bluetooth,
+#pulseaudio,
+#pulseaudio.mic,
+#language,
+#pulseaudio.bluetooth,
+#network,
+#disk,
+#memory,
+#temperature,
+#cpu,
+#clock {
+    padding: 0 0.38em;
+}
+
+#disk,
+#memory,
+#temperature,
+#cpu {
+    background: shade(@color-bg, 1.21);
+}
+
+#temperature.critical {
+    background: @color-red;
+}
+
+#workspaces button {
+    border-radius: 0;
+}
+
+/* #workspaces button.active {
+    border-bottom: solid 0.1em @color-fg;
+} */
+
+#pulseaudio {
+    padding-top: 0.2em;
+}
+
+#pulseaudio.muted {
+    color: @color-yellow;
+    padding-top: 0.1em;
+    padding-right: 0.62em;
+}
+
+#backlight-slider,
+#pulseaudio-slider {
+    padding: 0 0.38em 0 0.54em;
+}
+
+#backlight-slider slider,
+#pulseaudio-slider slider {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+    min-width: 50px;
+    min-height: 0.5em;
+    border-radius: 0.54em;
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+    min-width: 0.38em;
+    min-height: 0.38em;
+    background-color: @color-fg;
+}
+
+#battery.charging {
+    color: @color-green;
+}
+
+#battery.warning:not(.charging) {
+    background-color: @color-yellow;
+    color: @color-black;
+}
+
+#battery.critical:not(.charging) {
+    background-color: @color-red;
+    color: @color-white;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    to {
+        background-color: @color-white;
+        color: @color-black;
+    }
+}

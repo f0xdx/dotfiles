@@ -12,12 +12,17 @@ in {
   };
 
   config = lib.mkIf config.waybar_support.enable {
+    home.packages = with pkgs; [
+      bottom
+    ];
+
     programs.waybar = {
       enable = true;
       systemd = {
         enable = true;
         target = "hyprland-session.target";
       };
+      style = builtins.readFile ./cfg/waybar/style.css;
 
       settings = {
         mainBar = {
@@ -25,11 +30,17 @@ in {
           position = "top";
           modules-left = ["custom/logo"];
           modules-center = ["hyprland/workspaces"];
-          modules-right = ["group/hardware" "hyprland/language" "clock"];
+          modules-right = [
+            "group/hardware"
+            "group/system"
+            "hyprland/language"
+            "clock"
+          ];
 
           "custom/logo" = {
-            "format" = "";
-            "on-click" = lib.mkIf config.programs.wlogout.enable "${pkgs.wlogout}/bin/wlogout";
+            format = " ";
+            on-click = lib.mkIf config.programs.wlogout.enable "${pkgs.wlogout}/bin/wlogout";
+            tooltip = false;
           };
 
           "hyprland/workspaces" = {
@@ -77,16 +88,16 @@ in {
           };
 
           "bluetooth" = {
-            format-on = "";
+            format-on = "󰂯";
             format-off = "";
             format-disabled = "󰂲";
-            format-connected = "󰂴";
-            format-connected-battery = "{device_battery_percentage}% 󰂴";
+            format-connected = "󰂱";
+            format-connected-battery = "󰂱";
             tooltip-format = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
             tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
             tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
-            tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t{device_battery_percentage}%";
-            on-click = "notify-send 'bzmenu not installed, use bluetoothctl'";
+            tooltip-format-enumerate-connected-battery = "{device_alias}\t{device_address}\t󰥈 {device_battery_percentage}%";
+            on-click = "hyprctl keyword exec '$terminal -e bluetoothctl'";
           };
 
           "network" = {
@@ -94,8 +105,8 @@ in {
             format-ethernet = " ";
             format-disconnected = "";
             tooltip-format = "{ipaddr}";
-            tooltip-format-wifi = "{essid} ({signalStrength}%)  | {ipaddr}";
-            tooltip-format-ethernet = "{ifname}  | {ipaddr}";
+            tooltip-format-wifi = "{essid} |   {signalStrength} %";
+            tooltip-format-ethernet = "{ifname}   {ipaddr}";
             on-click = "notify-send 'iwmenu not installed, use nmcli'";
           };
 
@@ -108,7 +119,7 @@ in {
             };
             format = "{capacity}%  {icon} ";
             format-charging = "{capacity}% 󰂄 ";
-            format-plugged = "{capacity}% 󰂄 ";
+            format-plugged = "{capacity}% ";
             format-alt = "{time} {icon}";
             format-icons = [
               "󰁻"
@@ -121,22 +132,75 @@ in {
           };
 
           "pulseaudio" = {
-            format = "{volume}% {icon}";
-            format-bluetooth = "󰂰";
-            format-muted = "<span font='12'></span>";
+            format = "{icon}";
+            format-bluetooth = "󰂰 {icon}";
+            format-bluetooth-muted = "󰂰 {icon}";
+            format-muted = "";
+            format-source = "{volume}% ";
+            format-source-muted = "";
             format-icons = {
-              headphones = "";
-              bluetooth = "󰥰";
-              handsfree = "";
-              headset = "󱡬";
+              headphone = "";
+              headphone-muted = "󰟎";
+              hands-free = "";
+              hands-free-muted = "󰟎";
+              headset = "";
+              headset-muted = "󰟎";
               phone = "";
+              phone-muted = "";
               portable = "";
+              portable-muted = "";
               car = "";
+              car-muted = "󰸜";
               default = ["" "" ""];
             };
             justify = "center";
             on-click = "notify-send 'pavucontrol not installed, use wireplumber'";
             tooltip-format = "{icon}  {volume}%";
+          };
+
+          "group/system" = {
+            orientation = "inherit";
+            drawer = {
+              transition-duration = 300;
+              children-class = "system-child";
+              transition-left-to-right = true;
+            };
+            modules = [
+              "custom/system"
+              "cpu"
+              "memory"
+              "disk"
+              "temperature"
+            ];
+          };
+
+          "custom/system" = {
+            format = " ";
+            on-click = "hyprctl keyword exec '$terminal -e ${pkgs.bottom}/bin/btm'";
+            tooltip = false;
+          };
+
+          "cpu" = {
+            interval = 1;
+            format = "󰻠 {usage}%";
+            format-icons = ["▁" "▂" "▃" "▄" "▅" "▆" "▇" "█"];
+          };
+
+          "memory" = {
+            format = " {percentage}%";
+          };
+
+          "disk" = {
+            interval = 30;
+            format = " {percentage_used}%";
+            path = "/";
+          };
+
+          "temperature" = {
+            format = " {temperatureC}°C";
+            format-critical = " {temperatureC}°C";
+            interval = 1;
+            critical-threshold = 80;
           };
         };
       };
