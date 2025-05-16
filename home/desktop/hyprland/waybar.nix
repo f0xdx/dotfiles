@@ -163,7 +163,7 @@ in {
             drawer = {
               transition-duration = 300;
               children-class = "system-child";
-              transition-left-to-right = true;
+              transition-left-to-right = false;
             };
             modules = [
               "custom/system"
