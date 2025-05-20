@@ -5,7 +5,9 @@
   theme,
   home,
   ...
-}: {
+}: let
+  sshKey = "${home}/.ssh/id_ed25519";
+in {
   home = {
     shell.enableBashIntegration = true;
     shellAliases = {
@@ -267,7 +269,7 @@
     userName = "Dr. Felix Heinrichs";
 
     signing = {
-      key = "${home}/.ssh/id_ed25519.pub";
+      key = "${sshKey}.pub";
       signByDefault = true;
     };
 

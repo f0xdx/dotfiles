@@ -57,12 +57,10 @@ in {
 
     services.mako = {
       enable = true;
-      criteria = {
+      settings = {
         "urgency=high" = {
           border-color = highlight_color;
         };
-      };
-      settings = {
         actions = "true";
         anchor = "top-right";
         background-color = bg_color;
