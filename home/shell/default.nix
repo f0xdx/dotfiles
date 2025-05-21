@@ -319,4 +319,11 @@ in {
       git_protocol = "ssh";
     };
   };
+
+  # yazi: terminal file manager
+
+  programs.yazi = {
+    enable = true;
+    enableBashIntegration = true;
+  };
 }
