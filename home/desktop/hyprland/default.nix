@@ -3,11 +3,7 @@
   pkgs,
   lib,
   ...
-}: let
-  bg_color = "#0000009e";
-  border_color = "#595959aa";
-  highlight_color = "#00ff99ee";
-in {
+}: {
   imports = [
     ./waybar.nix
   ];
@@ -15,6 +11,45 @@ in {
   options = {
     hyprland_support.enable =
       lib.mkEnableOption "Enables a wayland desktop based on hyprland.";
+
+    hyprland_support.color = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          background = lib.mkOption {
+            default = "#0000009e";
+            type = lib.types.strMatching "#[0-9a-f]{8}";
+            description = ''
+              Color in 8-digit RGB hex notation (lower case) including alpha,
+              preceded by a hash sign, e.g., #112233ff.
+            '';
+          };
+
+          border = lib.mkOption {
+            default = "#595959aa";
+            type = lib.types.strMatching "#[0-9a-f]{8}";
+            description = ''
+              Color in 8-digit RGB hex notation (lower case) including alpha,
+              preceded by a hash sign, e.g., #112233ff.
+            '';
+          };
+
+          highlight = lib.mkOption {
+            default = "#00ff99ee";
+            type = lib.types.strMatching "#[0-9a-f]{8}";
+            description = ''
+              Color in 8-digit RGB hex notation (lower case) including alpha,
+              preceded by a hash sign, e.g., #112233ff.
+            '';
+          };
+        };
+      };
+
+      default = {
+        background = "#0000009e";
+        border = "#595959aa";
+        highlight = "#00ff99ee";
+      };
+    };
   };
 
   config = lib.mkIf config.hyprland_support.enable {
@@ -59,12 +94,12 @@ in {
       enable = true;
       settings = {
         "urgency=high" = {
-          border-color = highlight_color;
+          border-color = config.hyprland_support.color.highlight;
         };
         actions = "true";
         anchor = "top-right";
-        background-color = bg_color;
-        border-color = border_color;
+        background-color = config.hyprland_support.color.background;
+        border-color = config.hyprland_support.color.border;
         border-radius = 10;
         default-timeout = 5000;
         height = 100;
