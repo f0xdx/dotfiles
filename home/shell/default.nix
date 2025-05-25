@@ -25,7 +25,9 @@ in {
       jq
       kubectl
       ripgrep
+      unzip
       yq
+      zip
       (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
         gke-gcloud-auth-plugin
       ]))

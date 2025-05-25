@@ -67,7 +67,7 @@
       enable = true;
     };
 
-    # wlogout: waland compatible logout utility
+    # wlogout: wayland compatible logout utility
 
     programs.wlogout = {
       enable = true;
