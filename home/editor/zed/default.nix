@@ -32,6 +32,10 @@
           ctrl-j = "workspace::ActivatePaneDown";
           "ctrl-w %" = "pane::SplitVertical";
           "ctrl-w \"" = "pane::SplitHorizontal";
+          "space f f" = "file_finder::Toggle";
+          "space f t" = "tab_switcher::Toggle";
+          "space f c" = "command_palette::Toggle";
+          "space f g" = "pane::DeploySearch";
         };
       }
     ];
