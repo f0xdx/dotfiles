@@ -1,0 +1,31 @@
+* {
+    border: none;
+    font-size: 14px;
+    font-family: "FiraCode Nerd Font";
+    min-height: 1.21em;
+    color: @color-foreground;
+}
+
+window {
+    background-color: @color-background;
+}
+
+button {
+    border-radius: 1em;
+    border-color: @color-background;
+    text-decoration-color: @color-foreground;
+    color: @color-foreground;
+    background-color: shade(@color-background, 1.21);
+    border-style: solid;
+    border-width: 1px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25%;
+}
+
+button:focus,
+button:active,
+button:hover {
+    background-color: shade(@color-highlight, 0.86);
+    outline-style: none;
+}

@@ -3,7 +3,14 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  conv_col = col: (let
+    r = builtins.toString (pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 1 2 col));
+    g = builtins.toString (pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 3 2 col));
+    b = builtins.toString (pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 5 2 col));
+    a = builtins.toString ((pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 7 2 col)) / 255.0);
+  in "rgba(${r}, ${g}, ${b}, ${a})");
+in {
   imports = [
     ./waybar.nix
   ];
@@ -24,6 +31,15 @@
             '';
           };
 
+          foreground = lib.mkOption {
+            default = "#ffffff9e";
+            type = lib.types.strMatching "#[0-9a-f]{8}";
+            description = ''
+              Color in 8-digit RGB hex notation (lower case) including alpha,
+              preceded by a hash sign, e.g., #112233ff.
+            '';
+          };
+
           border = lib.mkOption {
             default = "#595959aa";
             type = lib.types.strMatching "#[0-9a-f]{8}";
@@ -34,7 +50,7 @@
           };
 
           highlight = lib.mkOption {
-            default = "#00ff99ee";
+            default = "#33ccffee";
             type = lib.types.strMatching "#[0-9a-f]{8}";
             description = ''
               Color in 8-digit RGB hex notation (lower case) including alpha,
@@ -46,8 +62,9 @@
 
       default = {
         background = "#0000009e";
+        foreground = "#ffffff9e";
         border = "#595959aa";
-        highlight = "#00ff99ee";
+        highlight = "#33ccffee";
       };
     };
   };
@@ -71,6 +88,37 @@
 
     programs.wlogout = {
       enable = true;
+      style =
+        ''
+          @define-color color-background ${conv_col config.hyprland_support.color.background};
+          @define-color color-foreground ${conv_col config.hyprland_support.color.foreground};
+          @define-color color-highlight ${conv_col config.hyprland_support.color.highlight};
+
+          #lock {
+              background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+          }
+
+          #logout {
+              background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+          }
+
+          #suspend {
+              background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+          }
+
+          #hibernate {
+              background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/hibernate.png"), url("/usr/local/share/wlogout/icons/hibernate.png"));
+          }
+
+          #shutdown {
+              background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
+          }
+
+          #reboot {
+              background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+          }
+        ''
+        + builtins.readFile ./cfg/wlogout/style.css;
     };
 
     # wofi: application launcher
