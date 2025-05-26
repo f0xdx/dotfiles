@@ -329,28 +329,30 @@ in {
     enableBashIntegration = true;
   };
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-termfilechooser
-    ];
+  # TODO make term file chooser an option; currently term file chooser
+  #      breaks zed file writing
+  # xdg.portal = {
+  #   enable = true;
+  #   extraPortals = with pkgs; [
+  #     xdg-desktop-portal-termfilechooser
+  #   ];
 
-    config.common = {
-      "org.freedesktop.impl.portal.FileChooser" = "termfilechooser";
-    };
-  };
+  #   config.common = {
+  #     "org.freedesktop.impl.portal.FileChooser" = "termfilechooser";
+  #   };
+  # };
 
-  xdg.configFile = {
-    "xdg-desktop-portal-termfilechooser/config" = {
-      force = true;
-      text = ''
-        [filechooser]
-        default_dir = $HOME
-        env = TERMCMD="${pkgs.alacritty}/bin/alacritty -T 'File Chooser' -e"
-        cmd = "${pkgs.xdg-desktop-portal-termfilechooser}/share/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh"
-        open_mode = suggested
-        save_mode = suggested
-      '';
-    };
-  };
+  # xdg.configFile = {
+  #   "xdg-desktop-portal-termfilechooser/config" = {
+  #     force = true;
+  #     text = ''
+  #       [filechooser]
+  #       default_dir = $HOME
+  #       env = TERMCMD="${pkgs.alacritty}/bin/alacritty -T 'File Chooser' -e"
+  #       cmd = "${pkgs.xdg-desktop-portal-termfilechooser}/share/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh"
+  #       open_mode = suggested
+  #       save_mode = last
+  #     '';
+  #   };
+  # };
 }
