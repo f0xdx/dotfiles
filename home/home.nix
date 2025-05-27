@@ -12,10 +12,12 @@
     ./editor/zed
     ./desktop
     ./browser/firefox
+    ./misc/spotify
   ];
 
   desktop_support.enable = lib.mkDefault true;
   firefox_support.enable = lib.mkDefault true;
+  spotify.enable = lib.mkDefault true;
 
   home = {
     username = user;
