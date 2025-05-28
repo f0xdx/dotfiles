@@ -1,8 +1,12 @@
-{ pkgs, lib, config, ... }: {
-
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     bluetooth_support.enable =
-      lib.mkEnableOption "Enables support for a wayland based desktop environment.";
+      lib.mkEnableOption "Enables support for bluetooth.";
   };
 
   config = lib.mkIf config.bluetooth_support.enable {
@@ -19,6 +23,5 @@
     environment.systemPackages = with pkgs; [
       bluez
     ];
-
   };
 }
