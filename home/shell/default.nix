@@ -22,6 +22,7 @@ in {
       curl
       delta
       fd
+      imagemagick
       jq
       kubectl
       ripgrep
