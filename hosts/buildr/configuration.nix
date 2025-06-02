@@ -2,6 +2,7 @@
   pkgs,
   user,
   host,
+  config,
   ...
 }: {
   imports = [
@@ -9,7 +10,12 @@
   ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest; # YOLO
+    kernelPackages = pkgs.linuxPackages_zen;
+    extraModulePackages = [config.boot.kernelPackages.msi-ec];
+
+    kernelModules = [
+      # "msi_ec" # NOTE WS65 9TK not supported yet
+    ];
     # kernelPackages = pkgs.linuxPackages_xanmod;
 
     # silent boot (press ESC to select)
@@ -77,7 +83,9 @@
 
   environment.systemPackages = with pkgs; [
     brightnessctl
+    cyme
     pciutils
+    usbutils
   ];
 
   security.polkit.enable = true;
