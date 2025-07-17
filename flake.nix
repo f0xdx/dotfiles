@@ -78,7 +78,8 @@
           theme = "modus-vivendi";
         };
         modules = [
-          ./home/home.nix
+          ./hosts/${host}/home.nix
+          ./home
         ];
       };
     };
@@ -100,9 +101,9 @@
         host = "buildr";
       }
       // mkHomeConfig {
-        system = "x86_64-darwin";
-        user = "fheinrichs";
-        host = "workr";
+        system = "aarch64-darwin";
+        user = "felixheinrichs";
+        host = "PC90221.local";
       };
   };
 }

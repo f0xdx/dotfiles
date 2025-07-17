@@ -47,6 +47,15 @@ For home manager setup run
 home-manager switch --flake .
 ```
 
+Note that for a first time setup, particularly on a system where you don't manage the
+system itself through nix (NixOS, nixdarwin etc.), you may need to run home manager directly
+through nix:
+
+```sh
+nix run --no-write-lock-file github:nix-community/home-manager/ -- --flake . switch
+```
+
+After that first time run, you can use the normal approach outlined above.
 
 ## Desktop Guide
 

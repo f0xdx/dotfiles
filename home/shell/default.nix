@@ -262,7 +262,7 @@ in {
     addKeysToAgent = "yes";
   };
 
-  services.ssh-agent = {
+  services.ssh-agent = lib.mkIf (! pkgs.stdenv.isDarwin) {
     enable = true;
   };
 

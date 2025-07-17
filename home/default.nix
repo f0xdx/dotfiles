@@ -45,11 +45,6 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    # TODO find a way to append packages from imports instead of maintaining them toplevel
-    gopls
-    go
-    gofumpt
-    golangci-lint
     nerd-fonts.hack
     nerd-fonts.fira-code
 
