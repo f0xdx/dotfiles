@@ -134,12 +134,12 @@
           };
         };
         nixd = {
-          # path = lib.getExe pkgs.nixd;
-          path_lookup = true; # set this for using system wide install
+          path = lib.getExe pkgs.nixd;
+          # path_lookup = true; # set this for using system wide install
         };
         nil = {
-          # path = lib.getExe pkgs.nil;
-          path_lookup = true; # set this for using system wide install
+          path = lib.getExe pkgs.nil;
+          # path_lookup = true; # set this for using system wide install
         };
         shellcheck = {
           path_lookup = true;
