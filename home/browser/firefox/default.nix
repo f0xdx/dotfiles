@@ -20,7 +20,7 @@
       #   pipewireSupport = true;
       # };
       policies = {
-        DefaultDownloadDirectory = "\${home}/downloads";
+        DefaultDownloadDirectory = "\${home}/Downloads";
         DisableAppUpdate = true;
         DisableTelemetry = true;
         DisableFirefoxStudies = true;
