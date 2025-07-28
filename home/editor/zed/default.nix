@@ -13,6 +13,7 @@
       "dockerfile"
       "git-firefly"
       "golangci-lint"
+      "graphql"
       "make"
       "marksman"
       "modus-themes"
@@ -133,6 +134,9 @@
             };
           };
         };
+        graphql = {
+          path = lib.getExe pkgs.graphql-language-service-cli;
+        };
         nixd = {
           path = lib.getExe pkgs.nixd;
           # path_lookup = true; # set this for using system wide install
@@ -162,6 +166,7 @@
       golangci-lint
       gopls
       govulncheck
+      graphql-language-service-cli
       marksman
       nil
       nixd
