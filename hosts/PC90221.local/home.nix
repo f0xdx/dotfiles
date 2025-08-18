@@ -1,10 +1,4 @@
-{
-  pkgs,
-  user,
-  home,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   desktop_support.enable = false;
   firefox_support.enable = true;
   spotify.enable = false;

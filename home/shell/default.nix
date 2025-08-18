@@ -1,9 +1,9 @@
 {
-  config,
   pkgs,
   lib,
   theme,
   home,
+  email,
   ...
 }: let
   sshKey = "${home}/.ssh/id_ed25519";
@@ -26,6 +26,7 @@ in {
       jq
       kubectl
       ripgrep
+      scc
       unzip
       yq
       zip
@@ -268,7 +269,7 @@ in {
 
   programs.git = {
     enable = true;
-    userEmail = "felix.heinrichs@esgbook.com";
+    userEmail = email;
     userName = "Dr. Felix Heinrichs";
 
     signing = {

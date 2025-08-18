@@ -61,6 +61,7 @@
     mkHomeConfig = {
       system,
       user,
+      email,
       host,
     }: let
       pkgs = mkPkgs system;
@@ -70,6 +71,7 @@
         extraSpecialArgs = {
           inherit inputs;
           inherit user;
+          inherit email;
           inherit host;
           home =
             if pkgs.stdenv.isDarwin
@@ -98,11 +100,13 @@
       mkHomeConfig {
         system = "x86_64-linux";
         user = "f0xdx";
+        email = "fheinrichs@heinrichs.it";
         host = "buildr";
       }
       // mkHomeConfig {
         system = "aarch64-darwin";
         user = "felixheinrichs";
+        email = "felix.heinrichs@solactive.com";
         host = "PC90221.local";
       };
   };
