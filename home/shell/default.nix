@@ -260,7 +260,13 @@ in {
 
   programs.ssh = {
     enable = true;
-    addKeysToAgent = "yes";
+    enableDefaultConfig = false;
+
+    matchBlocks = {
+      "*" = {
+        addKeysToAgent = "yes";
+      };
+    };
   };
 
   services.ssh-agent = lib.mkIf (! pkgs.stdenv.isDarwin) {
