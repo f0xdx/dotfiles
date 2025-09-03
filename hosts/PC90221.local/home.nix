@@ -5,6 +5,7 @@
 
   home.packages = with pkgs; [
     _1password-cli
+    markdownlint-cli2
   ];
 
   home.file = {

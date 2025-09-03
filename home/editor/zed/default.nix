@@ -64,6 +64,14 @@
         npm_path = getExe' pkgs.nodejs "npm";
       };
 
+      # editor
+      preferred_line_length = 80;
+      show_wrap_guides = true;
+      wrap_guides = [
+        81
+        121
+      ];
+
       # font settings
       ui_font_family = "FiraCode Nerd Font";
       ui_font_size = 14;
