@@ -9,6 +9,7 @@
     enable = true;
 
     extensions = [
+      "basedpyright"
       "basher"
       "dockerfile"
       "git-firefly"
@@ -19,6 +20,8 @@
       "modus-themes"
       "nix"
       "proto"
+      "ruff"
+      "toml"
     ];
 
     userKeymaps = [
@@ -168,6 +171,7 @@
 
     extraPackages = with pkgs; [
       alejandra
+      basedpyright
       dockerfile-language-server-nodejs
       go
       gofumpt
