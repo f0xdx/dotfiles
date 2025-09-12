@@ -2,7 +2,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   # config example: https://wiki.nixos.org/wiki/Zed#LSP_Support
 
   programs.zed-editor = {
@@ -45,16 +46,11 @@
     ];
 
     userSettings = {
-      # AI assistant
-      assistant = {
-        enabled = true;
-        version = "2";
-        # TODO configure to use other providers if relevant
-      };
-
       # base
       auto_update = false;
-      hour_format = "hour24";
+      journal = {
+        hour_format = "hour24";
+      };
       load_direnv = "shell_hook";
 
       telemetry = {
@@ -87,7 +83,6 @@
       vim_mode = true;
       vim = {
         toggle_relative_line_numbers = false;
-        use_multiline_find = true;
         use_smartcase_find = true;
       };
       relative_line_numbers = false;
@@ -102,11 +97,12 @@
 
       icon_theme = {
         mode = "system";
-        light = "Light Icon Theme";
-        dark = "Dark Icon Theme";
+        light = "Zed (Default)";
+        dark = "Zed (Default)";
       };
 
       # lsp
+
       languages = {
         "Nix" = {
           formatter.external = {
@@ -117,6 +113,26 @@
             ];
           };
         };
+        "Python" = {
+          language_servers = [
+            "ruff"
+            "basedpyright"
+          ];
+          format_on_save = "on";
+          formatter = [
+            {
+              code_actions = {
+                "source.organizeImports.ruff" = true;
+                "source.fixAll.ruff" = true;
+              };
+            }
+            {
+              language_server = {
+                name = "ruff";
+              };
+            }
+          ];
+        };
       };
       file_types = {
         Dockerfile = [
@@ -125,7 +141,10 @@
       };
       lsp = {
         gopls = {
-          path_lookup = true;
+          binary = {
+            ignore_system_version = false;
+            path = lib.getExe pkgs.gopls;
+          };
           initialization_options = {
             # options found here: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
             usePlaceholders = true;
@@ -146,26 +165,45 @@
           };
         };
         graphql = {
-          path = lib.getExe pkgs.graphql-language-service-cli;
+          binary = {
+            path = lib.getExe pkgs.graphql-language-service-cli;
+          };
         };
         nixd = {
-          path = lib.getExe pkgs.nixd;
-          # path_lookup = true; # set this for using system wide install
+          binary = {
+            path = lib.getExe pkgs.nixd;
+          };
         };
         nil = {
-          path = lib.getExe pkgs.nil;
-          # path_lookup = true; # set this for using system wide install
+          binary = {
+            path = lib.getExe pkgs.nil;
+          };
         };
         shellcheck = {
-          path_lookup = true;
+          binary = {
+            path = lib.getExe pkgs.shellcheck;
+          };
         };
         dockerfile-language-server = {
-          # path_lookup = true;
-          path = lib.getExe pkgs.dockerfile-language-server-nodejs;
+          binary = {
+            path = lib.getExe pkgs.dockerfile-language-server-nodejs;
+          };
         };
         golangci-lint = {
-          path_lookup = true;
+          binary = {
+            path = lib.getExe pkgs.golangci-lint;
+          };
         };
+        # ruff = {
+        #   binary = {
+        #     path = lib.getExe pkgs.ruff;
+        #   };
+        # };
+        # basedpyright = {
+        #   binary = {
+        #     path = lib.getExe pkgs.basedpyright;
+        #   };
+        # };
       };
     };
 
@@ -183,6 +221,8 @@
       nil
       nixd
       nodejs
+      python313
+      ruff
       shellcheck
     ];
   };
