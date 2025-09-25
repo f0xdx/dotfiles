@@ -25,6 +25,7 @@ in {
       imagemagick
       jq
       kubectl
+      mermaid-cli
       ripgrep
       scc
       unzip
