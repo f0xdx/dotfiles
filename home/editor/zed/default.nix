@@ -2,8 +2,7 @@
   lib,
   pkgs,
   ...
-}:
-{
+}: {
   # config example: https://wiki.nixos.org/wiki/Zed#LSP_Support
 
   programs.zed-editor = {
@@ -186,7 +185,7 @@
         };
         dockerfile-language-server = {
           binary = {
-            path = lib.getExe pkgs.dockerfile-language-server-nodejs;
+            path = lib.getExe pkgs.dockerfile-language-server;
           };
         };
         golangci-lint = {
@@ -210,7 +209,7 @@
     extraPackages = with pkgs; [
       alejandra
       basedpyright
-      dockerfile-language-server-nodejs
+      dockerfile-language-server
       go
       gofumpt
       golangci-lint

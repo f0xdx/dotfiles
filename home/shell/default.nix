@@ -276,21 +276,22 @@ in {
 
   programs.git = {
     enable = true;
-    userEmail = email;
-    userName = "Dr. Felix Heinrichs";
 
     signing = {
       key = "${sshKey}.pub";
       signByDefault = true;
     };
 
-    aliases = {
-      lg = "log --graph --oneline --decorate";
-      st = "status -s";
-      co = "checkout";
-    };
-
-    extraConfig = {
+    settings = {
+      user = {
+        email = email;
+        name = "Dr. Felix Heinrichs";
+      };
+      alias = {
+        lg = "log --graph --oneline --decorate";
+        st = "status -s";
+        co = "checkout";
+      };
       core = {
         editor = "nvim";
       };
@@ -311,15 +312,16 @@ in {
         format = "ssh";
       };
     };
+  };
 
-    delta = {
-      enable = true;
-      options = {
-        line-numbers = true;
-        side-by-side = true;
-        navigate = true;
-        # features = "GitHub";
-      };
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      line-numbers = true;
+      side-by-side = true;
+      navigate = true;
+      # features = "GitHub";
     };
   };
 
