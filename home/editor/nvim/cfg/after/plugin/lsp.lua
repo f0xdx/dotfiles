@@ -15,7 +15,6 @@ vim.diagnostic.config({
   virtual_text = {
     prefix = " ",
   },
-  signs = true,
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = "",
@@ -33,7 +32,7 @@ vim.diagnostic.config({
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+  vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", {buf = bufnr })
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -179,12 +178,6 @@ end
 
 -- lsp setup
 
-local ok, lspconfig = pcall(require, "lspconfig")
-if not ok then
-  vim.notify("lspconfig module not found")
-  return
-end
-
 -- language servers (default settings)
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -206,58 +199,72 @@ local servers = {
   "zls",
 }
 for _, lsp in pairs(servers) do
-  lspconfig[lsp].setup {
+  vim.lsp.config(lsp, {
     capabilities = capabilities,
     on_attach = on_attach,
-  }
+  })
+  vim.lsp.enable(lsp)
 end
-
-local util = require("lspconfig/util")
 
 -- language servers (specific settings)
 
-lspconfig.lua_ls.setup {
+vim.lsp.config('lua_ls',  {
   on_attach = on_attach,
   capabilities = capabilities,
   on_init = function(client)
-    local path = client.workspace_folders[1].name
-    if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-      client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
-        Lua = {
-          runtime = {
-            -- Tell the language server which version of Lua you're using
-            -- (most likely LuaJIT in the case of Neovim)
-            version = 'LuaJIT'
-          },
-          -- Make the server aware of Neovim runtime files
-          workspace = {
-            checkThirdParty = false,
-            library = {
-              vim.env.VIMRUNTIME
-              -- "${3rd}/luv/library"
-              -- "${3rd}/busted/library",
-            }
-            -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-            -- library = vim.api.nvim_get_runtime_file("", true)
-          },
-          hint = {
-            enable = true,
-          },
-        }
-      })
-
-      client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if
+        path ~= vim.fn.stdpath('config')
+        and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+      then
+        return
+      end
     end
-    return true
-  end
-}
 
-lspconfig.gopls.setup {
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most
+        -- likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Tell the language server how to find Lua modules same way as Neovim
+        -- (see `:h lua-module-load`)
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
+        },
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+          -- Depending on the usage, you might want to add additional paths
+          -- here.
+          -- '${3rd}/luv/library'
+          -- '${3rd}/busted/library'
+        }
+        -- Or pull in all of 'runtimepath'.
+        -- NOTE: this is a lot slower and will cause issues when working on
+        -- your own configuration.
+        -- See https://github.com/neovim/nvim-lspconfig/issues/3189
+        -- library = {
+        --   vim.api.nvim_get_runtime_file('', true),
+        -- }
+      }
+    })
+  end,
+  settings = {
+    Lua = {}
+  }
+})
+vim.lsp.enable('lua_ls')
+
+vim.lsp.config('gopls', {
   on_attach = on_attach,
   capabilities = capabilities,
   cmd = { "gopls", "serve" },
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
-  root_dir = util.root_pattern("go.work", "go.mod", ".git"),
   settings = {
     gopls = {
       experimentalPostfixCompletions = true,
@@ -286,4 +293,4 @@ lspconfig.gopls.setup {
   init_options = {
     usePlaceholders = true,
   }
-}
+})
