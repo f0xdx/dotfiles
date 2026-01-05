@@ -44,7 +44,6 @@
         # treesitter
         nvim-treesitter-textobjects
         nvim-treesitter-context
-        playground
         (nvim-treesitter.withPlugins (p:
           with p; [
             comment
