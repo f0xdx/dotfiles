@@ -78,8 +78,8 @@
         nvim-surround
       ])
       ++ (with pkgs.vimExtraPlugins; [
-        modus-themes-nvim
-        express-line-nvim
+        modus-themes-nvim-miikanissi
+        express-line-nvim-tjdevries
       ]);
 
     extraPackages = with pkgs; [
