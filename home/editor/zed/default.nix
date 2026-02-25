@@ -2,7 +2,9 @@
   lib,
   pkgs,
   ...
-}: {
+}: let
+  ollamaPort = 11434;
+in {
   # config example: https://wiki.nixos.org/wiki/Zed#LSP_Support
 
   programs.zed-editor = {
@@ -228,8 +230,19 @@
 
   # local LLM support
 
+  # note that this will require to install the model through ollama first
+  #
+  # ollama run hf.co/zed-industries/zeta
+  #
   # https://nix-community.github.io/home-manager/options.xhtml#opt-services.ollama.enable
   # services.ollama = {
   #   enable = true;
+  #   acceleration = "cuda";
+  #   port = ollamaPort;
   # };
+
+  # using vllm
+  # home.packages = with pkgs; [
+  #   vllm
+  # ];
 }
