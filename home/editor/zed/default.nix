@@ -4,9 +4,8 @@
   ...
 }: let
   ollamaPort = 11434;
-  # ollamaModel = "hf.co/byteshape/Qwen3-Coder-30B-A3B-Instruct-GGUF:latest";
   # ollamaModel = "hf.co/lmstudio-community/zeta-GGUF:Q4_K_M";
-  ollamaModel = "nishtahir/zeta";
+  ollamaModel = "hf.co/bartowski/zed-industries_zeta-GGUF:Q4_K_M";
 in {
   # config example: https://wiki.nixos.org/wiki/Zed#LSP_Support
 
