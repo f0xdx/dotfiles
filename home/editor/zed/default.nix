@@ -4,6 +4,9 @@
   ...
 }: let
   ollamaPort = 11434;
+  # ollamaModel = "hf.co/byteshape/Qwen3-Coder-30B-A3B-Instruct-GGUF:latest";
+  # ollamaModel = "hf.co/lmstudio-community/zeta-GGUF:Q4_K_M";
+  ollamaModel = "nishtahir/zeta";
 in {
   # config example: https://wiki.nixos.org/wiki/Zed#LSP_Support
 
@@ -206,6 +209,13 @@ in {
         #   };
         # };
       };
+      edit_predictions = {
+        provider = "ollama";
+        ollama = {
+          api_url = "http://localhost:${toString ollamaPort}";
+          model = ollamaModel;
+        };
+      };
     };
 
     extraPackages = with pkgs; [
@@ -233,16 +243,19 @@ in {
   # note that this will require to install the model through ollama first
   #
   # ollama run hf.co/zed-industries/zeta
-  #
+  # ollama run hf.co/byteshape/Qwen3-Coder-30B-A3B-Instruct-GGUF
   # https://nix-community.github.io/home-manager/options.xhtml#opt-services.ollama.enable
-  # services.ollama = {
-  #   enable = true;
-  #   acceleration = "cuda";
-  #   port = ollamaPort;
-  # };
+  services.ollama = {
+    enable = true;
+    port = ollamaPort;
+    environmentVariables = {
+      OLLAMA_NO_CLOUD = "1";
+    };
+  };
 
   # using vllm
   # home.packages = with pkgs; [
   #   vllm
   # ];
+  #
 }

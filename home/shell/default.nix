@@ -363,6 +363,10 @@ in {
     enableBashIntegration = true;
   };
 
+  programs.gemini-cli = {
+    enable = true;
+  };
+
   # TODO make term file chooser an option; currently term file chooser
   #      breaks zed file writing
   # xdg.portal = {

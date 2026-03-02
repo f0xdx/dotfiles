@@ -22,4 +22,8 @@
     #   org.gradle.daemon.idletimeout=3600000
     # '';
   };
+
+  services.ollama = {
+    acceleration = "cuda";
+  };
 }
