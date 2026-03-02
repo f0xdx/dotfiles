@@ -361,6 +361,7 @@ in {
   programs.yazi = {
     enable = true;
     enableBashIntegration = true;
+    shellWrapperName = "y";
   };
 
   programs.gemini-cli = {
@@ -373,6 +374,7 @@ in {
       };
 
       general = {
+        vimMode= true;
         preferredEditor = "zed";
       };
 
