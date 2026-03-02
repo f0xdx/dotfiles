@@ -365,6 +365,29 @@ in {
 
   programs.gemini-cli = {
     enable = true;
+    settings = {
+      security = {
+        auth = {
+          selectedType = "oauth-personal";
+        };
+      };
+
+      general = {
+        preferredEditor = "zed";
+      };
+
+      experimental = {
+        plan = true;
+      };
+
+      context = {
+        fileName = [
+          "AGENTS.md"
+          "CONTEXT.md"
+          "GEMINI.md"
+        ];
+      };
+    };
   };
 
   # TODO make term file chooser an option; currently term file chooser

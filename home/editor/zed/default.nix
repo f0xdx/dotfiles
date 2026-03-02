@@ -209,7 +209,8 @@ in {
         # };
       };
       edit_predictions = {
-        provider = "ollama";
+        # provider = "ollama";
+        provider = "zed";
         ollama = {
           api_url = "http://localhost:${toString ollamaPort}";
           model = ollamaModel;
