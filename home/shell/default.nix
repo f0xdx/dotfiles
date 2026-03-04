@@ -364,33 +364,6 @@ in {
     shellWrapperName = "y";
   };
 
-  programs.gemini-cli = {
-    enable = true;
-    settings = {
-      security = {
-        auth = {
-          selectedType = "oauth-personal";
-        };
-      };
-
-      general = {
-        vimMode= true;
-        preferredEditor = "zed";
-      };
-
-      experimental = {
-        plan = true;
-      };
-
-      context = {
-        fileName = [
-          "AGENTS.md"
-          "CONTEXT.md"
-          "GEMINI.md"
-        ];
-      };
-    };
-  };
 
   # TODO make term file chooser an option; currently term file chooser
   #      breaks zed file writing

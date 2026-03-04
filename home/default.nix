@@ -13,10 +13,12 @@
     ./desktop
     ./browser/firefox
     ./misc/spotify
+    ./agents
   ];
 
   desktop_support.enable = lib.mkDefault true;
   firefox_support.enable = lib.mkDefault true;
+  agents.enable = lib.mkDefault true;
   spotify.enable = lib.mkDefault true;
 
   home = {
