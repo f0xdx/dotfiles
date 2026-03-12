@@ -66,13 +66,19 @@ This section will over time be completed by explaining how to
 * manage additional screens and peripherals
 * setup screen recordings, screenshots and video calls
 
-## TODOs / Ideas
+## Next Steps / Ideas
 
-* [ ] bash scripts
+### TODO Bash Utility Support (2025-05-26)
+
+* [ ] bash scripts reviewed / improved
+* [ ] bash scripts available as home manager module
+
+### TODO Extension points (2025-05-26)
+
 * [ ] automatic brightness control on wayland with [wluma](https://github.com/maximbaz/wluma)
 * [ ] tiling window manager on mac osx with [aerospace](https://github.com/nikitabobko/AeroSpace)
 
-### Hyprland Configuration
+### TODO Hyprland Configuration (2025-05-26)
 
 * [ ] waybar setup
   * [ ] use wireplumber instead of pulse audio module in waybar

@@ -21,10 +21,20 @@
         general = {
           vimMode= true;
           preferredEditor = "zed";
+          enableAutoUpdate = false;
+          sessionRetention = {
+            enabled = true;
+            maxAge = "120d";
+          };
         };
 
         experimental = {
-          plan = true;
+          modelSteering = true;
+          enableAgents = true;
+        };
+
+        tools = {
+          useRipgrep = true;
         };
 
         context = {
