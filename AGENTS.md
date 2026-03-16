@@ -15,7 +15,7 @@ macOS).
   `homeConfigurations`.
 - `home/`: Modular user configuration.
     - `shell/`: Shell environment and aliases.
-    - `editor/`: Config for `nvim` and `zed`.
+    - `editor/`: Config for editors (`nvim`, `zed`).
     - `terminal/alacritty/`: Terminal configuration.
     - `desktop/`: Window manager (Hyprland), status bar (Waybar), and
       notifications.

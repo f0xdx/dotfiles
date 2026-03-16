@@ -31,7 +31,8 @@
         experimental = {
           modelSteering = true;
           enableAgents = true;
-          enablePlan = true;
+          plan = true;
+          topicUpdateNarration = true;
         };
 
         tools = {
