@@ -20,7 +20,7 @@
 
         general = {
           vimMode= true;
-          preferredEditor = "zed";
+          preferredEditor = "neovim";
           enableAutoUpdate = false;
           sessionRetention = {
             enabled = true;
@@ -31,6 +31,7 @@
         experimental = {
           modelSteering = true;
           enableAgents = true;
+          enablePlan = true;
         };
 
         tools = {
