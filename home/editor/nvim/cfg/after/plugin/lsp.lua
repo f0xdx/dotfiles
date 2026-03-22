@@ -171,7 +171,7 @@ if ok then
     end
   end, { silent = true })
 else
-  vim.notify("cmp module not found")
+  vim.notify("luasnip module not found")
   return
 end
 

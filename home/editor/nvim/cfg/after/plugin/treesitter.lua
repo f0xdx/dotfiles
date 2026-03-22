@@ -1,11 +1,11 @@
-local ok, _ = pcall(require, "nvim-treesitter.configs")
+local ok, configs = pcall(require, "nvim-treesitter.config")
 if not ok then
   vim.notify("treesitter module not found")
   return
 end
 
 -- basic setup
-require 'nvim-treesitter.configs'.setup {
+configs.setup {
   -- A list of parser names, or "all"
   ensure_installed = {},
 
@@ -54,26 +54,6 @@ require 'nvim-treesitter.configs'.setup {
 
   indent = {
     enable = true
-  },
-
-  -- config of playground plugin: https://github.com/nvim-treesitter/playground
-  playground = {
-    enable = true,
-    disable = {},
-    updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
-    persist_queries = false, -- Whether the query persists across vim sessions
-    keybindings = {
-      toggle_query_editor = 'o',
-      toggle_hl_groups = 'i',
-      toggle_injected_languages = 't',
-      toggle_anonymous_nodes = 'a',
-      toggle_language_display = 'I',
-      focus_language = 'f',
-      unfocus_language = 'F',
-      update = 'R',
-      goto_node = '<cr>',
-      show_help = '?',
-    },
   },
 
   -- config of textobjects plugin: https://github.com/nvim-treesitter/nvim-treesitter-textobjects

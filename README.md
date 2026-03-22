@@ -92,3 +92,16 @@ This section will over time be completed by explaining how to
       (flake exists)
 * [ ] switch wifi config to [iwmenu](https://github.com/e-tho/iwmenu)
       (flake exists) - this requires [iwd](https://nixos.wiki/wiki/Iwd), configured with network manager
+
+### TODO Hyprland Ecosystem Migration (2026-03-20)
+
+Goal: migrate tools used in the desktop config to the [hyprland
+ecosystem](https://wiki.hypr.land/Hypr-Ecosystem/), where tools exist. Avoid QT
+usage where possible.
+
+* [ ] Analzye the current setup and list all desktop components being used
+* [ ] Identify which components could be replaced by hyprland ecosystem components
+* [ ] Build a migration plan, including how to configure new components based on
+existing settings for replaced components; validate this plan
+* [ ] Migrate components and verify setup
+

@@ -17,6 +17,7 @@
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
+    initLua = "require('user')";
 
     plugins =
       (with pkgs.vimPlugins; [
@@ -97,8 +98,12 @@
     ];
   };
 
-  xdg.configFile.nvim = {
-    source = ./cfg;
+  xdg.configFile."nvim/lua" = {
+    source = ./cfg/lua;
+    recursive = true;
+  };
+  xdg.configFile."nvim/after" = {
+    source = ./cfg/after;
     recursive = true;
   };
 }
