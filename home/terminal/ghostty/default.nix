@@ -92,9 +92,9 @@
           "shift+arrow_left=adjust_selection:left"
           "shift+arrow_right=adjust_selection:right"
           "shift+arrow_up=adjust_selection:up"
-          "escape=end_search"
-          "copy=copy_to_clipboard:mixed"
-          "paste=paste_from_clipboard"
+          "performable:escape=end_search"
+          "performable:copy=copy_to_clipboard:mixed"
+          "performable:paste=paste_from_clipboard"
         ];
         window-save-state = "always";
       };
