@@ -18,19 +18,25 @@ description:
 
 1.  **Analyze Requirements**: Identify the tool/service, its configuration
     needs, and whether it applies to Darwin, Linux, or both.
-2.  **Determine Location**:
+2.  **Dependency Audit**: Check if the tool requires a new flake input. Apply
+    the "Deep Follows" pattern for nested dependencies to ensure nixpkgs
+    consistency.
+3.  **Determine Location**:
     *   `home/`: User-level (Home Manager) configurations.
     *   `system/`: System-level (NixOS/nix-darwin) configurations.
-3.  **Create Directory**: Create a new directory for the module if it's
+4.  **Create Directory**: Create a new directory for the module if it's
     complex, or just a `default.nix` for simple cases.
-4.  **Populate with Template**: Use the `module-template.nix` asset as a base.
-5.  **Define Options**: Use `lib.mkEnableOption` to allow the user to toggle
+5.  **Populate with Template**: Use the `module-template.nix` asset as a base.
+6.  **Define Options**: Use `lib.mkEnableOption` to allow the user to toggle
     the module.
-6.  **Implement Logic**:
+7.  **Implement Logic**:
     *   Use `lib.mkIf` to apply configuration conditionally.
+    *   **Bundle Enhancements**: Include shell completions
+        and helper functions (e.g., fzf pickers) within the same activation
+        block as the main tool.
     *   Use `pkgs.stdenv.isDarwin` and `pkgs.stdenv.isLinux` for system-specific
         logic.
-7.  **Register Module**: Add the new module to the appropriate `default.nix`
+8.  **Register Module**: Add the new module to the appropriate `default.nix`
     (e.g., `home/default.nix` or `system/default.nix`) or include it in the
     host configuration.
 

@@ -10,6 +10,8 @@
   };
 
   config = lib.mkIf config.ghostty_support.enable {
+    home.packages = [ pkgs.zmx ];
+
     programs.ghostty = {
       enable = true;
       enableBashIntegration = true;
@@ -20,6 +22,7 @@
         font-family = "FiraCode Nerd Font"; 
         theme = "light:Modus Operandi,dark:Modus Vivendi";
         font-size = 14;
+        confirm-close-surface = false;
         keybind = [
           "ctrl+g>h=goto_split:left"
           "ctrl+g>l=goto_split:right"
@@ -46,6 +49,7 @@
           "ctrl+g>p=toggle_command_palette"
           "ctrl+g>t=new_tab"
           "ctrl+g>w=new_window"
+          "ctrl+g>q=close_surface"
 
           "ctrl+shift+page_down=jump_to_prompt:1"
           "ctrl+shift+page_up=jump_to_prompt:-1"
@@ -101,6 +105,54 @@
 
       systemd.enable = true;
     };
+
+    programs.bash.initExtra = ''
+      # zmx completions
+      if command -v zmx &> /dev/null; then
+        eval "$(zmx completions bash)"
+      fi
+
+      # fzf session picker (zmx-select)
+      zmx-select() {
+        local display
+        display=$(zmx list 2>/dev/null | while IFS=$'\t' read -r name pid clients created dir; do
+          name=''${name#session_name=}
+          pid=''${pid#pid=}
+          clients=''${clients#clients=}
+          dir=''${dir#started_in=}
+          printf "%-20s  pid:%-8s  clients:%-2s  %s\n" "$name" "$pid" "$clients" "$dir"
+        done)
+
+        local output query key selected session_name
+        output=$({ [[ -n "$display" ]] && echo "$display"; } | fzf \
+          --print-query \
+          --expect=ctrl-n \
+          --height=80% \
+          --reverse \
+          --prompt="zmx> " \
+          --header="Enter: select | Ctrl-N: create new" \
+          --preview='zmx history {1}' \
+          --preview-window=right:60%:follow \
+        )
+
+        readarray -t results <<< "$output"
+        query=''${results[0]}
+        key=''${results[1]}
+        selected=''${results[2]}
+
+        if [[ "$key" == "ctrl-n" ]]; then
+          if [[ -n "$query" ]]; then
+            zmx attach "$query"
+          else
+            read -p "Session name: " name
+            [[ -n "$name" ]] && zmx attach "$name"
+          fi
+        elif [[ -n "$selected" ]]; then
+          session_name=$(echo "$selected" | awk '{print $1}')
+          zmx attach "$session_name"
+        fi
+      }
+    '';
   };
 }
 

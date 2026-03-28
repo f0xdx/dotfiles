@@ -11,6 +11,14 @@
       url = "github:NixNeovim/NixNeovimPlugins";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zig2nix = {
+      url = "github:Cloudef/zig2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zmx = {
+      url = "github:neurosnap/zmx";
+      inputs.zig2nix.follows = "zig2nix";
+    };
   };
 
   outputs = {
@@ -28,6 +36,9 @@
 
         overlays = with inputs; [
           nixneovimplugins.overlays.default
+          (final: prev: {
+            zmx = inputs.zmx.packages.${final.system}.default;
+          })
         ];
       };
 

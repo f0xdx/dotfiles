@@ -15,11 +15,11 @@ macOS).
   `homeConfigurations`.
 - `home/`: Modular user configuration.
     - `shell/`: Shell environment and aliases.
-    - `editor/`: Config for editors (`nvim`, `zed`).
-    - `terminal/alacritty/`: Terminal configuration.
-    - `desktop/`: Window manager (Hyprland), status bar (Waybar), and
-      notifications.
-    - `browser/firefox/`: Firefox customization.
+    - `editor/`: Config for editors. One sub-folder per editor.
+    - `terminal/`: Terminal configuration.
+    - `desktop/`: Window manager, status bar, and notifications.
+    - `browser/`: Browser configuration and customization. Sub-folders per
+      browser
     - `agents/`: AI-related configurations and skills.
 - `system/`: System-level NixOS modules (Bluetooth, Sound, Printing, etc.).
 - `hosts/`: Host-specific overrides.
@@ -53,6 +53,12 @@ home-manager switch --flake .
   new hosts.
 - Variable Usage: Use `user`, `host`, and `home` variables passed through
   `specialArgs` and `extraSpecialArgs`.
+- Input Promotion Rule: If a flake input `A` uses flake `B`, and you want to
+  override `B`'s nixpkgs, promote `B` to a top-level input in `flake.nix` and
+  set `A.inputs.B.follows = "B"`. This ensures dependency hygiene and avoids
+  redundant nixpkgs copies.
+- Feature Bundling: Group related "Quality of Life" tools with the primary
+  application they enhance.
 
 ### Markdown Conventions
 
@@ -69,3 +75,6 @@ home-manager switch --flake .
 - Git Hygiene: Do not stage or commit changes unless explicitly requested.
 - Validation: Before finishing a change, ensure it passes `nix flake check`
   or try a dry-run of the switch commands.
+- Quick Verification: Confirm package availability and overlay correctness
+  without a full rebuild using:
+  `nix eval .#homeConfigurations."user@host".pkgs.package_name.name`
