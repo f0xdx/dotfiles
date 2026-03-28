@@ -1,107 +1,54 @@
 # dotfiles
 
-Personal configuration to be used on different devices. These are base settings
-for various tools in my personal workflow. Configuration is rolled out through
-[nix home manager](https://github.com/nix-community/home-manager) and managed in
-a nix flake.
+Personal configuration for various tools and environments, managed with [Nix Home Manager](https://github.com/nix-community/home-manager) and Nix Flakes.
 
-Currently, this supports the nixos config of my personal machine (buildr),
-buildrs home files for my user and my user on the work machine. Others may be
-added in the future.
+## Structure
 
+* `flake.nix` is the central entry point for all configurations.
+* `home/` contains modular user configuration (shell, editors, desktop).
+* `system/` contains system-level NixOS modules (services, desktop support).
+* `hosts/` contains host-specific overrides (e.g., `buildr` for Linux, `PC90221.local` for macOS).
 
-## Overview
+## Keybindings
 
-The core toolchain is
+A comprehensive [keybinds.md](keybinds.md) reference is available for quick access to application shortcuts:
 
-* [alacritty](https://alacritty.org/) as terminal emulator
-* [neovim](https://neovim.io/) as CLI editor and [zed](https://zed.dev/) as IDE
-* [eza](https://eza.rocks/), [bat](https://github.com/sharkdp/bat),
-  [zoxide](https://github.com/ajeetdsouza/zoxide) and of course
-  [fzf](https://github.com/junegunn/fzf) for a fast and modern CLI experience
-* various small utilities tailored to a mostly CLI based workflow with some
-  graphical tools where it makes sense
+* [Hyprland](keybinds.md#hyprland-window-manager)
+* [Neovim](keybinds.md#neovim-editor)
+* [Zed](keybinds.md#zed-editor)
+* [Ghostty](keybinds.md#ghostty-terminal)
+* [tmux](keybinds.md#tmux-terminal-multiplexer)
+* [Bash / Shell](keybinds.md#bash--shell)
 
-Other tools will be added as needed over time. For the nixos config, those are
-run on a full wayland based custom desktop using pipewire which prioritises
-speed and utility over completeness and design.
+## Desktop Environment
 
+A Wayland-based setup centered around [Hyprland](https://hyprland.org/) and its ecosystem:
+* [waybar](https://github.com/Alexays/Waybar) for status bar with system info and controls.
+* [mako](https://github.com/emersion/mako) for notifications with lightweight alerts.
+* [greetd](https://git.sr.ht/~qbit/greetd) with [tuigreet](https://github.com/apognu/tuigreet) for login, [hypridle](https://github.com/hyprwm/hypridle)/[hyprlock](https://github.com/hyprwm/hyprlock) for session management.
+* [grim](https://github.com/emersion/grim)/[slurp](https://github.com/emersion/slurp) for screenshots and [wl-clipboard](https://github.com/bugaevc/wl-clipboard) for clipboard management.
+* Nerd Fonts ([Hack](https://github.com/source-foundry/Hack), [Fira Code](https://github.com/tonsky/FiraCode)) for a rich terminal experience.
 
-## How to apply
+## CLI & AI Integration
 
-In order to update the dependencies run
+* [eza](https://eza.rocks/), [bat](https://github.com/sharkdp/bat), [zoxide](https://github.com/ajeetdsouza/zoxide), and [fzf](https://github.com/junegunn/fzf) for a fast and modern CLI experience.
+* [neovim](https://neovim.io/) for CLI editing and [zed](https://zed.dev/) as a modern IDE.
+* custom bash utilities in `home/shell/bash/bin/` for git cleanup, TOC generation, and more.
+* AI agents integrated via the Gemini CLI and custom skills in `home/agents/`.
 
-```sh
-nix flake update
-```
+## How to Apply
 
-For system update then run
+### Prerequisites
+Ensure Nix is installed with `nix-command` and `flakes` enabled.
 
-```sh
-sudo nixos-rebuild switch --flake .#
-```
+### Apply Configuration
+1. Update dependencies: `nix flake update`
+2. Apply System (NixOS): `sudo nixos-rebuild switch --flake .#`
+3. Apply User (Home Manager): `home-manager switch --flake .`
 
-For home manager setup run
+> [!NOTE]
+> For a first-time setup on systems not managed through Nix (macOS, etc.), use:
+> `nix run --no-write-lock-file github:nix-community/home-manager/ -- --flake . switch`
 
-```sh
-home-manager switch --flake .
-```
-
-Note that for a first time setup, particularly on a system where you don't manage the
-system itself through nix (NixOS, nixdarwin etc.), you may need to run home manager directly
-through nix:
-
-```sh
-nix run --no-write-lock-file github:nix-community/home-manager/ -- --flake . switch
-```
-
-After that first time run, you can use the normal approach outlined above.
-
-## Desktop Guide
-
-This section will over time be completed by explaining how to
-
-* manage WIFIs
-* manage bluetooth devices
-* manage additional screens and peripherals
-* setup screen recordings, screenshots and video calls
-
-## Next Steps / Ideas
-
-### TODO Bash Utility Support (2025-05-26)
-
-* [ ] bash scripts reviewed / improved
-* [ ] bash scripts available as home manager module
-
-### TODO Extension points (2025-05-26)
-
-* [ ] automatic brightness control on wayland with [wluma](https://github.com/maximbaz/wluma)
-* [ ] tiling window manager on mac osx with [aerospace](https://github.com/nikitabobko/AeroSpace)
-
-### TODO Hyprland Configuration (2025-05-26)
-
-* [ ] waybar setup
-  * [ ] use wireplumber instead of pulse audio module in waybar
-  * [x] add a system group under an icon for pop-up to show cpu/temp/mem/disk
-        elements
-  * [x] complete styling of waybar
-* [ ] switch to Brave browser
-* [ ] theme wlgout
-* [ ] switch to fuzzel launcher
-* [ ] switch bluetooth config to [bzmenu](https://github.com/e-tho/bzmenu)
-      (flake exists)
-* [ ] switch wifi config to [iwmenu](https://github.com/e-tho/iwmenu)
-      (flake exists) - this requires [iwd](https://nixos.wiki/wiki/Iwd), configured with network manager
-
-### TODO Hyprland Ecosystem Migration (2026-03-20)
-
-Goal: migrate tools used in the desktop config to the [hyprland
-ecosystem](https://wiki.hypr.land/Hypr-Ecosystem/), where tools exist. Avoid QT
-usage where possible.
-
-* [ ] Analzye the current setup and list all desktop components being used
-* [ ] Identify which components could be replaced by hyprland ecosystem components
-* [ ] Build a migration plan, including how to configure new components based on
-existing settings for replaced components; validate this plan
-* [ ] Migrate components and verify setup
-
+## Roadmap
+See [tasks.md](tasks.md) for planned improvements and upcoming migrations.

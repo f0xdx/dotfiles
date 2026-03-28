@@ -26,6 +26,12 @@ macOS).
     - `buildr/`: NixOS configuration for the primary workstation.
     - `PC90221.local/`: macOS configuration for the work machine.
 
+## Task Management
+
+All tasks, ideas, and planned improvements MUST be tracked in `tasks.md`. When
+identifying a new task or a long-term goal, record it in that file using the
+established Markdown format.
+
 ## Key Workflows
 
 ### Update Dependencies
@@ -62,7 +68,8 @@ home-manager switch --flake .
 
 ### Markdown Conventions
 
-* avoid excessive use of bold face, especially in lists
+* avoid leading bold face in lists
+* avoid excessive use of bold face in general
 * use `*` for list items
 * for numeric lists mark all items as `1.`, so sequence can be changed later
   without changing the numbering
