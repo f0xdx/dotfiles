@@ -29,7 +29,7 @@
     # prepare a pkgs attribute configured with required overlays
     mkPkgs = system:
       import nixpkgs {
-        inherit system;
+        localSystem = system;
         config = {
           allowUnfree = true;
         };
@@ -37,7 +37,7 @@
         overlays = with inputs; [
           nixneovimplugins.overlays.default
           (final: prev: {
-            zmx = inputs.zmx.packages.${final.system}.default;
+            zmx = inputs.zmx.packages.${final.stdenv.hostPlatform.system}.default;
           })
         ];
       };
@@ -52,7 +52,6 @@
       lib = nixpkgs.lib;
     in {
       "${host}" = lib.nixosSystem {
-        inherit system;
         inherit pkgs;
         specialArgs = {
           inherit inputs; # pass flake inputs through
