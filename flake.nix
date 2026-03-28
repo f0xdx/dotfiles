@@ -11,6 +11,14 @@
       url = "github:NixNeovim/NixNeovimPlugins";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zig2nix = {
+      url = "github:Cloudef/zig2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zmx = {
+      url = "github:neurosnap/zmx";
+      inputs.zig2nix.follows = "zig2nix";
+    };
   };
 
   outputs = {
@@ -21,13 +29,16 @@
     # prepare a pkgs attribute configured with required overlays
     mkPkgs = system:
       import nixpkgs {
-        inherit system;
+        localSystem = system;
         config = {
           allowUnfree = true;
         };
 
         overlays = with inputs; [
           nixneovimplugins.overlays.default
+          (final: prev: {
+            zmx = inputs.zmx.packages.${final.stdenv.hostPlatform.system}.default;
+          })
         ];
       };
 
@@ -41,7 +52,6 @@
       lib = nixpkgs.lib;
     in {
       "${host}" = lib.nixosSystem {
-        inherit system;
         inherit pkgs;
         specialArgs = {
           inherit inputs; # pass flake inputs through

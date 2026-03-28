@@ -85,29 +85,6 @@ in {
       source <(kubectl completion bash | sed 's|__start_kubectl kubectl|__start_kubectl k|g')
 
       USE_GKE_GCLOUD_AUTH_PLUGIN="True"
-      # Auto-attach to tmux on interactive shell start. Check if:
-      # 1. We are in an interactive shell ($- contains 'i')
-      # 2. We are not already in tmux ($TMUX is not set)
-      # 3. The tmux command is available
-      if [[ "$-" == *i* && -z "$TMUX" && -n "$(command -v tmux)" ]]; then
-        # Find the latest-used session that is not attached
-        # 'tmux ls' lists sessions.
-        # '-F' specifies format: '#{session_activity}:#{session_name}:#{session_attached}'
-        # 'sort -nr' sorts numerically in reverse (latest activity first).
-        # 'grep ':0$' filters for unattached sessions (attached status is 0).
-        # 'head -n 1' gets the top (latest) one.
-        # 'cut -d: -f2' extracts the session name.
-        local latest_unattached_session=$(tmux ls -F '#{session_activity}:#{session_name}:#{session_attached}' 2>/dev/null | sort -nr | grep ':0$' | head -n 1 | cut -d: -f2)
-
-        if [[ -n "$latest_unattached_session" ]]; then
-          # Found an unattached session, attach to it by name
-          exec tmux attach-session -t "$latest_unattached_session"
-        else
-          # No unattached sessions (either all are attached or none exist)
-          # Create a new one
-          exec tmux new-session
-        fi
-      fi
     '';
 
     # note: can also source complete files like this
@@ -234,14 +211,14 @@ in {
 
         # Resize the current pane using Alt + direction
         # those might not work on mac
-        bind -n M-k resize-pane -U
-        bind -n M-j resize-pane -D
-        bind -n M-h resize-pane -L
-        bind -n M-l resize-pane -R
+        bind C-k resize-pane -U
+        bind C-j resize-pane -D
+        bind C-h resize-pane -L
+        bind C-l resize-pane -R
 
         # Open new panes and windows in current directory.
-        bind '|' split-window -h -c '#{pane_current_path}'
-        bind '-' split-window -v -c '#{pane_current_path}'
+        bind -n C-, split-window -h -c '#{pane_current_path}'
+        bind -n C-. split-window -v -c '#{pane_current_path}'
         bind c new-window -c '#{pane_current_path}'
 
 

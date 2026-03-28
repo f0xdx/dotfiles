@@ -1,6 +1,7 @@
 format = """
 $username\
 $hostname\
+${env_var.ZMX_SESSION}\
 $directory\
 $git_branch\
 $git_state\
@@ -44,3 +45,9 @@ style = "yellow"
 [python]
 format = "[$virtualenv]($style) "
 style = "bright-white"
+
+[env_var.ZMX_SESSION]
+symbol = " "
+format = "[$symbol$env_value]($style) "
+description = "zmx session name"
+style = "green"

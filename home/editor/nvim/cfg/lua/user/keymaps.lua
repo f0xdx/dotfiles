@@ -32,8 +32,8 @@ keymap("n", "<C-w><C-h>", ":vertical resize -5<CR>", opts)
 keymap("n", "<C-w><C-l>", ":vertical resize +5<CR>", opts)
 
 -- tmux style splits
-keymap("n", "<C-w>%", ":vspl<cr>", opts)
-keymap("n", "<C-w>\"", ":spl<cr>", opts)
+keymap("n", "<C-w><C-.>", ":vspl<cr>", opts)
+keymap("n", "<C-w><C-,>", ":spl<cr>", opts)
 
 -- navigate buffers
 keymap("n", "<S-l>", ":bnext<CR>", opts)
