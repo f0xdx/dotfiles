@@ -8,6 +8,7 @@
   imports = [
     ./shell
     ./terminal/alacritty
+    ./terminal/ghostty
     ./editor/nvim
     ./editor/zed
     ./desktop
@@ -19,6 +20,7 @@
   desktop_support.enable = lib.mkDefault true;
   firefox_support.enable = lib.mkDefault true;
   alacritty_support.enable = lib.mkDefault true;
+  ghostty_support.enable = lib.mkDefault true;
   agents.enable = lib.mkDefault true;
   spotify.enable = lib.mkDefault true;
 

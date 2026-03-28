@@ -12,7 +12,6 @@ local options = {
   ignorecase = true,                       -- ignore case in search patterns
   pumheight = 10,                          -- pop up menu height
   showmode = false,                        -- we don't need to see things like -- INSERT -- anymore
-  showtabline = 1,                         -- show tabs (0 - never, 1 - more than 1, 2 - always)
   smartcase = true,                        -- smart case
   smartindent = true,                      -- make indenting smarter again
   splitbelow = true,                       -- force all horizontal splits to go below current window
@@ -41,7 +40,9 @@ local options = {
   title = true,                            -- set terminal title
   showmatch = true,                        -- show matching braces if visible
   mat = 2,                                 -- tenths of a second to blink when showing matching brace (showmatch)
-  laststatus = 3,                           -- show global status line only (default = 2)
+  laststatus = 3,                          -- show global status line only (default = 2)
+  tabclose = "uselast",                    -- go to previously used tab on close
+  showtabline = 1,                         -- show tabs (0 - never, 1 - more than 1, 2 - always)
   grepprg = "rg --vimgrep --no-heading --smart-case", -- use rg for grep
   fillchars = { eob = " ", foldopen = '', foldclose ='', fold = ' '},
 }

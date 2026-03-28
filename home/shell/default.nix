@@ -211,14 +211,14 @@ in {
 
         # Resize the current pane using Alt + direction
         # those might not work on mac
-        bind -n M-k resize-pane -U
-        bind -n M-j resize-pane -D
-        bind -n M-h resize-pane -L
-        bind -n M-l resize-pane -R
+        bind C-k resize-pane -U
+        bind C-j resize-pane -D
+        bind C-h resize-pane -L
+        bind C-l resize-pane -R
 
         # Open new panes and windows in current directory.
-        bind '|' split-window -h -c '#{pane_current_path}'
-        bind '-' split-window -v -c '#{pane_current_path}'
+        bind -n C-, split-window -h -c '#{pane_current_path}'
+        bind -n C-. split-window -v -c '#{pane_current_path}'
         bind c new-window -c '#{pane_current_path}'
 
 
