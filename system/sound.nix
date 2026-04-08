@@ -27,7 +27,17 @@
             "hsp_ag"
             "hfp_hf"
             "hfp_ag"
+            "a2dp_sink"
+            "a2dp_source"
+            "bap_sink"
+            "bap_source"
           ];
+        };
+      };
+
+      wireplumber.extraConfig."11-bluetooth-policy" = {
+        "wireplumber.settings" = {
+          "bluetooth.autoswitch-to-headset-profile" = false;
         };
       };
     };
