@@ -207,6 +207,8 @@ in {
     wayland.windowManager.hyprland = {
       enable = true;
 
+      # as per https://wiki.nixos.org/wiki/Hyprland
+      # systemd.enable = false;
       systemd.variables = ["--all"];
       extraConfig = builtins.readFile ./cfg/hyprland.conf;
       settings = {

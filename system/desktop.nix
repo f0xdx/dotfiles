@@ -11,7 +11,10 @@
 
   config = lib.mkIf config.desktop_support.enable {
     # xserver settings (even if we use wayland)
-
+    i18n.inputMethod = {
+      enable = true;
+      type = "ibus";
+    };
     services.xserver = {
       # keyboard layouts
       xkb = {
@@ -28,7 +31,7 @@
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet -r -t --time-format '%FT%T%z' --asterisks -c ${pkgs.hyprland}/bin/hyprland";
+          command = "${pkgs.tuigreet}/bin/tuigreet -r -t --time-format '%FT%T%z' --asterisks -c ${pkgs.hyprland}/bin/start-hyprland";
         };
       };
     };
@@ -50,7 +53,7 @@
     environment.systemPackages = with pkgs; [
       alacritty
       glib # gsettings
-      greetd.tuigreet
+      tuigreet
       grim # screenshots, works with slurp
       hyprpaper
       libnotify
