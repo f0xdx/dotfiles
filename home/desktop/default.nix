@@ -30,6 +30,7 @@
         name = "Qogir-Dark";
         package = pkgs.qogir-theme;
       };
+      gtk4.theme = config.gtk.theme;
     };
 
     dconf = {

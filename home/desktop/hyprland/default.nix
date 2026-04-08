@@ -5,10 +5,10 @@
   ...
 }: let
   conv_col = col: (let
-    r = builtins.toString (pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 1 2 col));
-    g = builtins.toString (pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 3 2 col));
-    b = builtins.toString (pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 5 2 col));
-    a = builtins.toString ((pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 7 2 col)) / 255.0);
+    r = toString (pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 1 2 col));
+    g = toString (pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 3 2 col));
+    b = toString (pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 5 2 col));
+    a = toString ((pkgs.lib.fromHexString ("0x" + pkgs.lib.substring 7 2 col)) / 255.0);
   in "rgba(${r}, ${g}, ${b}, ${a})");
 in {
   imports = [
@@ -207,13 +207,15 @@ in {
     wayland.windowManager.hyprland = {
       enable = true;
 
+      # as per https://wiki.nixos.org/wiki/Hyprland
+      # systemd.enable = false;
       systemd.variables = ["--all"];
       extraConfig = builtins.readFile ./cfg/hyprland.conf;
       settings = {
         "$mod" = "SUPER";
 
         # See https://wiki.hyprland.org/Configuring/Keywords/
-        "$terminal" = "alacritty";
+        "$terminal" = "ghostty";
         "$menu" = "wofi";
         "$lock" = "loginctl lock-session";
         "$exit" = "wlogout";

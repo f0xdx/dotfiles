@@ -28,6 +28,7 @@ in {
       mermaid-cli
       ripgrep
       scc
+      tree-sitter
       unzip
       yq
       zip
