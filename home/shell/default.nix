@@ -293,7 +293,7 @@ in {
         st = "status -s";
         co = "checkout";
         wtmk = "!f() { branch=\"$1\"; main_repo=$(realpath \"$(git rev-parse --git-common-dir)/..\"); target=\"$main_repo-$(echo \"$branch\" | sed 's#/#-#g')\"; git worktree add -b \"$branch\" \"$target\"; }; f";
-        wtfd = "!git worktree list | awk '{print $1}' | fzf --header 'Select worktree'";
+        wtfd = "!git worktree list | fzf --header 'Select worktree' | awk '{print $1}'";
         wtls = "worktree list";
         wtrm = "!f() { wt=$(git worktree list | fzf --header 'Select worktree to remove' | awk '{print $1}'); [ -n \"$wt\" ] && git worktree remove \"$wt\"; }; f";
       };
