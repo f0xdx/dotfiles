@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   desktop_support.enable = false;
   firefox_support.enable = true;
+  ghostty_support.enable = false;
   spotify.enable = false;
 
   home.packages = with pkgs; [
