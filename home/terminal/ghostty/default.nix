@@ -103,7 +103,7 @@
         window-save-state = "always";
       };
 
-      systemd.enable = true;
+      systemd.enable = ! pkgs.stdenv.isDarwin;
     };
 
     programs.bash.initExtra = ''
