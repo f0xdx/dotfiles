@@ -18,10 +18,10 @@ description:
 
 ## Guidelines
 
-* transition to Unified `windowrule` format with explicit `match:` prefixes
-* use underscores and explicit boolean values (`on`, `true`/`false`)
-* maintain hybrid strategy: Nix `settings` for globals/hardware, `extraConfig` for verbose blocks
-* confirm headless validation success before applying changes to the active session
+* prefer the unified `windowrule` format with explicit `match:` prefixes over any legacy alternatives found in [syntax-patterns.md](references/syntax-patterns.md)
+* use `snake_case` property names and explicit boolean values (`on`, `true`/`false`)
+* maintain the hybrid strategy: Nix `settings` for globals/hardware, `extraConfig` for verbose or dynamic blocks
+* always validate headlessly before applying to the active session — config errors in a live session require a restart
 
 ## Resources
 

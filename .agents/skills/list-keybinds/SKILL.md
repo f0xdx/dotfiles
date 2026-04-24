@@ -14,9 +14,9 @@ description: Synchronize application keybindings via codebase discovery.
 
 ## Guidelines
 
-* maintain path agnosticism by using `grep_search` and `glob`
-* document Leader/Prefix keys for each application
-* resolve conflicts by documenting the version actually applied
+* discover config files dynamically by searching for binding patterns — never hardcode paths that may change
+* document the Leader/Prefix/Modifier key for each application at the top of its section
+* when the same keybinding is defined in multiple places, document the version that takes effect last (wins)
 
 ## Resources
 
