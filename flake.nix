@@ -105,19 +105,24 @@
 
     # HomeManager standalone
     # organized by username, apply through 'homemanager switch --flake .'
-    homeConfigurations =
-      mkHomeConfig {
+    homeConfigurations = let
+      buildrConfig = mkHomeConfig {
         system = "x86_64-linux";
         user = "f0xdx";
         email = "fheinrichs@heinrichs.it";
         host = "buildr";
-      }
-      // mkHomeConfig {
+      };
+      workConfig = mkHomeConfig {
         system = "aarch64-darwin";
         user = "felixheinrichs";
         email = "felix.heinrichs@solactive.com";
-        host = "PC90221.local";
-        # host = "PC90221";
+        host = "PC90221";
+      };
+    in
+      buildrConfig
+      // workConfig
+      // {
+        "felixheinrichs@PC90221.local" = workConfig."felixheinrichs@PC90221";
       };
   };
 }

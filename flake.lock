@@ -43,11 +43,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779103424,
-        "narHash": "sha256-hBYJz5jnRDjACPrwdD064zwMW+s5bdNlG/lNQipLhgM=",
+        "lastModified": 1780099287,
+        "narHash": "sha256-efIPwVGtIWIjWcznhaop6XN6HxnOL8800hF6CBNvlqQ=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "dd71501fb7005264feb4de78444a2e1518cd4f66",
+        "rev": "7d8127d308c3fb9664f7e643eec944be74ebb37d",
         "type": "github"
       },
       "original": {
@@ -87,11 +87,11 @@
         "poetry2nix": "poetry2nix"
       },
       "locked": {
-        "lastModified": 1779030623,
-        "narHash": "sha256-ptB4luEmBQGY2NuIpR269xFwEdL9IsJzKQAJLtv2lzo=",
+        "lastModified": 1780241073,
+        "narHash": "sha256-PlY19CD3Npj3/7PSH/6Z3XeteZ8KS/LtcaHjRdTPz8g=",
         "owner": "NixNeovim",
         "repo": "NixNeovimPlugins",
-        "rev": "d27c83b3ffd4579f85cd2c7295f44f9f8a1d85e8",
+        "rev": "d294fda833f24e85683763aa37e3682d82bfa6c4",
         "type": "github"
       },
       "original": {
@@ -102,11 +102,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1778869304,
-        "narHash": "sha256-30sZNZoA1cqF5JNO9fVX+wgiQYjB7HJqqJ4ztCDeBZE=",
+        "lastModified": 1779560665,
+        "narHash": "sha256-tpyBcxPpcQb8ukyNF7DoCwfSY3VPsxHoYwj00Cayv5o=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d233902339c02a9c334e7e593de68855ad26c4cb",
+        "rev": "64c08a7ca051951c8eae34e3e3cb1e202fe36786",
         "type": "github"
       },
       "original": {
@@ -189,11 +189,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779076649,
-        "narHash": "sha256-jkvfK+DsCtUe2hvrDGnKwd3G2sUQKm9DbitvwVykzx4=",
+        "lastModified": 1780287822,
+        "narHash": "sha256-hB9eTXnl+rPX8fPUXRUzXMS83NCvHCRnho7H6YkTw7g=",
         "owner": "Cloudef",
         "repo": "zig2nix",
-        "rev": "b6987e97402c32a9bd40def032fa36eb90e60ba4",
+        "rev": "db357a64a6aa160152f917f2bcee6da4e572e742",
         "type": "github"
       },
       "original": {
@@ -209,11 +209,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1778980112,
-        "narHash": "sha256-cyGmkPf+6WSbVrBKy5RXnWD+afittvDOVkAHnP9IOkA=",
+        "lastModified": 1779290534,
+        "narHash": "sha256-B1PSD5cQeMQqqYOnp5QhSvX8mDAiVayUg58p47BfQgw=",
         "owner": "neurosnap",
         "repo": "zmx",
-        "rev": "8f1b215647eefe3816382893eb86ec589e2f5f0b",
+        "rev": "9889a13d62c3ef2d412cab7cf63683a1bb2d7013",
         "type": "github"
       },
       "original": {

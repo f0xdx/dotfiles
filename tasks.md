@@ -109,16 +109,18 @@ edit predictions.
 
 ## Multi-Hostname Support for macOS Host
 
-Goal: The macOS machine is `PC90221.local` within the work network and `PC90221` outside
-it. Both hostnames should resolve to the same home-manager configuration so `home-manager
-switch` works in either environment.
+Goal: The macOS machine is `PC90221.local` within the work network and `PC90221`
+outside it. Both hostnames should resolve to the same home-manager configuration
+so `home-manager switch --flake .` works in either environment.
 
-* [ ] Add a second entry `felixheinrichs@PC90221` to `homeConfigurations` in `flake.nix`
-      pointing to `hosts/PC90221.local`
-* [ ] Remove the stale `# host = "PC90221"` comment in `flake.nix:120`
-* [ ] Document both apply commands in `README.md`:
-  * `home-manager switch --flake .#felixheinrichs@PC90221.local` (in-network)
-  * `home-manager switch --flake .#felixheinrichs@PC90221` (off-network)
+* [x] Change the entry `felixheinrichs@PC90221.local` to
+  `felixheinrichs@PC90221` in `homeConfigurations` in `flake.nix` by changing
+  `host` to `hosts/PC90221`
+* [x] Move `hosts/PC90221.local` to `hosts/PC90221`
+* [x] Ensure that the resulting map has another entry
+  `felixheinrichs@PC90221.local` pointing to the same contents as
+  `felixheinrichs@PC90221` 
+* [x] Remove the stale `# host = "PC90221"` comment in `flake.nix:120`
 
 ## Hyprland Ecosystem Migration (2026-03-20)
 
