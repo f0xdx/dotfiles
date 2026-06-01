@@ -31,6 +31,8 @@
         experimental = {
           modelSteering = true;
           enableAgents = true;
+          autoMemory = true;
+          enableNotifications = true;
           plan = true;
           topicUpdateNarration = true;
         };
