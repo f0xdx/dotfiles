@@ -5,11 +5,11 @@
   ...
 }: {
   options = {
-    bluetooth_support.enable =
-      lib.mkEnableOption "Enables support for bluetooth.";
+    modules.bluetooth.enable =
+      lib.mkEnableOption "Enables Bluetooth system services.";
   };
 
-  config = lib.mkIf config.bluetooth_support.enable {
+  config = lib.mkIf config.modules.bluetooth.enable {
     hardware.bluetooth = {
       enable = true;
       settings = {

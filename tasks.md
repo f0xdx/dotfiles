@@ -32,44 +32,6 @@ dedicated `ops` module, cleanly separating ops concerns from the general shell e
 * [ ] Enable `ops.enable = true` by default in `home/default.nix`; import the module there
 * [ ] Remove all migrated items from `home/shell/default.nix`
 
-## Option Naming Convention Refactor
-
-Goal: Standardize module option names to use nested attribute sets instead of
-underscore-suffixed names, consistent with the `spotify.enable` / `agents.enable` pattern
-already in use.
-
-Naming rules:
-
-* Home manager modules: `<name>.enable` (safe — HM uses `programs.*` / `services.*`)
-* System (NixOS) modules: `modules.<name>.enable` (required to avoid clashes with NixOS
-  built-ins such as `sound.enable` and `console.*`)
-
-Home manager renames:
-
-* [ ] `desktop_support.enable` → `desktop.enable`
-* [ ] `firefox_support.enable` → `firefox.enable`
-* [ ] `alacritty_support.enable` → `alacritty.enable`
-* [ ] `ghostty_support.enable` → `ghostty.enable`
-* [ ] `hyprland_support.enable` → `hyprland.enable` (and `hyprland_support.color` →
-      `hyprland.color`)
-* [ ] `kanshi_support.enable` → `kanshi.enable`
-* [ ] `waybar_support.enable` → `waybar.enable`
-
-System (NixOS) renames:
-
-* [ ] `console_support.enable` → `modules.console.enable`
-* [ ] `desktop_support.enable` → `modules.desktop.enable`
-* [ ] `sound_support.enable` → `modules.sound.enable`
-* [ ] `bluetooth_support.enable` → `modules.bluetooth.enable`
-* [ ] `nvidia_support.enable` → `modules.nvidia.enable`
-* [ ] `printing_support.enable` → `modules.printing.enable`
-
-Cleanup:
-
-* [ ] Fix copy-paste option descriptions (kanshi, home desktop, waybar, and sound all read
-      "Enables proprietary driver nvidia support.")
-* [ ] Update all option references in host configs and parent modules accordingly
-* [ ] Verify with `nix flake check`
 
 ## Ollama Module
 
@@ -77,11 +39,9 @@ Goal: Extract ollama configuration from `editor/zed` into a standalone
 `home/services/ollama` module that can be independently enabled and accelerated per host.
 
 * [ ] Create `home/services/ollama/default.nix` with:
-  * [ ] `ollama.enable` option
-  * [ ] `ollama.acceleration` option (type `enum ["cuda" "rocm" "metal"]`, optional, no
-        default)
+  * [ ] `modules.ollama.enable` option
 * [ ] Move `services.ollama` configuration from `hosts/buildr/home.nix` into the module;
-      set `ollama.enable = true` and `ollama.acceleration = "cuda"` in buildr's `home.nix`
+      set `modules.ollama.enable = true`; set nixpkgs.config.cudaSupport in buildr's `home.nix`
 * [ ] Import the new module in `home/default.nix` (disabled by default)
 
 ## Zed Module with Ollama Integration
@@ -89,14 +49,14 @@ Goal: Extract ollama configuration from `editor/zed` into a standalone
 Goal: Factor the Zed editor into a configurable module with optional ollama-backed inline
 edit predictions.
 
-* [ ] Add `zed.enable` option and wrap the existing config in `lib.mkIf config.zed.enable`
-* [ ] Add `zed.ollamaIntegration.enable` sub-option (default `false`)
-* [ ] When `zed.ollamaIntegration.enable = true`, configure Zed's inline AI / edit
+* [ ] Add `modules.zed.enable` option and wrap the existing config in `lib.mkIf config.modules.zed.enable`
+* [ ] Add `modules.zed.ollamaIntegration.enable` sub-option (default `false`)
+* [ ] When `modules.zed.ollamaIntegration.enable = true`, configure Zed's inline AI / edit
       predictions to use the local ollama endpoint; derive the model from `ollama` module
       settings if available
-* [ ] Emit a module warning if `zed.ollamaIntegration.enable = true` but `ollama.enable =
+* [ ] Emit a module warning if `modules.zed.ollamaIntegration.enable = true` but `ollama.enable =
       false`
-* [ ] Enable `zed.enable = true` by default in `home/default.nix`
+* [ ] Enable `modules.zed.enable = true` by default in `home/default.nix`
 
 ## Hyprland Ecosystem Migration (2026-03-20)
 

@@ -10,13 +10,15 @@
   ];
 
   options = {
-    desktop_support.enable =
-      lib.mkEnableOption "Enables proprietary driver nvidia support.";
+    modules.desktop.enable =
+      lib.mkEnableOption "Enables desktop environment configurations (GTK theme, icons, and dconf).";
   };
 
-  config = lib.mkIf config.desktop_support.enable {
-    kanshi_support.enable = lib.mkDefault true;
-    hyprland_support.enable = lib.mkDefault true;
+  config = lib.mkIf config.modules.desktop.enable {
+    modules = {
+      kanshi.enable = lib.mkDefault true;
+      hyprland.enable = lib.mkDefault true;
+    };
 
     # gtk theme support
 

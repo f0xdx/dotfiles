@@ -5,11 +5,11 @@
   ...
 }: {
   options = {
-    agents_antigravity.enable =
-      lib.mkEnableOption "Enables support for Antigravity agent";
+    modules.agents.antigravity.enable =
+      lib.mkEnableOption "Enables support for the Antigravity agent CLI.";
   };
 
-  config = lib.mkIf config.agents_antigravity.enable {
+  config = lib.mkIf config.modules.agents.antigravity.enable {
     programs.antigravity-cli = {
       enable = true;
       settings = {

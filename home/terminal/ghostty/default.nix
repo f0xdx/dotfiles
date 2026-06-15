@@ -5,11 +5,11 @@
   ...
 }: {
   options = {
-    ghostty_support.enable =
-      lib.mkEnableOption "Enables the ghostty terminal emulator.";
+    modules.ghostty.enable =
+      lib.mkEnableOption "Enables Ghostty terminal emulator configuration.";
   };
 
-  config = lib.mkIf config.ghostty_support.enable {
+  config = lib.mkIf config.modules.ghostty.enable {
     home.packages = [ pkgs.zmx ];
 
     programs.ghostty = {

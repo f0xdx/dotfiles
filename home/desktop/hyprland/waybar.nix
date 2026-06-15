@@ -7,11 +7,11 @@
   kb_name = "at-translated-set-2-keyboard";
 in {
   options = {
-    waybar_support.enable =
-      lib.mkEnableOption "Enables proprietary driver nvidia support.";
+    modules.waybar.enable =
+      lib.mkEnableOption "Enables Waybar status bar configuration.";
   };
 
-  config = lib.mkIf config.waybar_support.enable {
+  config = lib.mkIf config.modules.waybar.enable {
     home.packages = with pkgs; [
       bottom
     ];

@@ -5,11 +5,11 @@
   ...
 }: {
   options = {
-    desktop_support.enable =
+    modules.desktop.enable =
       lib.mkEnableOption "Enables support for a wayland based desktop environment.";
   };
 
-  config = lib.mkIf config.desktop_support.enable {
+  config = lib.mkIf config.modules.desktop.enable {
     # xserver settings (even if we use wayland)
     i18n.inputMethod = {
       enable = true;
