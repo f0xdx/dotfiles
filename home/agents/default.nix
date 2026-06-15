@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-    ./gemini
+    ./antigravity
   ];
 
   options = {
@@ -13,10 +13,6 @@
   };
 
   config = lib.mkIf config.agents.enable {
-    agents_gemini.enable = lib.mkDefault true;
-
-    home.file.".agents/skills".source = ./skills;
+    agents_antigravity.enable = lib.mkDefault true;
   };
 }
-
-

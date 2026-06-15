@@ -62,7 +62,7 @@ Home manager renames:
       `hyprland.color`)
 * [ ] `kanshi_support.enable` → `kanshi.enable`
 * [ ] `waybar_support.enable` → `waybar.enable`
-* [ ] `agents_gemini.enable` → `agents.gemini.enable`
+* [x] `agents_gemini.enable` → `agents.antigravity.enable`
 
 System (NixOS) renames:
 
