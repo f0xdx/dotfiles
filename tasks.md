@@ -2,11 +2,6 @@
 
 This file tracks the upcoming tasks, ideas, and planned improvements for the dotfiles project.
 
-## Bash Utility Support (2025-05-26)
-
-* [ ] bash scripts reviewed / improved
-* [ ] bash scripts available as home manager module
-
 ## Extension points (2025-05-26)
 
 * [ ] automatic brightness control on wayland with [wluma](https://github.com/maximbaz/wluma)
@@ -16,9 +11,6 @@ This file tracks the upcoming tasks, ideas, and planned improvements for the dot
 
 * [ ] waybar setup
   * [ ] use wireplumber instead of pulse audio module in waybar
-  * [x] add a system group under an icon for pop-up to show cpu/temp/mem/disk
-        elements
-  * [x] complete styling of waybar
 * [ ] switch to Brave browser
 * [ ] theme wlgout
 * [ ] switch to fuzzel launcher
@@ -62,7 +54,6 @@ Home manager renames:
       `hyprland.color`)
 * [ ] `kanshi_support.enable` → `kanshi.enable`
 * [ ] `waybar_support.enable` → `waybar.enable`
-* [x] `agents_gemini.enable` → `agents.antigravity.enable`
 
 System (NixOS) renames:
 
@@ -106,21 +97,6 @@ edit predictions.
 * [ ] Emit a module warning if `zed.ollamaIntegration.enable = true` but `ollama.enable =
       false`
 * [ ] Enable `zed.enable = true` by default in `home/default.nix`
-
-## Multi-Hostname Support for macOS Host
-
-Goal: The macOS machine is `PC90221.local` within the work network and `PC90221`
-outside it. Both hostnames should resolve to the same home-manager configuration
-so `home-manager switch --flake .` works in either environment.
-
-* [x] Change the entry `felixheinrichs@PC90221.local` to
-  `felixheinrichs@PC90221` in `homeConfigurations` in `flake.nix` by changing
-  `host` to `hosts/PC90221`
-* [x] Move `hosts/PC90221.local` to `hosts/PC90221`
-* [x] Ensure that the resulting map has another entry
-  `felixheinrichs@PC90221.local` pointing to the same contents as
-  `felixheinrichs@PC90221` 
-* [x] Remove the stale `# host = "PC90221"` comment in `flake.nix:120`
 
 ## Hyprland Ecosystem Migration (2026-03-20)
 
