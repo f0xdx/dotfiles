@@ -1,7 +1,7 @@
 {pkgs, ...}: {
-  desktop_support.enable = true;
-  firefox_support.enable = true;
-  spotify.enable = true;
+  modules.desktop.enable = true;
+  modules.firefox.enable = true;
+  modules.spotify.enable = true;
 
   home.packages = with pkgs; [
     gopls

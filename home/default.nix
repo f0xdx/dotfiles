@@ -17,12 +17,14 @@
     ./agents
   ];
 
-  desktop_support.enable = lib.mkDefault true;
-  firefox_support.enable = lib.mkDefault true;
-  alacritty_support.enable = lib.mkDefault true;
-  ghostty_support.enable = lib.mkDefault true;
-  agents.enable = lib.mkDefault true;
-  spotify.enable = lib.mkDefault true;
+  modules = {
+    desktop.enable = lib.mkDefault true;
+    firefox.enable = lib.mkDefault true;
+    alacritty.enable = lib.mkDefault true;
+    ghostty.enable = lib.mkDefault true;
+    agents.enable = lib.mkDefault true;
+    spotify.enable = lib.mkDefault true;
+  };
 
   home = {
     username = user;

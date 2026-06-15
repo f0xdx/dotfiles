@@ -92,7 +92,7 @@
 
   # modules (see /system)
 
-  nvidia_support.enable = true;
+  modules.nvidia.enable = true;
 
   # state version
 

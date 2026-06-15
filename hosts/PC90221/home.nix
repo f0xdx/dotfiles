@@ -1,8 +1,8 @@
 {pkgs, ...}: {
-  desktop_support.enable = false;
-  firefox_support.enable = true;
-  ghostty_support.enable = false;
-  spotify.enable = false;
+  modules.desktop.enable = false;
+  modules.firefox.enable = true;
+  modules.ghostty.enable = false;
+  modules.spotify.enable = false;
 
   home.packages = with pkgs; [
     _1password-cli

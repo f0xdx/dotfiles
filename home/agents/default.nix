@@ -8,11 +8,11 @@
   ];
 
   options = {
-    agents.enable =
+    modules.agents.enable =
       lib.mkEnableOption "Enables support for agents based on https://agentskills.io";
   };
 
-  config = lib.mkIf config.agents.enable {
-    agents_antigravity.enable = lib.mkDefault true;
+  config = lib.mkIf config.modules.agents.enable {
+    modules.agents.antigravity.enable = lib.mkDefault true;
   };
 }

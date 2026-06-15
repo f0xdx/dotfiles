@@ -1,11 +1,11 @@
 { pkgs, lib, config, ... }: {
 
   options = {
-    console_support.enable =
+    modules.console.enable =
       lib.mkEnableOption "Enables console support with nerd-fonts.";
   };
 
-  config = lib.mkIf config.console_support.enable {
+  config = lib.mkIf config.modules.console.enable {
     # console setup
 
     console = {

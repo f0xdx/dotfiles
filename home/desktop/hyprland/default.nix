@@ -16,10 +16,10 @@ in {
   ];
 
   options = {
-    hyprland_support.enable =
-      lib.mkEnableOption "Enables a wayland desktop based on hyprland.";
+    modules.hyprland.enable =
+      lib.mkEnableOption "Enables Hyprland Wayland compositor configuration.";
 
-    hyprland_support.color = lib.mkOption {
+    modules.hyprland.color = lib.mkOption {
       type = lib.types.submodule {
         options = {
           background = lib.mkOption {
@@ -69,8 +69,8 @@ in {
     };
   };
 
-  config = lib.mkIf config.hyprland_support.enable {
-    waybar_support.enable = lib.mkDefault true;
+  config = lib.mkIf config.modules.hyprland.enable {
+    modules.waybar.enable = lib.mkDefault true;
 
     home = {
       sessionVariables = {
@@ -90,9 +90,9 @@ in {
       enable = true;
       style =
         ''
-          @define-color color-background ${conv_col config.hyprland_support.color.background};
-          @define-color color-foreground ${conv_col config.hyprland_support.color.foreground};
-          @define-color color-highlight ${conv_col config.hyprland_support.color.highlight};
+          @define-color color-background ${conv_col config.modules.hyprland.color.background};
+          @define-color color-foreground ${conv_col config.modules.hyprland.color.foreground};
+          @define-color color-highlight ${conv_col config.modules.hyprland.color.highlight};
 
           #lock {
               background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
@@ -142,12 +142,12 @@ in {
       enable = true;
       settings = {
         "urgency=high" = {
-          border-color = config.hyprland_support.color.highlight;
+          border-color = config.modules.hyprland.color.highlight;
         };
         actions = "true";
         anchor = "top-right";
-        background-color = config.hyprland_support.color.background;
-        border-color = config.hyprland_support.color.border;
+        background-color = config.modules.hyprland.color.background;
+        border-color = config.modules.hyprland.color.border;
         border-radius = 10;
         default-timeout = 5000;
         height = 100;

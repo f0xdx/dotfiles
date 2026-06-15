@@ -4,11 +4,11 @@
   ...
 }: {
   options = {
-    firefox_support.enable =
-      lib.mkEnableOption "Enables the firefox web browser.";
+    modules.firefox.enable =
+      lib.mkEnableOption "Enables Firefox web browser configuration.";
   };
 
-  config = lib.mkIf config.firefox_support.enable {
+  config = lib.mkIf config.modules.firefox.enable {
     home.sessionVariables = {
       MOZ_ENABLE_WAYLAND = "1";
       MOZ_USE_XINPUT2 = "1";

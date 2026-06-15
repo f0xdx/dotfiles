@@ -6,14 +6,14 @@
   ...
 }: {
   options = {
-    spotify.enable =
+    modules.spotify.enable =
       lib.mkEnableOption "Enables spotify setup with spotifyd and spotify-player.";
 
-    spotify.premium =
+    modules.spotify.premium =
       lib.mkEnableOption "Whether a spotify premium account is setup.";
   };
 
-  config = lib.mkIf config.spotify.enable {
+  config = lib.mkIf config.modules.spotify.enable {
     # spotify: music streaming
     #
     # NOTE the spotify setup consists of two parts
@@ -30,7 +30,7 @@
     # ```sh
     # spotifyd authenticate
     # ```
-    services.spotifyd = lib.mkIf config.spotify.premium {
+    services.spotifyd = lib.mkIf config.modules.spotify.premium {
       enable = true;
       settings = {
         # see https://docs.spotifyd.rs/configuration/index.html
@@ -42,7 +42,7 @@
       };
     };
 
-    programs.spotify-player = lib.mkIf config.spotify.premium {
+    programs.spotify-player = lib.mkIf config.modules.spotify.premium {
       enable = true;
       # settings = {
       #   # see https://github.com/aome510/spotify-player/blob/master/docs/config.md

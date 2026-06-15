@@ -6,11 +6,11 @@
   ...
 }: {
   options = {
-    alacritty_support.enable =
-      lib.mkEnableOption "Enables the alacritty terminal emulator.";
+    modules.alacritty.enable =
+      lib.mkEnableOption "Enables Alacritty terminal emulator configuration.";
   };
 
-  config = lib.mkIf config.alacritty_support.enable {
+  config = lib.mkIf config.modules.alacritty.enable {
     programs.alacritty = {
       enable = true;
       settings = {

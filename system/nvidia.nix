@@ -1,11 +1,11 @@
 { pkgs, lib, config, ... }: {
   
   options = {
-    nvidia_support.enable =
+    modules.nvidia.enable =
       lib.mkEnableOption "Enables proprietary driver nvidia support.";
   };
 
-  config = lib.mkIf config.nvidia_support.enable {
+  config = lib.mkIf config.modules.nvidia.enable {
     hardware.graphics = {
       enable = true;
       extraPackages = with pkgs; [nvidia-vaapi-driver];
@@ -17,7 +17,7 @@
       # modesetting.enable = true;
     };
 
-    services.xserver.videoDrivers = lib.mkIf config.desktop_support.enable [
+    services.xserver.videoDrivers = lib.mkIf config.modules.desktop.enable [
       "nvidia"
     ];
 

@@ -11,9 +11,9 @@
     ./printing.nix
   ];
 
-  console_support.enable = lib.mkDefault true;
-  desktop_support.enable = lib.mkDefault true;
-  sound_support.enable = lib.mkDefault true;
-  bluetooth_support.enable = lib.mkDefault true;
-  printing_support.enable = lib.mkDefault true;
+  modules.console.enable = lib.mkDefault true;
+  modules.desktop.enable = lib.mkDefault true;
+  modules.sound.enable = lib.mkDefault true;
+  modules.bluetooth.enable = lib.mkDefault true;
+  modules.printing.enable = lib.mkDefault true;
 }

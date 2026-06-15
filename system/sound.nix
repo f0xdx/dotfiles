@@ -1,11 +1,11 @@
 { pkgs, lib, config, ... }: {
 
   options = {
-    sound_support.enable =
-      lib.mkEnableOption "Enables support for a wayland based desktop environment.";
+    modules.sound.enable =
+      lib.mkEnableOption "Enables system sound support via Pipewire.";
   };
 
-  config = lib.mkIf config.sound_support.enable {
+  config = lib.mkIf config.modules.sound.enable {
     # optional but recommended
     security.rtkit.enable = true;
     services.pipewire = {

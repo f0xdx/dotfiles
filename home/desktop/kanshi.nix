@@ -5,11 +5,11 @@
   ...
 }: {
   options = {
-    kanshi_support.enable =
-      lib.mkEnableOption "Enables proprietary driver nvidia support.";
+    modules.kanshi.enable =
+      lib.mkEnableOption "Enables Kanshi display profile manager configuration.";
   };
 
-  config = lib.mkIf config.kanshi_support.enable {
+  config = lib.mkIf config.modules.kanshi.enable {
     # kanshi: automatic setup of multiple displays
 
     services.kanshi = {
