@@ -80,7 +80,9 @@
       ])
       ++ (with pkgs.vimExtraPlugins; [
         modus-themes-nvim-miikanissi
-        express-line-nvim-tjdevries
+        (express-line-nvim-tjdevries.overrideAttrs (old: {
+          dependencies = [pkgs.vimPlugins.plenary-nvim];
+        }))
       ]);
 
     extraPackages = with pkgs; [
