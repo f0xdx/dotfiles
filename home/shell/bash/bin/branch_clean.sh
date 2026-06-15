@@ -3,28 +3,55 @@
 # branch_clean.sh
 #
 # This script will clean the branches in the current git repository, i.e.,
-# attempt to delete all local branches that do not have a remote counter part
+# attempt to delete all local branches that do not have a remote counterpart.
 
 set -euo pipefail
 
+source "${BASH_SOURCE[0]%/*}/lib/common.sh"
 
-[ ! -d ".git" ] && { echo "ERR: not in a git repository" >&2; exit 1; }
+# usage prints script usage information
+usage() {
+  cat <<EOF
+Usage: ${0##*/}
 
+Clean local git branches that no longer exist on the remote repository.
+EOF
+}
 
-# remotes
+# main cleans the local branches in the current git repository
+main() {
+  local -r dependencies=(
+    'git'
+    'cut'
+    'grep'
+  )
+  common::check_dependencies "${dependencies[@]}"
 
-declare -A remotes
-while read -r branch; do
-  remotes[$branch]=1
-done < <( \
-  git branch -r \
-    | cut -d '/' -f2- \
-    | grep -v '^HEAD' \
-)
+  if [[ ! -d ".git" ]]; then
+    common::err "Not in a git repository root directory"
+    exit 1
+  fi
 
-# clean branches
+  local branch
+  local -A remotes
 
-for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/); do
-  [[ ! -v "remotes[$branch]" ]] && { git branch -d $branch; }
-done
+  # Read remote branches and store them in an associative array.
+  while read -r branch; do
+    if [[ -n "${branch}" ]]; then
+      remotes["${branch}"]=1
+    fi
+  done < <( \
+    git branch -r \
+      | cut -d '/' -f2- \
+      | grep -v '^HEAD' \
+  )
 
+  # Delete local branches that do not have a remote counterpart.
+  while read -r branch; do
+    if [[ -n "${branch}" ]] && [[ ! -v "remotes[${branch}]" ]]; then
+      git branch -d "${branch}"
+    fi
+  done < <(git for-each-ref --format='%(refname:short)' refs/heads/)
+}
+
+main "$@"

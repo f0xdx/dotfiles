@@ -8,6 +8,10 @@
 }: let
   sshKey = "${home}/.ssh/id_ed25519";
 in {
+  imports = [
+    ./bash
+  ];
+
   home = {
     shell.enableBashIntegration = true;
     shellAliases = {
