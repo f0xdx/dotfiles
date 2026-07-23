@@ -125,13 +125,15 @@ in {
     enableBashIntegration = true;
 
     # configures alt-c command
-    changeDirWidgetCommand = "fd --type d --hidden --color always --exclude .git";
-    changeDirWidgetOptions = [
-      # TODO $LINES arithmetic not working
-      "--preview 'exa -T -L1 --color always --icons -s name --group-directories-first {} | sed \\\"$(( $LINES-1 ))s/.*/.../; $LINES,$ d\\\"'"
-      "--ansi"
-      "--height 40%"
-    ];
+    changeDirWidget = {
+      command = "fd --type d --hidden --color always --exclude .git";
+      options = [
+        # TODO $LINES arithmetic not working
+        "--preview 'exa -T -L1 --color always --icons -s name --group-directories-first {} | sed \\\"$(( $LINES-1 ))s/.*/.../; $LINES,$ d\\\"'"
+        "--ansi"
+        "--height 40%"
+      ];
+    };
 
     # configures default command
     defaultCommand = "fd --hidden --color always --exclude .git";
@@ -141,17 +143,21 @@ in {
     ];
 
     # configures ctrl-t command
-    fileWidgetCommand = "fd --type f --hidden --color always --exclude .git";
-    fileWidgetOptions = [
-      "--ansi"
-      "--preview 'bat --style=numbers,changes --color=always --line-range=:$LINES {}'"
-      "--height 40%"
-    ];
+    fileWidget = {
+      command = "fd --type f --hidden --color always --exclude .git";
+      options = [
+        "--ansi"
+        "--preview 'bat --style=numbers,changes --color=always --line-range=:$LINES {}'"
+        "--height 40%"
+      ];
+    };
 
-    historyWidgetOptions = [
-      "--tac"
-      "--height 40%"
-    ];
+    historyWidget = {
+      options = [
+        "--tac"
+        "--height 40%"
+      ];
+    };
 
     tmux.enableShellIntegration = true;
   };

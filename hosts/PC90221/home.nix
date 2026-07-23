@@ -6,6 +6,7 @@
 
   home.packages = with pkgs; [
     _1password-cli
+    glab
     markdownlint-cli2
   ];
 
