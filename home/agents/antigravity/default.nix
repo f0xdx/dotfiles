@@ -60,7 +60,7 @@
           deny = [
             "command(rm -rf /)"
             "command(sudo)"
-            "write_file(.git/)"
+            "write_file(${home}/.git)"
             "write_file(${home}/.ssh)"
           ];
         };

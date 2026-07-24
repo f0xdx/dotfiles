@@ -17,18 +17,15 @@ in {
     shellAliases = {
       # TODO move this to the shell module that we import above
       lsx = "eza -T -L1 --color always --icons -s name --group-directories-first";
-      k = "kubectl";
     };
 
     packages = with pkgs; [
-      auth0-cli
       bottom
       curl
       delta
       fd
       imagemagick
       jq
-      kubectl
       mermaid-cli
       ripgrep
       scc
@@ -36,9 +33,6 @@ in {
       unzip
       yq
       zip
-      (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
-        gke-gcloud-auth-plugin
-      ]))
     ];
 
     sessionVariables = {
@@ -85,11 +79,6 @@ in {
     initExtra = ''
       # fzf path completion for eza and others
       _fzf_setup_completion path eza lsx bat nvim.sh
-
-      # kubectl completion on `k` alias
-      source <(kubectl completion bash | sed 's|__start_kubectl kubectl|__start_kubectl k|g')
-
-      USE_GKE_GCLOUD_AUTH_PLUGIN="True"
     '';
 
     # note: can also source complete files like this

@@ -2,6 +2,12 @@
   modules.desktop.enable = true;
   modules.firefox.enable = true;
   modules.spotify.enable = true;
+  modules.ollama = {
+    enable = true;
+    acceleration = "cuda";
+  };
+
+  nixpkgs.config.cudaSupport = true;
 
   home.packages = with pkgs; [
     gopls
@@ -21,9 +27,5 @@
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
-  };
-
-  services.ollama = {
-    acceleration = "cuda";
   };
 }
