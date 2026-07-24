@@ -7,6 +7,7 @@
 }: {
   imports = [
     ./shell
+    ./ops
     ./terminal/alacritty
     ./terminal/ghostty
     ./editor/nvim
@@ -14,10 +15,14 @@
     ./desktop
     ./browser/firefox
     ./misc/spotify
+    ./ai/ollama
     ./agents
   ];
 
   modules = {
+    ops.enable = lib.mkDefault true;
+    zed.enable = lib.mkDefault true;
+    ollama.enable = lib.mkDefault false;
     desktop.enable = lib.mkDefault true;
     firefox.enable = lib.mkDefault true;
     alacritty.enable = lib.mkDefault true;

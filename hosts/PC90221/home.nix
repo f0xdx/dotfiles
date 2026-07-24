@@ -3,6 +3,8 @@
   modules.firefox.enable = true;
   modules.ghostty.enable = false;
   modules.spotify.enable = false;
+  modules.ollama.enable = true;
+  modules.zed.ollamaIntegration.enable = true;
 
   home.packages = with pkgs; [
     _1password-cli
