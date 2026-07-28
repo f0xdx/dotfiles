@@ -242,7 +242,8 @@
             ollama = {
               api_url = "http://localhost:${toString config.services.ollama.port}";
               model = config.modules.zed.ollamaIntegration.model;
-              prompt_format = "infer";
+              prompt_format = "zeta2_1";
+              max_output_tokens = 512;
             };
           }
           else {
