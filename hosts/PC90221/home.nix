@@ -3,8 +3,15 @@
   modules.firefox.enable = true;
   modules.ghostty.enable = false;
   modules.spotify.enable = false;
-  modules.ollama.enable = true;
-  modules.zed.ollamaIntegration.enable = true;
+  modules.ollama = {
+    enable = true;
+    models = [
+      "hf.co/mradermacher/zeta-2.1-GGUF:Q4_K_M"
+      "gemma4:31b"
+    ];
+    defaultModel = "hf.co/mradermacher/zeta-2.1-GGUF:Q4_K_M";
+  };
+  modules.zed.ollamaIntegration.enable = false;
 
   home.packages = with pkgs; [
     _1password-cli

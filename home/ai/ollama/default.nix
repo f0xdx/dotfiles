@@ -77,9 +77,13 @@ in {
       enable = true;
       port = ollamaPort;
       acceleration = config.modules.ollama.acceleration;
-      environmentVariables = {
-        OLLAMA_NO_CLOUD = "1";
-      };
+      environmentVariables =
+        {
+          OLLAMA_NO_CLOUD = "1";
+        }
+        // lib.optionalAttrs pkgs.stdenv.isDarwin {
+          OLLAMA_MLX = "1";
+        };
     };
 
     systemd.user.services.ollama-model-loader = lib.mkIf (!pkgs.stdenv.isDarwin) {
