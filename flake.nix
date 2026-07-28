@@ -72,6 +72,7 @@
       user,
       email,
       host,
+      locale ? "en_US.UTF-8",
     }: let
       pkgs = mkPkgs system;
     in {
@@ -82,6 +83,7 @@
           inherit user;
           inherit email;
           inherit host;
+          inherit locale;
           home =
             if pkgs.stdenv.isDarwin
             then "/Users/${user}"
@@ -111,12 +113,14 @@
         user = "f0xdx";
         email = "fheinrichs@heinrichs.it";
         host = "buildr";
+        locale = "en_US.UTF-8";
       };
       workConfig = mkHomeConfig {
         system = "aarch64-darwin";
         user = "felixheinrichs";
         email = "felix.heinrichs@solactive.com";
         host = "PC90221";
+        locale = "en_US.UTF-8";
       };
     in
       buildrConfig

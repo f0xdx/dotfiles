@@ -4,6 +4,7 @@
   theme,
   home,
   email,
+  locale,
   ...
 }: let
   sshKey = "${home}/.ssh/id_ed25519";
@@ -37,6 +38,8 @@ in {
 
     sessionVariables = {
       PAGER = "bat";
+      LANG = locale;
+      LC_ALL = locale;
     };
   };
 
