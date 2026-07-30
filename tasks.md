@@ -69,3 +69,25 @@ usage where possible.
 * [ ] Build a migration plan, including how to configure new components based on
 existing settings for replaced components; validate this plan
 * [ ] Migrate components and verify setup
+
+## Emacs Module (2026-07-29)
+
+Goal: Add a modern, XDG-compliant, cross-platform Emacs configuration module with native compilation, demand-driven server startup via `emacsclient`, and local development guidelines.
+
+* [x] Create `home/editor/emacs/cfg/init.el` and modular Elisp configs under `home/editor/emacs/cfg/lisp/`
+* [x] Create `home/editor/emacs/default.nix` with `modules.emacs.enable` option and OS-specific package selection (`emacs30-pgtk` on Linux, `emacs30` on macOS)
+* [x] Set `ALTERNATE_EDITOR=""`, `EDITOR`, `VISUAL`, and `ex`/`et` shell aliases
+* [x] Import `./editor/emacs` in `home/default.nix` and enable it by default
+* [x] Create `home/editor/emacs/README.md` documenting layout, manual server management, and local dev/test workflow
+
+## Preferred Editor Selection (2026-07-29)
+
+Goal: Resolve `EDITOR` / `VISUAL` sessionVariable definition conflicts between editor modules by introducing a centralized `modules.editor.default` option.
+
+* [x] Create `home/editor/default.nix` with `modules.editor.default` option and mapping logic
+* [x] Add `modules.nvim.enable` option to `home/editor/nvim/default.nix` and remove hardcoded `sessionVariables`
+* [x] Remove hardcoded `sessionVariables` from `home/editor/emacs/default.nix`
+* [x] Update `home/default.nix` to import `./editor` and set default editor preference
+* [x] Verify configuration evaluation with `nix flake check`
+
+

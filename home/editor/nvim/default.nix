@@ -4,109 +4,110 @@
   lib,
   ...
 }: {
-  home = {
-    sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
+  options = {
+    modules.nvim = {
+      enable = lib.mkEnableOption "Enables Neovim editor configuration.";
     };
   };
 
-  programs.neovim = {
-    enable = true;
-    # defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    vimdiffAlias = true;
-    initLua = "require('user')";
+  config = lib.mkIf config.modules.nvim.enable {
+    programs.neovim = {
+      enable = true;
+      # defaultEditor = true;
+      viAlias = true;
+      vimAlias = true;
+      vimdiffAlias = true;
+      initLua = "require('user')";
 
-    plugins =
-      (with pkgs.vimPlugins; [
-        # basic
-        plenary-nvim
-        nvim-web-devicons
+      plugins =
+        (with pkgs.vimPlugins; [
+          # basic
+          plenary-nvim
+          nvim-web-devicons
 
-        # telescope
-        telescope-zf-native-nvim
-        telescope-undo-nvim
-        telescope-file-browser-nvim
-        telescope-nvim
-        nvim-lspconfig
-        lspkind-nvim
-        cmp-nvim-lsp
-        cmp-nvim-lsp-signature-help
-        cmp-buffer
-        cmp-path
-        cmp-cmdline
-        cmp-git
-        luasnip
-        cmp_luasnip
-        nvim-cmp
+          # telescope
+          telescope-zf-native-nvim
+          telescope-undo-nvim
+          telescope-file-browser-nvim
+          telescope-nvim
+          nvim-lspconfig
+          lspkind-nvim
+          cmp-nvim-lsp
+          cmp-nvim-lsp-signature-help
+          cmp-buffer
+          cmp-path
+          cmp-cmdline
+          cmp-git
+          luasnip
+          cmp_luasnip
+          nvim-cmp
 
-        # treesitter
-        nvim-treesitter-textobjects
-        nvim-treesitter-context
-        (nvim-treesitter.withPlugins (p:
-          with p; [
-            comment
-            css
-            diff
-            dockerfile
-            elm
-            fennel
-            go
-            gomod
-            gowork
-            haskell
-            hcl
-            html
-            javascript
-            json
-            lua
-            make
-            markdown
-            markdown_inline
-            nix
-            proto
-            sql
-            terraform
-            typescript
-            vimdoc
-            yaml
-            zig
-          ]))
+          # treesitter
+          nvim-treesitter-textobjects
+          nvim-treesitter-context
+          (nvim-treesitter.withPlugins (p:
+            with p; [
+              comment
+              css
+              diff
+              dockerfile
+              elm
+              fennel
+              go
+              gomod
+              gowork
+              haskell
+              hcl
+              html
+              javascript
+              json
+              lua
+              make
+              markdown
+              markdown_inline
+              nix
+              proto
+              sql
+              terraform
+              typescript
+              vimdoc
+              yaml
+              zig
+            ]))
 
-        # misc
-        nvim-surround
-      ])
-      ++ (with pkgs.vimExtraPlugins; [
-        modus-themes-nvim-miikanissi
-        (express-line-nvim-tjdevries.overrideAttrs (old: {
-          dependencies = [pkgs.vimPlugins.plenary-nvim];
-        }))
-      ]);
+          # misc
+          nvim-surround
+        ])
+        ++ (with pkgs.vimExtraPlugins; [
+          modus-themes-nvim-miikanissi
+          (express-line-nvim-tjdevries.overrideAttrs (old: {
+            dependencies = [pkgs.vimPlugins.plenary-nvim];
+          }))
+        ]);
 
-    extraPackages = with pkgs; [
-      # llm-ls # broken on mac, see: https://github.com/NixOS/nixpkgs/issues/273596
-      fd
-      gopls
-      go
-      gofumpt
-      golangci-lint
-      lua-language-server
-      marksman
-      nixd
-      ripgrep
-      terraform-ls
-    ];
-  };
+      extraPackages = with pkgs; [
+        # llm-ls # broken on mac, see: https://github.com/NixOS/nixpkgs/issues/273596
+        fd
+        gopls
+        go
+        gofumpt
+        golangci-lint
+        lua-language-server
+        marksman
+        nixd
+        ripgrep
+        terraform-ls
+      ];
+    };
 
-  xdg.configFile."nvim/lua" = {
-    source = ./cfg/lua;
-    recursive = true;
-  };
-  xdg.configFile."nvim/after" = {
-    source = ./cfg/after;
-    recursive = true;
+    xdg.configFile."nvim/lua" = {
+      source = ./cfg/lua;
+      recursive = true;
+    };
+    xdg.configFile."nvim/after" = {
+      source = ./cfg/after;
+      recursive = true;
+    };
   };
 }
 # TODO Extension points
@@ -128,4 +129,3 @@
 #   suggestions into the current buffer
 # * make a simple async make utility similar to this one: https://phelipetls.github.io/posts/async-make-in-nvim-with-lua/
 #   that will just populate the quickfix buffer accordingly
-

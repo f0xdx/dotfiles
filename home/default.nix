@@ -10,8 +10,7 @@
     ./ops
     ./terminal/alacritty
     ./terminal/ghostty
-    ./editor/nvim
-    ./editor/zed
+    ./editor
     ./desktop
     ./browser/firefox
     ./misc/spotify
@@ -21,7 +20,10 @@
 
   modules = {
     ops.enable = lib.mkDefault true;
+    editor.default = lib.mkDefault "emacs";
+    nvim.enable = lib.mkDefault true;
     zed.enable = lib.mkDefault true;
+    emacs.enable = lib.mkDefault true;
     ollama.enable = lib.mkDefault false;
     desktop.enable = lib.mkDefault true;
     firefox.enable = lib.mkDefault true;
