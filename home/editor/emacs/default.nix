@@ -29,6 +29,7 @@
           );
       extraPackages = epkgs: with epkgs; [
         orderless
+	ultra-scroll
         vertico
       ];
     };

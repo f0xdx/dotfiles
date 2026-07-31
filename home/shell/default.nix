@@ -99,7 +99,7 @@ in {
       "\\e[B" = "history-search-forward";
     };
     variables = {
-      editing-mode = "vi";
+      editing-mode = "emacs";
       colored-completion-prefix = true;
       colored-stats = true;
       menu-complete-display-prefix = true;
@@ -300,7 +300,7 @@ in {
         wtrm = "!f() { wt=$(git worktree list | fzf --header 'Select worktree to remove' | awk '{print $1}'); [ -n \"$wt\" ] && git worktree remove \"$wt\"; }; f";
       };
       core = {
-        editor = "nvim";
+        editor = "emacs";
       };
       push = {
         default = "current";
