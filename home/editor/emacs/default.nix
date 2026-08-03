@@ -28,7 +28,10 @@
             else pkgs.emacs
           );
       extraPackages = epkgs: with epkgs; [
+        hl-todo
         difftastic
+        exec-path-from-shell
+        expreg
         magit
         orderless
 	ultra-scroll

@@ -135,6 +135,13 @@
 ;;              (delete-trailing-whitespace))))
 ;; TODO ws-butler style region mapping from vc tools
 
+;; exec-path-from-shell - sync PATH and env vars from the shell on macOS
+(use-package exec-path-from-shell
+  :config
+  ;; only needed for GUI Emacs on macOS, where the shell env isn't inherited
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize)))
+
 ;; discover available keys
 (use-package which-key
   :init
@@ -216,18 +223,30 @@
 
 ;; TODO continue from https://github.com/bbatsov/emacs.d/blob/master/init.el
 
+;; hl-todo - highlight TODO, FIXME, etc. in comments
+(use-package hl-todo
+  :ensure nil                           ;; external installation
+  :config
+  (setq hl-todo-highlight-punctuation ":")
+  (global-hl-todo-mode +1))
 
 ;; git
 
 (use-package magit
-  :bind (("C-x g" . magit-status)))
+  :ensure nil                           ;; external installation
+  :bind (("C-x g" . magit-status))
+  :config
+  (setq
+   transient-values-file (expand-file-name "transient-values.el" user-emacs-cache-directory)
+   transient-levels-file (expand-file-name "transient-levels.el" user-emacs-cache-directory)
+   transient-history-file (expand-file-name "transient-history.el" user-emacs-cache-directory)))
 (use-package difftastic-bindings
   :ensure nil                           ;; external installation
-  :config (difftastic-bindings-mode))
+  :config
+  (difftastic-bindings-mode +1))
 
-;; TODO move to difftastic in workflow
-;;  * https://github.com/wilfred/difftastic - the tool itself
-;; * integration with git
+;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L786
+;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
 
 ;; modeline
 
@@ -298,8 +317,27 @@
 ;; marginalia for contextual hints in mini-buffers: https://github.com/minad/marginalia
 
 
+;; treesitter
+
+;; TODO setup treesitter with grammars installed through nix like here https://mort.io/blog/treesitting-emacs/
+
+;; expand-region, tree-sitter edition
+(use-package expreg
+  :ensure nil                           ;; manual installation
+  :bind (("C-+" . expreg-expand)
+         ("C-=" . expreg-contract))
+  :config
+  (defvar expreg-repeat-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map "+" #'expreg-expand)
+      (define-key map "=" #'expreg-contract)
+      map))
+  (put 'expreg-expand 'repeat-map 'expreg-repeat-map)
+  (put 'expreg-contract 'repeat-map 'expreg-repeat-map))
+
 ;; TODO evaluate if needed
 
+;; projectile for project based config: https://docs.projectile.mx/projectile/index.html
 ;; embark for contextual actions in (mini-)buffers: https://github.com/oantolin/embark
 ;; corfu for local completion pop-ups: https://github.com/minad/corfu
 ;; cape for additional pop-ups: https://github.com/minad/cape
