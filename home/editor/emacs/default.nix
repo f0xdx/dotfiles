@@ -28,6 +28,8 @@
             else pkgs.emacs
           );
       extraPackages = epkgs: with epkgs; [
+        difftastic
+        magit
         orderless
 	ultra-scroll
         vertico

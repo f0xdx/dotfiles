@@ -321,16 +321,29 @@ in {
     };
   };
 
-  programs.delta = {
+  programs.difftastic = {
     enable = true;
-    enableGitIntegration = true;
+    git = {
+      enable = true;
+      mode = "both";
+    };
     options = {
-      line-numbers = true;
-      side-by-side = true;
-      navigate = true;
-      # features = "GitHub";
+      color = "always";
+      sort-paths = true;
+      tab-width = 2;
     };
   };
+
+#  programs.delta = {
+#    enable = true;
+#    enableGitIntegration = true;
+#    options = {
+#      line-numbers = true;
+#      side-by-side = true;
+#      navigate = true;
+#      # features = "GitHub";
+#    };
+#  };
 
   programs.gh = {
     enable = true;

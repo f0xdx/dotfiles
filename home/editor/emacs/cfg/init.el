@@ -18,13 +18,17 @@
 ;; loading them simply through (require '<package name>)
 ;; see also https://discourse.nixos.org/t/how-to-use-emacs-packages-installed-via-home-manager/2513
 ;; TODO evaluate use of autoload (load a function on use) instead of require
+;; TODO after emacs 31 upgrade implement diminish style functionality, see https://emacsredux.com/blog/2025/12/24/hide-minor-modes-in-the-modeline-in-emacs-31/
 
 ;;; Code:
 
 ;; basic settings
-
 (setq user-full-name "Felix Heinrichs"
       user-email-address "felix.heinrichs@gmail.com")
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
 
 ;; performance
 ;; data read from sub-processes, e.g., LSP (default is just 4KB)
@@ -37,17 +41,16 @@
 ;; quit Emacs directly even if there are running processes
 (setq confirm-kill-processes nil)
 
-;; emacs cache directory
+;; cache
 (defconst user-emacs-cache-directory
   (expand-file-name "emacs/" (or (getenv "XDG_CACHE_HOME") "~/.cache/"))
   "Directory where cached files for this user should be stored.")
 (unless (file-exists-p user-emacs-cache-directory)
   (make-directory user-emacs-cache-directory :parents))
 
-;; looks
+;; minimal
 (setq inhibit-startup-message t)
 (setq ring-bell-function 'ignore) ;; no bell, TODO use a short flash https://emacs.stackexchange.com/questions/28906/how-to-switch-off-the-sounds
-
 (blink-cursor-mode -1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
@@ -58,51 +61,43 @@
 
 ;; appearance
 
+;; line
 (setq-default truncate-lines t)		              ;; no wrapping lines
-
-;; line numbers
-;; built-in and fastest option these days.  Only in buffers where the
-;; numbers mean something - the global mode also turns them on in
-;; magit, dired, ibuffer, REPLs and the like, where they're just noise
 (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
   (add-hook hook #'display-line-numbers-mode))
 ;; (add-hook 'prog-mode-hook 'display-line-numbers-mode) ;; line numbers in all programming modes
-
-;; mode line settings
+;; mode line
 (line-number-mode 1)
 (column-number-mode 1)
 (size-indication-mode 1)
 
-;; ultra-scroll - buttery-smooth pixel-precision scrolling; a better
-;; take on the built-in pixel-scroll-precision-mode (which it enables
-;; and builds upon internally): faster, handles images taller than
-;; the window and hides the cursor while scrolling
+;; scrolling
 (use-package ultra-scroll
+  :ensure nil                           ;; external installation
   :init
-  (setq scroll-margin 0 ; ultra-scroll requires 0 for glitch-free scrolling
+  (setq scroll-margin 0                 ;; ultra-scroll requires 0 for glitch-free scrolling
     scroll-conservatively 100000
     scroll-preserve-screen-position 1)
   :config
   (ultra-scroll-mode +1))
 
-;;(add-to-list 'initial-frame-alist '(fullscreen . maximized))  ;; fullscreen on startup
-;;(add-to-list 'default-frame-alist '(fullscreen . fullheight)) ;; full-height frames
-
+;; fonts and theme
 (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 160)
 ;; (load-theme 'modus-operandi)
 (load-theme 'modus-vivendi)		;; TODO automatic switching: https://emacsredux.com/blog/2026/03/29/automatic-light-dark-theme-switching/
 
-;; highlight the current error in compilation/grep buffers
-(setq next-error-message-highlight t)
+;; misc
+(setq next-error-message-highlight t) ;; highlight current error in compilation/grep buffers
 
 
 ;; environmental protection
 
 ;; TODO refactor this
-;; store stuff there
+;; auto-save
 (setq auto-save-list-file-prefix (expand-file-name "saves-" user-emacs-cache-directory))
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
+
 
 ;; quality of life
 
@@ -114,6 +109,8 @@
 (setq save-interprogram-paste-before-kill t) ;; preserve system clipboard in kill ring
 (setq kill-do-not-save-duplicates t)
 (setq ffap-machine-p-known 'reject)          ;; don't let ffap ping random hostnames
+(setq auto-revert-avoid-polling t)           ;; automatic revert when underlying file changes
+(global-auto-revert-mode t)
 
 ;; mark
 ;; after C-u C-SPC, keep popping the mark ring with just C-SPC
@@ -126,17 +123,17 @@
 (delete-selection-mode 1)  ;; delete the selection with a keypress
 (minibuffer-regexp-mode 1) ;; visual feedback for regex in minibuffer
 
-(setq auto-revert-avoid-polling t) ;; automatic revert when underlying file changes
-(global-auto-revert-mode t)
-
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-
 ;; hippie expand
 (global-set-key (kbd "M-/") #'hippie-expand)
 (global-set-key (kbd "s-/") #'hippie-expand)
+
+;; remove trailing whitespace
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;;(add-hook 'before-save-hook
+;;          (lambda ()
+;;            (when (derived-mode-p 'progr-mode)
+;;              (delete-trailing-whitespace))))
+;; TODO ws-butler style region mapping from vc tools
 
 ;; discover available keys
 (use-package which-key
@@ -153,7 +150,7 @@
 (use-package calendar
   :defer t
   :config
-  ;; weeks in Bulgaria start on Monday
+  ;; weeks starting on Monday
   (setq calendar-week-start-day 1))
 
 ;; highlight the current line
@@ -162,7 +159,7 @@
   (global-hl-line-mode +1))
 
 (use-package uniquify
-  :ensure nil
+  :ensure nil ;; external installation
   :config
   (setq uniquify-buffer-name-style 'forward)
   (setq uniquify-separator "/")
@@ -207,8 +204,30 @@
         recentf-auto-cleanup 'never)
   (recentf-mode +1))
 
+;; editorconfig - honor .editorconfig files (built-in since Emacs 30);
+;; automatically adjusts indentation style/size, line endings, final
+;; newlines, etc. to match the conventions of the project at hand
+(use-package editorconfig
+  :config
+  (editorconfig-mode +1))
+
+;; dired ?
+;; ediff ?
+
 ;; TODO continue from https://github.com/bbatsov/emacs.d/blob/master/init.el
 
+
+;; git
+
+(use-package magit
+  :bind (("C-x g" . magit-status)))
+(use-package difftastic-bindings
+  :ensure nil                           ;; external installation
+  :config (difftastic-bindings-mode))
+
+;; TODO move to difftastic in workflow
+;;  * https://github.com/wilfred/difftastic - the tool itself
+;; * integration with git
 
 ;; modeline
 
@@ -235,6 +254,7 @@
 ;; vertico for vertical command completion: https://github.com/minad/vertico
 ;; Vertico sorts by history position.
 (use-package vertico
+  :ensure nil
   :custom
   (vertico-scroll-margin 0) ;; Different scroll margin
   (vertico-count 10) ;; Show 10 candidates
@@ -263,6 +283,7 @@
 
 ;; orderless for fuzzy matching: https://github.com/oantolin/orderless
 (use-package orderless
+  :ensure nil
   :custom
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
