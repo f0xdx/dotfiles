@@ -123,8 +123,20 @@
 (minibuffer-regexp-mode 1) ;; visual feedback for regex in minibuffer
 
 ;; hippie expand
-(global-set-key (kbd "M-/") #'hippie-expand)
-(global-set-key (kbd "s-/") #'hippie-expand)
+(keymap-global-set "M-/" #'hippie-expand)
+(keymap-global-set "s-/" #'hippie-expand)
+
+;; movement
+;; forward/backwar paragraph is easier to type if just M- prefixed, instead of using shift key
+;; window movement is also common, so we need to bind these as well. This is one of the rare cases
+;; where deviating from devault helps me being faster.
+(keymap-global-set "M-n" 'forward-paragraph)
+(keymap-global-set "M-p" 'backward-paragraph)
+(keymap-global-set "M-o" 'other-window)
+(keymap-global-set "M-}" 'windmove-right)
+(keymap-global-set "M-{" 'windmove-left)
+(keymap-global-set "M-[" 'windmove-up)
+(keymap-global-set "M-]" 'windmove-down)
 
 ;; remove trailing whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -358,7 +370,7 @@
    '(read-only t cursor-intangible t face minibuffer-prompt))
   ;; hide commands in M-x which do not work in the current mode
   (read-extended-command-predicate
-        #'command-completion-default-include-p))
+   #'command-completion-default-include-p))
 
 ;; orderless for fuzzy matching: https://github.com/oantolin/orderless
 (use-package orderless
@@ -513,7 +525,7 @@
 
 ;; completion-preview - built-in (Emacs 30+) inline "ghost text"
 ;; preview of the top completion candidate as you type; a lightweight
-;; complement to corfu's popup.  While a preview is visible TAB
+;; complement to vertico.  While a preview is visible TAB
 ;; accepts it and M-i completes up to the longest common prefix of
 ;; all candidates.
 (use-package completion-preview
