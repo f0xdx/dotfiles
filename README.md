@@ -1,13 +1,14 @@
 # dotfiles
 
-Personal configuration for various tools and environments, managed with [Nix Home Manager](https://github.com/nix-community/home-manager) and Nix Flakes.
+Personal configuration for various tools and environments, managed with [Nix
+Home Manager](https://github.com/nix-community/home-manager) and Nix Flakes.
 
 ## Structure
 
 * `flake.nix` is the central entry point for all configurations.
 * `home/` contains modular user configuration (shell, editors, desktop).
 * `system/` contains system-level NixOS modules (services, desktop support).
-* `hosts/` contains host-specific overrides (e.g., `buildr` for Linux, `PC90221.local` for macOS).
+* `hosts/` contains host-specific overrides (e.g., `buildr` for Linux, `PC90221` for macOS).
 
 ## Keybindings
 
@@ -23,6 +24,7 @@ A comprehensive [keybinds.md](keybinds.md) reference is available for quick acce
 ## Desktop Environment
 
 A Wayland-based setup centered around [Hyprland](https://hyprland.org/) and its ecosystem:
+
 * [waybar](https://github.com/Alexays/Waybar) for status bar with system info and controls.
 * [mako](https://github.com/emersion/mako) for notifications with lightweight alerts.
 * [greetd](https://git.sr.ht/~qbit/greetd) with [tuigreet](https://github.com/apognu/tuigreet) for login, [hypridle](https://github.com/hyprwm/hypridle)/[hyprlock](https://github.com/hyprwm/hyprlock) for session management.

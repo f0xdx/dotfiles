@@ -9,7 +9,7 @@
 
 ;;; Commentary:
 
-;; User specific settings for emacs configuration. Packages are managed through
+;; User specific settings for Emacs configuration.  Packages are managed through
 ;; nix home manager.
 
 ;; Packages
@@ -18,7 +18,7 @@
 ;; loading them simply through (require '<package name>)
 ;; see also https://discourse.nixos.org/t/how-to-use-emacs-packages-installed-via-home-manager/2513
 ;; TODO evaluate use of autoload (load a function on use) instead of require
-;; TODO after emacs 31 upgrade implement diminish style functionality, see https://emacsredux.com/blog/2025/12/24/hide-minor-modes-in-the-modeline-in-emacs-31/
+;; TODO after Emacs 31 upgrade implement diminish style functionality, see https://emacsredux.com/blog/2025/12/24/hide-minor-modes-in-the-modeline-in-emacs-31/
 
 ;;; Code:
 
@@ -303,12 +303,25 @@
 
 ;; lsp support
 
+(use-package eglot
+  :ensure nil                           ;; standard package
+  :defer t
+  :custom
+  ;; shut down LSP server when last managed buffer is killed
+  (eglot-autoshutdown t)
+  ;; don't log every LSP event to the events buffer - the logging adds
+  ;; overhead with chatty servers; set :size back to nil (unlimited)
+  ;; temporarily when you need to debug an LSP session
+  (eglot-events-buffer-config '(:size 0 :format full)))
+
+;;
+
 ;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L1209
 ;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
 
 ;; lsp mode: https://github.com/emacs-lsp/lsp-mode
-;; consult-lsp: https://github.com/gagbo/consult-lsp ;; unclear whether needed, may work out of the box
-
+;; consult-lsp: https://github.com/gagbo/consult-lsp ;; seems this is for lsp-mode, so may be the wrong plugin
+;; consult-eglot: https://github.com/mohkale/consult-eglot/ ;; adds consult navigation through lsp symbols
 
 ;; modal editing
 ;; TODO decide on modal editing support:
@@ -557,17 +570,16 @@
 
 ;; treesitter
 
-;; TODO setup treesitter with grammars installed through nix like here https://mort.io/blog/treesitting-emacs/
+;; tree-sitter-langs provides compiled grammars; but we don't actually
 (use-package tree-sitter-langs ;; grammar bundle
   :ensure nil
+  :config
+  (setq major-mode-remap-alist              ;; use ts modes for some of the default modes
+        '((c-mode . c-ts-mode)
+          (js-json-mode . json-ts-mode)
+          (python-mode . python-ts-mode)
+          (conf-toml-mode . toml-ts-mode)))
   :custom (global-tree-sitter-mode t))
-
-;; treesit auto slows down buffer opening significantly - figure out how to do this manually
-;; (use-package treesit-auto ;; auto-install missing grammars
-;;   :ensure nil
-;;   :config
-;;   (setq treesit-auto-install nil)
-;;   (global-treesit-auto-mode))
 
 ;; expand-region, tree-sitter edition
 (use-package expreg
@@ -652,6 +664,15 @@
 
 ;; programming modes
 
+;; TODO install emacs-direnv: https://github.com/wbolster/emacs-direnv - this should
+;;      enable using flakes for things like compiler, language servers etc.
+(use-package direnv
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :defer t
+  :init
+  (direnv-mode 1))
+
+
 ;; markdown
 ;; NOTE emacs 31 has this builtin, so when upgrading ensure that we use
 ;; the builting package instead
@@ -660,9 +681,41 @@
   :mode ("\\.md\\'" . markdown-ts-mode)
   :defer 't)
 
-(use-package nix-ts-mode
-  :ensure nil                           ;; installed through home/editors/emacs/default.nix
-  :mode ("\\.nix\\'" . nix-ts-mode)
+;; bash
+(use-package bash-ts-mode
+  :ensure nil                           ;; standard package
+  :hook ((bash-ts-mode . eglot-ensure))
+  :defer t)
+
+;; golang
+;; gopls is default language server, so no need to configure
+(use-package go-ts-mode
+  :ensure nil                           ;; standard package
+  :hook ((go-ts-mode . eglot-ensure)
+         (go-ts-mode . subword-mode))
+;;  :mode ("\\.go\\'" . go-ts-mode)
+  :defer t)
+
+(use-package go-mod-ts-mode
+  :ensure nil                           ;; standard package
+;;  :mode ("\\.go.mod\\'" . go-mod-ts-mode)
+  :defer t)
+
+;; yaml
+(use-package yaml-ts-mode
+  :ensure nil                           ;; standard package
+  :mode ("\\.ya?ml\\'" . yaml-ts-mode)
+  :defer t)
+
+;; zig
+(use-package zig-ts-mode
+  :ensure nil                             ;; installed through home/editors/emacs/default.nix
+  :hook ((zig-ts-mode . eglot-ensure)
+         (zig-ts-mode . subword-mode))
+  :config
+  (with-eval-after-load 'eglot            ;; technically not necessary as this is the eglot default
+    (add-to-list 'eglot-server-programs
+               '(zig-ts-mode . ("zls"))))
   :defer t)
 
 ;; TODO evaluate if needed
@@ -676,3 +729,6 @@
 ;; ghostel for modern terminal: https://github.com/dakra/ghostel
 ;; nerdicons dired: https://github.com/rainstormstudio/nerd-icons-dired
 ;; buffer nerd icons: https://github.com/seagle0128/nerd-icons-ibuffer/
+
+(provide 'init)
+;;; init.el ends here

@@ -30,6 +30,7 @@
       extraPackages = epkgs: with epkgs; [
         consult
         difftastic
+        direnv
         embark
         embark-consult
         exec-path-from-shell
@@ -70,6 +71,7 @@
         wgrep
 	ultra-scroll
         vertico
+        zig-ts-mode
       ];
     };
 
@@ -77,6 +79,25 @@
       ex = "emacsclient -c -a ''";
       et = "emacsclient -t -a ''";
     };
+
+    home.packages = with pkgs; [
+      # bash
+      shellcheck
+      shfmt
+      bash-language-server
+
+      # golang
+      gopls
+      go
+      gofumpt
+      golangci-lint
+
+      # zig
+      zig
+      zig-zlint
+      zig-shell-completions
+      zls
+    ];
 
     xdg.configFile."emacs" = {
       source = ./cfg;
