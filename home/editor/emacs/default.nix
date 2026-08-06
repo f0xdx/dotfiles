@@ -92,6 +92,11 @@
       gofumpt
       golangci-lint
 
+      #nix
+      nixd
+      nil
+      nixfmt
+
       # zig
       zig
       zig-zlint

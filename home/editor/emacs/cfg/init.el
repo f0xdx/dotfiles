@@ -687,6 +687,16 @@
   :hook ((bash-ts-mode . eglot-ensure))
   :defer t)
 
+(use-package nix-ts-mode
+  :ensure nil                           ;; standard package
+  :hook ((nix-ts-mode . eglot-ensure))
+  :mode ("\\.nix\\'" . nix-ts-mode)
+  :config
+  (with-eval-after-load 'eglot            ;; technically not necessary as this is the eglot default
+    (add-to-list 'eglot-server-programs
+               '(nix-ts-mode . ("nixd"))))
+  :defer t)
+
 ;; golang
 ;; gopls is default language server, so no need to configure
 (use-package go-ts-mode
@@ -712,10 +722,6 @@
   :ensure nil                             ;; installed through home/editors/emacs/default.nix
   :hook ((zig-ts-mode . eglot-ensure)
          (zig-ts-mode . subword-mode))
-  :config
-  (with-eval-after-load 'eglot            ;; technically not necessary as this is the eglot default
-    (add-to-list 'eglot-server-programs
-               '(zig-ts-mode . ("zls"))))
   :defer t)
 
 ;; TODO evaluate if needed
