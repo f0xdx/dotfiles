@@ -50,6 +50,7 @@
 
 ;; minimal
 (setq inhibit-startup-message t)
+
 (setq ring-bell-function 'ignore) ;; no bell, TODO use a short flash https://emacs.stackexchange.com/questions/28906/how-to-switch-off-the-sounds
 (blink-cursor-mode -1)
 (scroll-bar-mode -1)
@@ -102,6 +103,7 @@
 
 (setq use-short-answers t)                   ;; enable y/n answers
 (setq help-window-select t)                  ;; automatically select help windows so you can dismiss them with 'q'
+(setq window-combination-resize t)           ;; resize all open windows proportionally
 (setq-default indent-tabs-mode nil)          ;; don't use tabs to indent
 (setq-default fill-column 80)
 (setq require-final-newline t)
@@ -137,6 +139,7 @@
 (keymap-global-set "M-{" 'windmove-left)
 (keymap-global-set "M-[" 'windmove-up)
 (keymap-global-set "M-]" 'windmove-down)
+;; alternative: use ace-window https://github.com/abo-abo/ace-window
 
 ;; remove trailing whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -168,14 +171,6 @@
   ;; only needed for GUI Emacs on macOS, where the shell env isn't inherited
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)))
-
-;; ripgrep
-(use-package grep
-  :config
-  (grep-apply-setting 'grep-command "rg --no-heading -Hn0 ")
-  (grep-apply-setting 'grep-find-command '("rg -Hn --no-heading -e '' -g '**/*' $(git rev-parse --show-toplevel || pwd)" . 25))
-  (grep-apply-setting grep-use-null-device nil)
-  (setq grep-use-headings t))
 
 ;; discover available keys
 (use-package which-key
@@ -263,7 +258,28 @@
   (setq hl-todo-highlight-punctuation ":")
   (global-hl-todo-mode +1))
 
+
+;; grep
+
+;; grep using ripgrep
+(use-package grep
+  :config
+  (grep-apply-setting 'grep-command "rg --no-heading -Hn0 ")
+  (grep-apply-setting 'grep-find-command '("rg -Hn --no-heading -e '' -g '**/*' $(git rev-parse --show-toplevel || pwd)" . 25))
+  (grep-apply-setting grep-use-null-device nil)
+  (setq grep-use-headings t))
+
+;; wgrep - edit grep/occur buffers and apply the changes to the files
+;; (press C-c C-p in a grep buffer, edit, then C-c C-e to apply)
+(use-package wgrep
+  :defer t
+  :config
+  ;; save the affected buffers automatically after applying the edits
+  (setq wgrep-auto-save-buffer t))
+
+
 ;; git
+
 (use-package magit
   :ensure nil                           ;; external installation
   :bind (("C-x g" . magit-status))
@@ -277,8 +293,6 @@
   :config
   (difftastic-bindings-mode +1))
 
-;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L786
-;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
 
 ;; modeline
 
@@ -288,6 +302,9 @@
 
 
 ;; lsp support
+
+;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L1209
+;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
 
 ;; lsp mode: https://github.com/emacs-lsp/lsp-mode
 ;; consult-lsp: https://github.com/gagbo/consult-lsp ;; unclear whether needed, may work out of the box
@@ -541,6 +558,16 @@
 ;; treesitter
 
 ;; TODO setup treesitter with grammars installed through nix like here https://mort.io/blog/treesitting-emacs/
+(use-package tree-sitter-langs ;; grammar bundle
+  :ensure nil
+  :custom (global-tree-sitter-mode t))
+
+;; treesit auto slows down buffer opening significantly - figure out how to do this manually
+;; (use-package treesit-auto ;; auto-install missing grammars
+;;   :ensure nil
+;;   :config
+;;   (setq treesit-auto-install nil)
+;;   (global-treesit-auto-mode))
 
 ;; expand-region, tree-sitter edition
 (use-package expreg
@@ -556,24 +583,85 @@
   (put 'expreg-expand 'repeat-map 'expreg-repeat-map)
   (put 'expreg-contract 'repeat-map 'expreg-repeat-map))
 
+
+;; folding
+;; based on https://www.jamescherti.com/emacs-the-definitive-guide-to-code-folding/
+
+;; kirigami as code folding frontend: https://github.com/jamescherti/kirigami.el
+(use-package kirigami
+  :ensure nil
+  :commands (kirigami-open-fold
+             kirigami-open-fold-rec
+             kirigami-close-fold
+             kirigami-toggle-fold
+             kirigami-open-folds
+             kirigami-close-folds-except-current
+             kirigami-close-folds)
+
+  :bind
+  ;; Vanilla Emacs keybindings
+  (("C-c z o" . kirigami-open-fold)          ; Open fold at point
+   ("C-c z O" . kirigami-open-fold-rec)      ; Open fold recursively
+   ("C-c z r" . kirigami-open-folds)         ; Open all folds
+   ("C-c z c" . kirigami-close-fold)         ; Close fold at point
+   ("C-c z m" . kirigami-close-folds)        ; Close all folds
+   ("C-c z a" . kirigami-toggle-fold))      ; Toggle fold at point
+  :custom
+  (kirigami-show-context-menu t)
+  :init
+  (kirigami-global-mode 1))
+
+(add-hook 'emacs-lisp-mode-hook #'outline-minor-mode)
+(add-hook 'lisp-interaction-mode-hook #'hs-minor-mode) ;; scratch
+(add-hook 'lisp-mode-hook #'outline-minor-mode)
+
+;; treesit-fold as tree sitter based backend for folding https://github.com/emacs-tree-sitter/treesit-fold
+(use-package treesit-fold
+  :ensure nil
+  :commands (treesit-fold-close
+             treesit-fold-close-all
+             treesit-fold-open
+             treesit-fold-toggle
+             treesit-fold-open-all
+             treesit-fold-mode
+             global-treesit-fold-mode
+             treesit-fold-open-recursively
+             treesit-fold-line-comment-mode)
+
+  :custom
+  (treesit-fold-line-count-show t)
+  (treesit-fold-line-count-format " ▼")
+
+  :config
+  ;; TODO these should move to the config blocks of the respective mode packages
+  (add-hook 'bash-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'c-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'dockerfile-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'go-mod-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'go-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'json-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'makefile-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'markdown-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'mermaid-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'nix-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'rust-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'toml-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'yaml-ts-mode-hook #'treesit-fold-mode)
+  (add-hook 'zig-ts-mode-hook #'treesit-fold-mode))
+
+
+;; programming modes
+
+
+
 ;; TODO evaluate if needed
 
 ;; ghostel as libghostty based terminal in emacs: https://github.com/dakra/ghostel
 ;; projectile for project based config: https://docs.projectile.mx/projectile/index.html
+;; enlight to build a custom startup screen https://github.com/ichernyshovvv/enlight
+;; combobulate for treesitter based navigation https://github.com/mickeynp/combobulate
 ;; corfu for local completion pop-ups: https://github.com/minad/corfu
 ;; cape for additional pop-ups: https://github.com/minad/cape
 ;; ghostel for modern terminal: https://github.com/dakra/ghostel
 ;; nerdicons dired: https://github.com/rainstormstudio/nerd-icons-dired
 ;; buffer nerd icons: https://github.com/seagle0128/nerd-icons-ibuffer/
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
