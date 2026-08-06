@@ -14,8 +14,9 @@
 
     programs.ghostty = {
       enable = true;
+      package = if pkgs.stdenv.isDarwin then null else pkgs.ghostty;
       enableBashIntegration = true;
-      installBatSyntax = true;
+      installBatSyntax = ! pkgs.stdenv.isDarwin;
       clearDefaultKeybinds = true;
 
       settings = {

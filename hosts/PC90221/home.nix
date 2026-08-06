@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   modules.desktop.enable = false;
   modules.firefox.enable = true;
-  modules.ghostty.enable = false;
+  modules.ghostty.enable = true;
   modules.spotify.enable = false;
   modules.ollama = {
     enable = true;

@@ -90,4 +90,14 @@ Goal: Resolve `EDITOR` / `VISUAL` sessionVariable definition conflicts between e
 * [x] Update `home/default.nix` to import `./editor` and set default editor preference
 * [x] Verify configuration evaluation with `nix flake check`
 
+## macOS Ghostty Support (2026-08-06)
+
+Goal: Enable Ghostty configuration management on macOS via Home Manager without compiling `pkgs.ghostty` on Darwin.
+
+* [x] Update `home/terminal/ghostty/default.nix` to set `programs.ghostty.package = null` and `installBatSyntax = false` on Darwin
+* [x] Set `modules.ghostty.enable = true;` in `hosts/PC90221/home.nix`
+* [x] Add manual application installation note to `README.md`
+* [x] Validate configuration evaluation with `nix flake check`
+
+
 

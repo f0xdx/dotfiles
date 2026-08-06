@@ -50,5 +50,8 @@ Ensure Nix is installed with `nix-command` and `flakes` enabled.
 > For a first-time setup on systems not managed through Nix (macOS, etc.), use:
 > `nix run --no-write-lock-file github:nix-community/home-manager/ -- --flake . switch`
 
+> [!NOTE]
+> On macOS, the [Ghostty](https://ghostty.org) terminal application must be installed manually. Home Manager automatically manages its configuration at `$XDG_CONFIG_HOME/ghostty/config` (`~/.config/ghostty/config`).
+
 ## Roadmap
 See [tasks.md](tasks.md) for planned improvements and upcoming migrations.
