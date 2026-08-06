@@ -38,6 +38,8 @@
         kirigami
         magit
         marginalia
+        markdown-ts-mode
+        nix-ts-mode
         orderless
         tree-sitter-langs
         (treesit-grammars.with-grammars (p: [

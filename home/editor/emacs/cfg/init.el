@@ -652,7 +652,18 @@
 
 ;; programming modes
 
+;; markdown
+;; NOTE emacs 31 has this builtin, so when upgrading ensure that we use
+;; the builting package instead
+(use-package markdown-ts-mode
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :mode ("\\.md\\'" . markdown-ts-mode)
+  :defer 't)
 
+(use-package nix-ts-mode
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :mode ("\\.nix\\'" . nix-ts-mode)
+  :defer t)
 
 ;; TODO evaluate if needed
 
