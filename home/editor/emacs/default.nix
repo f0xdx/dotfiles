@@ -35,6 +35,7 @@
         embark-consult
         exec-path-from-shell
         expreg
+        # ghostel # currently doesn't build on mac os
         hl-todo
         kirigami
         magit

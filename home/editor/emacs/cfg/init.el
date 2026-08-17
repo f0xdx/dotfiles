@@ -17,7 +17,6 @@
 ;; packages are managed through nix in home/editor/emacs/default.nix
 ;; loading them simply through (require '<package name>)
 ;; see also https://discourse.nixos.org/t/how-to-use-emacs-packages-installed-via-home-manager/2513
-;; TODO evaluate use of autoload (load a function on use) instead of require
 ;; TODO after Emacs 31 upgrade implement diminish style functionality, see https://emacsredux.com/blog/2025/12/24/hide-minor-modes-in-the-modeline-in-emacs-31/
 
 ;;; Code:
@@ -111,6 +110,7 @@
 (setq kill-do-not-save-duplicates t)
 (setq ffap-machine-p-known 'reject)          ;; don't let ffap ping random hostnames
 (setq auto-revert-avoid-polling t)           ;; automatic revert when underlying file changes
+(setq next-line-add-newlines t)              ;; automatically append new lines at the end of buffer
 (global-auto-revert-mode t)
 
 ;; mark
@@ -318,9 +318,8 @@
 
 ;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L1209
 ;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
+;; TODO take inspiration from: https://github.com/LionyxML/emacs-solo
 
-;; lsp mode: https://github.com/emacs-lsp/lsp-mode
-;; consult-lsp: https://github.com/gagbo/consult-lsp ;; seems this is for lsp-mode, so may be the wrong plugin
 ;; consult-eglot: https://github.com/mohkale/consult-eglot/ ;; adds consult navigation through lsp symbols
 
 ;; modal editing
@@ -659,7 +658,15 @@
   (add-hook 'rust-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'toml-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'yaml-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'zig-ts-mode-hook #'treesit-fold-mode))
+  ;; (add-hook 'zig-ts-mode-hook #'treesit-fold-mode)  ;; grouped under zig-ts mode
+  )
+
+;; ghostel
+;; provided libghostty based terminal in emacs: https://github.com/dakra/ghostel
+;; TODO libghostty-vt currently doesn't build on mac os, revisit after fix; see also in default.nix
+;;(use-package ghostel
+;;  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+;;  )
 
 
 ;; programming modes
@@ -722,17 +729,17 @@
   :ensure nil                             ;; installed through home/editors/emacs/default.nix
   :hook ((zig-ts-mode . eglot-ensure)
          (zig-ts-mode . subword-mode))
-  :defer t)
+  :defer t
+  :config
+  (add-hook 'zig-ts-mode-hook #'treesit-fold-mode)
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+               '(zig-ts-mode . ("zls")))))
 
 ;; TODO evaluate if needed
 
-;; ghostel as libghostty based terminal in emacs: https://github.com/dakra/ghostel
-;; projectile for project based config: https://docs.projectile.mx/projectile/index.html
 ;; enlight to build a custom startup screen https://github.com/ichernyshovvv/enlight
 ;; combobulate for treesitter based navigation https://github.com/mickeynp/combobulate
-;; corfu for local completion pop-ups: https://github.com/minad/corfu
-;; cape for additional pop-ups: https://github.com/minad/cape
-;; ghostel for modern terminal: https://github.com/dakra/ghostel
 ;; nerdicons dired: https://github.com/rainstormstudio/nerd-icons-dired
 ;; buffer nerd icons: https://github.com/seagle0128/nerd-icons-ibuffer/
 
