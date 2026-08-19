@@ -7,7 +7,7 @@
 
 ;; This file is not part of GNU Emacs.
 
-;;; Commentary:
+;; Commentary:
 
 ;; User specific settings for Emacs configuration.  Packages are managed through
 ;; nix home manager.
@@ -19,11 +19,13 @@
 ;; see also https://discourse.nixos.org/t/how-to-use-emacs-packages-installed-via-home-manager/2513
 ;; TODO after Emacs 31 upgrade implement diminish style functionality, see https://emacsredux.com/blog/2025/12/24/hide-minor-modes-in-the-modeline-in-emacs-31/
 
-;;; Code:
 
-;; basic settings
+;;; Basic Settings
+
 (setq user-full-name "Felix Heinrichs"
       user-email-address "felix.heinrichs@gmail.com")
+
+;; file encoding
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
@@ -47,9 +49,17 @@
 (unless (file-exists-p user-emacs-cache-directory)
   (make-directory user-emacs-cache-directory :parents))
 
+;; environmental protection
+;; auto-save
+(setq auto-save-list-file-prefix (expand-file-name "saves-" user-emacs-cache-directory))
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+
+
+;;; Appearance
+
 ;; minimal
 (setq inhibit-startup-message t)
-
 (setq ring-bell-function 'ignore) ;; no bell, TODO use a short flash https://emacs.stackexchange.com/questions/28906/how-to-switch-off-the-sounds
 (blink-cursor-mode -1)
 (scroll-bar-mode -1)
@@ -57,9 +67,6 @@
 (tooltip-mode -1)
 (set-fringe-mode 10)
 (menu-bar-mode -1)
-
-
-;; appearance
 
 ;; line
 (setq-default truncate-lines t)		              ;; no wrapping lines
@@ -96,27 +103,19 @@
 (setq next-error-message-highlight t) ;; highlight current error in compilation/grep buffers
 
 
-;; environmental protection
+;;; Quality of Life
 
-;; auto-save
-(setq auto-save-list-file-prefix (expand-file-name "saves-" user-emacs-cache-directory))
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-
-
-;; quality of life
-
-(setq use-short-answers t)                   ;; enable y/n answers
-(setq help-window-select t)                  ;; automatically select help windows so you can dismiss them with 'q'
-(setq window-combination-resize t)           ;; resize all open windows proportionally
-(setq-default indent-tabs-mode nil)          ;; don't use tabs to indent
+(setq use-short-answers t)                   ; enable y/n answers
+(setq help-window-select t)                  ; automatically select help windows so you can dismiss them with 'q'
+(setq window-combination-resize t)           ; resize all open windows proportionally
+(setq-default indent-tabs-mode nil)          ; don't use tabs to indent
 (setq-default fill-column 80)
 (setq require-final-newline t)
-(setq save-interprogram-paste-before-kill t) ;; preserve system clipboard in kill ring
+(setq save-interprogram-paste-before-kill t) ; preserve system clipboard in kill ring
 (setq kill-do-not-save-duplicates t)
-(setq ffap-machine-p-known 'reject)          ;; don't let ffap ping random hostnames
-(setq auto-revert-avoid-polling t)           ;; automatic revert when underlying file changes
-(setq next-line-add-newlines t)              ;; automatically append new lines at the end of buffer
+(setq ffap-machine-p-known 'reject)          ; don't let ffap ping random hostnames
+(setq auto-revert-avoid-polling t)           ; automatic revert when underlying file changes
+(setq next-line-add-newlines t)              ; automatically append new lines at the end of buffer
 (global-auto-revert-mode t)
 
 ;; mark
@@ -164,9 +163,8 @@
 (advice-add 'kill-region :before #'slick-cut)
 (advice-add 'kill-ring-save :before #'slick-copy)
 
-;; exec-path-from-shell - sync PATH and env vars from the shell on macOS
-
 ;; exec-path-from-shell
+;; sync PATH and env vars from the shell on macOS
 ;; only needed for GUI Emacs on macOS, where the shell env isn't inherited
 (when (memq window-system '(mac ns))
   (use-package exec-path-from-shell
@@ -205,9 +203,7 @@
           'font-lock-face 'font-lock-comment-face)))
 
 ;; spell checking
-
-
-;; TODO configure ispell
+;; TODO configure aspell
 
 ;; highlight the current line
 (use-package hl-line
@@ -259,13 +255,6 @@
         ;; problems with remote files
         recentf-auto-cleanup 'never)
   (recentf-mode +1))
-
-;; editorconfig - honor .editorconfig files (built-in since Emacs 30);
-;; automatically adjusts indentation style/size, line endings, final
-;; newlines, etc. to match the conventions of the project at hand
-(use-package editorconfig
-  :config
-  (editorconfig-mode +1))
 
 ;; dired
 (use-package dired
@@ -364,7 +353,8 @@
 ;; NOTE we can take inspiration from https://github.com/domtronn/all-the-icons.el/wiki/Mode-Line on how to
 ;;      build a custom mode line with icons
 
-;; lsp support
+
+;;; LSP Support
 
 (use-package eglot
   :ensure nil                           ;; standard package
@@ -381,12 +371,6 @@
 
 ;; eglot keybindings for common lsp commands
 
-;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L1209
-;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
-;; TODO take inspiration from: https://github.com/LionyxML/emacs-solo
-
-;; consult-eglot: https://github.com/mohkale/consult-eglot/ ;; adds consult navigation through lsp symbols
-;; consult-todo: https://github.com/eki3z/consult-todo ;; brows all todos in project
 
 ;; modal editing
 ;; TODO decide on modal editing support:
@@ -395,7 +379,7 @@
 ;; completion
 
 
-;; completion
+;;; Completion
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
@@ -485,7 +469,8 @@
   (completion-category-defaults nil) ;; Disable defaults, use our settings
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 
-;; Example configuration for Consult
+;; consult
+;; improve minibuffer completions
 (use-package consult
   :ensure nil
   ;; Replace bindings. Lazily loaded by `use-package'.
@@ -591,6 +576,8 @@
   :bind(;; M-g bindings in `goto-map'
         ("M-g s" . consult-eglot-symbols)))
 
+;; TODO consult-todo: https://github.com/eki3z/consult-todo ;; brows all todos in project
+
 (use-package embark
   :ensure nil
 
@@ -644,8 +631,11 @@
   (global-completion-preview-mode +1))
 
 
-;; treesitter
+;;; Treesitter
 
+;; TODO refactor, this package seems to not be necessary, as we install the grammars through
+;;      nix in home/editor/emacs/default.nix; we would want to load the builtin package through
+;;      use package macro though, as this provides a nice structure for setting the mode remap etc.
 ;; tree-sitter-langs provides compiled grammars; but we don't actually
 (use-package tree-sitter-langs ;; grammar bundle
   :ensure nil
@@ -672,7 +662,7 @@
   (put 'expreg-contract 'repeat-map 'expreg-repeat-map))
 
 
-;; folding
+;; Folding
 ;; based on https://www.jamescherti.com/emacs-the-definitive-guide-to-code-folding/
 
 ;; kirigami as code folding frontend: https://github.com/jamescherti/kirigami.el
@@ -705,7 +695,7 @@
 
 ;; treesit-fold as tree sitter based backend for folding https://github.com/emacs-tree-sitter/treesit-fold
 (use-package treesit-fold
-  :ensure nil
+  :ensure nil                           ; installed through home/editor/emacs/default.nix
   :commands (treesit-fold-close
              treesit-fold-close-all
              treesit-fold-open
@@ -722,16 +712,16 @@
 
   :config
   ;; TODO these should move to the config blocks of the respective mode packages
-  (add-hook 'bash-ts-mode-hook #'treesit-fold-mode)
+  ;; (add-hook 'bash-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'c-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'dockerfile-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'go-mod-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'go-ts-mode-hook #'treesit-fold-mode)
+  ;; (add-hook 'go-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'json-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'makefile-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'markdown-ts-mode-hook #'treesit-fold-mode)
+  ;; (add-hook 'markdown-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'mermaid-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'nix-ts-mode-hook #'treesit-fold-mode)
+  ;; (add-hook 'nix-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'rust-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'toml-ts-mode-hook #'treesit-fold-mode)
   (add-hook 'yaml-ts-mode-hook #'treesit-fold-mode)
@@ -739,47 +729,56 @@
   )
 
 
-;; terminal
+;;; Terminal
 
 ;; ghostel
 ;; provided libghostty based terminal in emacs: https://github.com/dakra/ghostel
 ;; TODO libghostty-vt currently doesn't build on mac os, revisit after fix; see also in default.nix
 ;;(use-package ghostel
-;;  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+;;  :ensure nil                          ; installed through home/editors/emacs/default.nix
 ;;  )
 
 
-;; programming modes
+;;; Programming Support
 
-;; TODO install emacs-direnv: https://github.com/wbolster/emacs-direnv - this should
-;;      enable using flakes for things like compiler, language servers etc.
+;; direnv
+;; supports flake based tooling on a project level
 (use-package direnv
-  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :defer t
   :init
   (direnv-mode 1))
 
+;; editorconfig - honor .editorconfig files (built-in since Emacs 30);
+;; automatically adjusts indentation style/size, line endings, final
+;; newlines, etc. to match the conventions of the project at hand
+(use-package editorconfig
+  :config
+  (editorconfig-mode +1))
 
 ;; markdown
 ;; NOTE emacs 31 has this builtin, so when upgrading ensure that we use
 ;; the builting package instead
 (use-package markdown-ts-mode
-  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
+  :hook ((markdown-ts-mode-hook . treesit-fold-mode))
   :mode ("\\.md\\'" . markdown-ts-mode)
   :defer 't)
 
 ;; bash
 (use-package bash-ts-mode
-  :ensure nil                           ;; standard package
-  :hook ((bash-ts-mode . eglot-ensure))
+  :ensure nil                           ; standard package
+  :hook ((bash-ts-mode . eglot-ensure)
+         (bash-ts-mode . treesit-fold-mode))
   :defer t)
 
 (use-package nix-ts-mode
-  :ensure nil                           ;; standard package
-  :hook ((nix-ts-mode . eglot-ensure))
+  :ensure nil                           ; standard package
+  :hook ((nix-ts-mode . eglot-ensure)
+         (nix-ts-mode . treesit-fold-mode))
   :mode ("\\.nix\\'" . nix-ts-mode)
   :config
-  (with-eval-after-load 'eglot            ;; technically not necessary as this is the eglot default
+  (with-eval-after-load 'eglot          ; technically not necessary as this is the eglot default
     (add-to-list 'eglot-server-programs
                '(nix-ts-mode . ("nixd"))))
   :defer t)
@@ -787,42 +786,49 @@
 ;; golang
 ;; gopls is default language server, so no need to configure
 (use-package go-ts-mode
-  :ensure nil                           ;; standard package
+  :ensure nil                           ; standard package
   :hook ((go-ts-mode . eglot-ensure)
-         (go-ts-mode . subword-mode))
+         (go-ts-mode . subword-mode)
+         (go-ts-mode . treesit-fold-mode))
 ;;  :mode ("\\.go\\'" . go-ts-mode)
   :defer t)
 
 (use-package go-mod-ts-mode
-  :ensure nil                           ;; standard package
+  :ensure nil                           ; standard package
 ;;  :mode ("\\.go.mod\\'" . go-mod-ts-mode)
   :defer t)
 
 ;; yaml
 (use-package yaml-ts-mode
-  :ensure nil                           ;; standard package
+  :ensure nil                           ; standard package
   :mode ("\\.ya?ml\\'" . yaml-ts-mode)
   :defer t)
 
 ;; zig
 (use-package zig-ts-mode
-  :ensure nil                             ;; installed through home/editors/emacs/default.nix
+  :ensure nil                             ; installed through home/editors/emacs/default.nix
   :hook ((zig-ts-mode . eglot-ensure)
-         (zig-ts-mode . subword-mode))
+         (zig-ts-mode . subword-mode)
+         (zig-ts-mode . treesit-fold-mode))
   :defer t
   :config
-  (add-hook 'zig-ts-mode-hook #'treesit-fold-mode)
+  ;; (add-hook 'zig-ts-mode-hook #'treesit-fold-mode)
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
                '(zig-ts-mode . ("zls")))))
 
-;; TODO evaluate if needed
 
-;; enlight to build a custom startup screen https://github.com/ichernyshovvv/enlight
-;; agent-shell to orchestrate ACP compatible agents: https://github.com/xenodium/agent-shell
-;; combobulate for treesitter based navigation https://github.com/mickeynp/combobulate
-;; nerdicons dired: https://github.com/rainstormstudio/nerd-icons-dired
-;; buffer nerd icons: https://github.com/seagle0128/nerd-icons-ibuffer/
+;;; Work-in-Progress
+
+;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L1209
+;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
+;; TODO take inspiration from: https://github.com/LionyxML/emacs-solo
+;; TODO evaluate if following are needed:
+;; * enlight to build a custom startup screen https://github.com/ichernyshovvv/enlight
+;; * agent-shell to orchestrate ACP compatible agents: https://github.com/xenodium/agent-shell
+;; * combobulate for treesitter based navigation https://github.com/mickeynp/combobulate
+;; * nerdicons dired: https://github.com/rainstormstudio/nerd-icons-dired
+;; * buffer nerd icons: https://github.com/seagle0128/nerd-icons-ibuffer/
 
 (provide 'init)
 ;;; init.el ends here
