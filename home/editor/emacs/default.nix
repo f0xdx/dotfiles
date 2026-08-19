@@ -29,6 +29,7 @@
           );
       extraPackages = epkgs: with epkgs; [
         consult
+        consult-eglot
         difftastic
         direnv
         embark
@@ -41,6 +42,11 @@
         magit
         marginalia
         markdown-ts-mode
+        nerd-icons
+        nerd-icons-grep
+        nerd-icons-xref
+        nerd-icons-dired
+        nerd-icons-completion
         nix-ts-mode
         orderless
         tree-sitter-langs
@@ -82,6 +88,8 @@
     };
 
     home.packages = with pkgs; [
+
+
       # bash
       shellcheck
       shfmt

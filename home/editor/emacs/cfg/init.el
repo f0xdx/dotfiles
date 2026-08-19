@@ -65,11 +65,6 @@
 (setq-default truncate-lines t)		              ;; no wrapping lines
 (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
   (add-hook hook #'display-line-numbers-mode))
-;; (add-hook 'prog-mode-hook 'display-line-numbers-mode) ;; line numbers in all programming modes
-;; mode line
-(line-number-mode 1)
-(column-number-mode 1)
-(size-indication-mode 1)
 
 ;; scrolling
 (use-package ultra-scroll
@@ -85,6 +80,17 @@
 (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 160)
 ;; (load-theme 'modus-operandi)
 (load-theme 'modus-vivendi)		;; TODO automatic switching: https://emacsredux.com/blog/2026/03/29/automatic-light-dark-theme-switching/
+
+;; nerd-icons
+;; see also https://github.com/rainstormstudio/nerd-icons.el
+(use-package nerd-icons
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :defer t
+  :custom
+  ;; The Nerd Font you want to use in GUI
+  ;; "Symbols Nerd Font Mono" is the default and is recommended
+  ;; but you can use any other Nerd Font if you want
+  (nerd-icons-font-family "FiraCode Nerd Font"))
 
 ;; misc
 (setq next-error-message-highlight t) ;; highlight current error in compilation/grep buffers
@@ -129,25 +135,18 @@
 (keymap-global-set "s-/" #'hippie-expand)
 
 ;; movement
-;; forward/backwar paragraph is easier to type if just M- prefixed, instead of using shift key
-;; window movement is also common, so we need to bind these as well. This is one of the rare cases
+;; window movement is common, so we need to bind these as well. This is one of the rare cases
 ;; where deviating from devault helps me being faster.
-(keymap-global-set "M-n" 'forward-paragraph)
-(keymap-global-set "M-p" 'backward-paragraph)
-(keymap-global-set "M-o" 'other-window)
-(keymap-global-set "M-}" 'windmove-right)
-(keymap-global-set "M-{" 'windmove-left)
-(keymap-global-set "M-[" 'windmove-up)
-(keymap-global-set "M-]" 'windmove-down)
+(keymap-global-set "M-o M-o" 'other-window)
+(keymap-global-set "M-o o" 'other-window)
+(keymap-global-set "M-o M-f" 'windmove-right)
+(keymap-global-set "M-o M-b" 'windmove-left)
+(keymap-global-set "M-o M-p" 'windmove-up)
+(keymap-global-set "M-o M-n" 'windmove-down)
 ;; alternative: use ace-window https://github.com/abo-abo/ace-window
 
 ;; remove trailing whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-;;(add-hook 'before-save-hook
-;;          (lambda ()
-;;            (when (derived-mode-p 'progr-mode)
-;;              (delete-trailing-whitespace))))
-;; TODO ws-butler style region mapping from vc tools
 
 ;; slick cut / copy (emacs fu from https://emacs.stackexchange.com/questions/2347/kill-or-copy-current-line-with-minimal-keystrokes)
 (defun slick-cut (beg end)
@@ -166,29 +165,49 @@
 (advice-add 'kill-ring-save :before #'slick-copy)
 
 ;; exec-path-from-shell - sync PATH and env vars from the shell on macOS
-(use-package exec-path-from-shell
-  :config
-  ;; only needed for GUI Emacs on macOS, where the shell env isn't inherited
-  (when (memq window-system '(mac ns))
+
+;; exec-path-from-shell
+;; only needed for GUI Emacs on macOS, where the shell env isn't inherited
+(when (memq window-system '(mac ns))
+  (use-package exec-path-from-shell
+    :ensure nil                           ;; installed through home/editors/emacs/default.nix
+    :config
     (exec-path-from-shell-initialize)))
 
 ;; discover available keys
 (use-package which-key
+  ;; The :init section is always executed.
   :init
-  (which-key-mode))
+  ;; which-key is activated in the :init section of use-package such that
+  ;; the mode gets enabled right away. Note that this forces loading the
+  ;; package.
+  (which-key-mode 1))
 
 ;; paren context
 (use-package paren
   :config
-  (show-paren-mode +1)
+  (show-paren-mode 1)
   ;; show matching paren context when it's offscreen
   (setq show-paren-context-when-offscreen 'overlay))
 
+;; calendar
 (use-package calendar
   :defer t
   :config
   ;; weeks starting on Monday
-  (setq calendar-week-start-day 1))
+  (setq calendar-week-start-day 1
+        calendar-intermonth-text
+        '(propertize
+          (format "w%2d"
+                  (car
+                   (calendar-iso-from-absolute
+                    (calendar-absolute-from-gregorian (list month day year)))))
+          'font-lock-face 'font-lock-comment-face)))
+
+;; spell checking
+
+
+;; TODO configure ispell
 
 ;; highlight the current line
 (use-package hl-line
@@ -248,7 +267,22 @@
   :config
   (editorconfig-mode +1))
 
-;; dired ?
+;; dired
+(use-package dired
+  :ensure nil
+  :defer t
+  :config
+  (put 'dired-find-alternate-file 'disabled nil) ;; dired - reuse current buffer by pressing 'a'
+  (setq dired-recursive-deletes 'always)         ;; always delete and copy recursively
+  (setq dired-recursive-copies 'always)
+  (setq dired-dwim-target t)                     ;; use subdir of other window
+  (setq dired-mouse-drag-files t))               ;; drag files from dired to other apps
+
+(use-package nerd-icons-dired
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
+
 ;; ediff ?
 
 ;; hl-todo
@@ -257,6 +291,22 @@
   :config
   (setq hl-todo-highlight-punctuation ":")
   (global-hl-todo-mode +1))
+
+;; xref
+(use-package nerd-icons-xref
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :hook
+  (xref--xref-buffer-mode . nerd-icons-xref-mode))
+;;  (after-init-hook . nerd-icons-xref-mode))
+
+;; server
+;; automatically start a server for emacsclient connections
+(use-package server
+  :ensure nil
+  :defer 1
+  :config
+  (unless server-process
+    (server-start)))
 
 
 ;; grep
@@ -269,13 +319,21 @@
   (grep-apply-setting grep-use-null-device nil)
   (setq grep-use-headings t))
 
+;; nerd icons in grep buffers (buggy, may need fix)
+(use-package nerd-icons-grep
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :init
+  (setq grep-use-headings t)
+  :hook
+  (grep-mode . nerd-icons-grep-mode))
+
 ;; wgrep - edit grep/occur buffers and apply the changes to the files
 ;; (press C-c C-p in a grep buffer, edit, then C-c C-e to apply)
 (use-package wgrep
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
   :defer t
   :config
-  ;; save the affected buffers automatically after applying the edits
-  (setq wgrep-auto-save-buffer t))
+  (setq wgrep-auto-save-buffer t))      ;; save the affected buffers automatically after applying the edits
 
 
 ;; git
@@ -296,16 +354,23 @@
 
 ;; modeline
 
+(line-number-mode 1)
+(column-number-mode 1)
+(size-indication-mode 1)
+
 ;; TODO evaluate customizing it https://protesilaos.com/codelog/2023-07-29-emacs-custom-modeline-tutorial/
 ;;      vs. https://github.com/seagle0128/doom-modeline
 ;;      vs. https://codeberg.org/Lambda-Emacs/lambda-line
-
+;; NOTE we can take inspiration from https://github.com/domtronn/all-the-icons.el/wiki/Mode-Line on how to
+;;      build a custom mode line with icons
 
 ;; lsp support
 
 (use-package eglot
   :ensure nil                           ;; standard package
   :defer t
+  :config
+  (setq eglot-extend-to-xref t)
   :custom
   ;; shut down LSP server when last managed buffer is killed
   (eglot-autoshutdown t)
@@ -314,13 +379,14 @@
   ;; temporarily when you need to debug an LSP session
   (eglot-events-buffer-config '(:size 0 :format full)))
 
-;;
+;; eglot keybindings for common lsp commands
 
 ;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L1209
 ;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
 ;; TODO take inspiration from: https://github.com/LionyxML/emacs-solo
 
 ;; consult-eglot: https://github.com/mohkale/consult-eglot/ ;; adds consult navigation through lsp symbols
+;; consult-todo: https://github.com/eki3z/consult-todo ;; brows all todos in project
 
 ;; modal editing
 ;; TODO decide on modal editing support:
@@ -340,13 +406,19 @@
   :bind (:map minibuffer-local-map
          ("M-A" . marginalia-cycle))
 
-  ;; The :init section is always executed.
   :init
-
   ;; Marginalia must be activated in the :init section of use-package such that
   ;; the mode gets enabled right away. Note that this forces loading the
   ;; package.
   (marginalia-mode))
+
+(use-package nerd-icons-completion
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
 
 ;; vertico for vertical command completion: https://github.com/minad/vertico
 ;; Vertico sorts by history position.
@@ -451,9 +523,9 @@
          ("M-g I" . consult-imenu-multi)
          ;; M-s bindings in `search-map'
          ("M-s f" . consult-fd)                    ;; Alternative: consult-find
-         ("M-s g" . consult-git-grep)
-         ("M-s s" . consult-ripgrep)
-         ("M-s M-s" . consult-ripgrep)
+         ("M-s G" . consult-git-grep)
+         ("M-s g" . consult-ripgrep)
+         ("M-s M-g" . consult-ripgrep)
          ("M-s l" . consult-line)
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
@@ -512,7 +584,12 @@
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
-)
+  )
+
+(use-package consult-eglot
+  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :bind(;; M-g bindings in `goto-map'
+        ("M-g s" . consult-eglot-symbols)))
 
 (use-package embark
   :ensure nil
@@ -661,6 +738,9 @@
   ;; (add-hook 'zig-ts-mode-hook #'treesit-fold-mode)  ;; grouped under zig-ts mode
   )
 
+
+;; terminal
+
 ;; ghostel
 ;; provided libghostty based terminal in emacs: https://github.com/dakra/ghostel
 ;; TODO libghostty-vt currently doesn't build on mac os, revisit after fix; see also in default.nix
@@ -739,6 +819,7 @@
 ;; TODO evaluate if needed
 
 ;; enlight to build a custom startup screen https://github.com/ichernyshovvv/enlight
+;; agent-shell to orchestrate ACP compatible agents: https://github.com/xenodium/agent-shell
 ;; combobulate for treesitter based navigation https://github.com/mickeynp/combobulate
 ;; nerdicons dired: https://github.com/rainstormstudio/nerd-icons-dired
 ;; buffer nerd icons: https://github.com/seagle0128/nerd-icons-ibuffer/

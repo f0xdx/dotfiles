@@ -48,7 +48,7 @@
         #   ];
         # };
         colorScheme = "dark"; # TODO use system light/dark switch
-        editor = "vim";
+        editor = "auto";
         enableTelemetry = false;
         enableTerminalSandbox = true;
 
