@@ -55,38 +55,51 @@
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 
+;; mac specifics
+;; exec-path-from-shell
+;; sync PATH and env vars from the shell on macOS
+;; only needed for GUI Emacs on macOS, where the shell env isn't inherited
+(when (memq window-system '(mac ns))
+  (use-package exec-path-from-shell
+    :ensure nil                           ;; installed through home/editors/emacs/default.nix
+    :config
+    (exec-path-from-shell-initialize)))
+
+
 
 ;;; Appearance
 
-;; minimal
+;; minimal distraction
 (setq inhibit-startup-message t)
-(setq ring-bell-function 'ignore) ;; no bell, TODO use a short flash https://emacs.stackexchange.com/questions/28906/how-to-switch-off-the-sounds
+(setq ring-bell-function 'ignore) ; no bell
 (blink-cursor-mode -1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
 (set-fringe-mode 10)
 (menu-bar-mode -1)
+;; TODO use a short flash of mode line as bell https://emacs.stackexchange.com/questions/28906/how-to-switch-off-the-sounds
 
 ;; line
-(setq-default truncate-lines t)		              ;; no wrapping lines
+(setq-default truncate-lines t)		                       ; no wrapping lines
 (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
   (add-hook hook #'display-line-numbers-mode))
 
 ;; scrolling
 (use-package ultra-scroll
-  :ensure nil                           ;; external installation
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :init
-  (setq scroll-margin 0                 ;; ultra-scroll requires 0 for glitch-free scrolling
+  (setq scroll-margin 0                 ; ultra-scroll requires 0 for glitch-free scrolling
     scroll-conservatively 100000
     scroll-preserve-screen-position 1)
   :config
-  (ultra-scroll-mode +1))
+  (ultra-scroll-mode 1))
 
 ;; fonts and theme
 (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 160)
 ;; (load-theme 'modus-operandi)
-(load-theme 'modus-vivendi)		;; TODO automatic switching: https://emacsredux.com/blog/2026/03/29/automatic-light-dark-theme-switching/
+(load-theme 'modus-vivendi)
+;; TODO automatic switching based on system: https://emacsredux.com/blog/2026/03/29/automatic-light-dark-theme-switching/
 
 ;; nerd-icons
 ;; see also https://github.com/rainstormstudio/nerd-icons.el
@@ -126,8 +139,8 @@
 ;; isearch
 (setq isearch-lazy-count t)
 (setq isearch-allow-motion t)
-(delete-selection-mode 1)  ;; delete the selection with a keypress
-(minibuffer-regexp-mode 1) ;; visual feedback for regex in minibuffer
+(delete-selection-mode 1)     ; delete the selection with a keypress
+(minibuffer-regexp-mode 1)    ; visual feedback for regex in minibuffer
 
 ;; hippie expand
 (keymap-global-set "M-/" #'hippie-expand)
@@ -162,15 +175,6 @@
 
 (advice-add 'kill-region :before #'slick-cut)
 (advice-add 'kill-ring-save :before #'slick-copy)
-
-;; exec-path-from-shell
-;; sync PATH and env vars from the shell on macOS
-;; only needed for GUI Emacs on macOS, where the shell env isn't inherited
-(when (memq window-system '(mac ns))
-  (use-package exec-path-from-shell
-    :ensure nil                           ;; installed through home/editors/emacs/default.nix
-    :config
-    (exec-path-from-shell-initialize)))
 
 ;; discover available keys
 (use-package which-key
@@ -208,7 +212,7 @@
 ;; highlight the current line
 (use-package hl-line
   :config
-  (global-hl-line-mode +1))
+  (global-hl-line-mode 1))
 
 (use-package uniquify
   :ensure nil ;; external installation
@@ -225,7 +229,7 @@
   :config
   (setq save-place-file (expand-file-name "saveplace" user-emacs-cache-directory))
   ;; activate it for all buffers
-  (save-place-mode +1))
+  (save-place-mode 1))
 
 ;; persist history over Emacs restarts.
 (use-package savehist
@@ -244,7 +248,7 @@
               (setq kill-ring
                     (mapcar #'substring-no-properties
                             (cl-remove-if-not #'stringp kill-ring)))))
-  (savehist-mode +1))
+  (savehist-mode 1))
 
 (use-package recentf
   :config
@@ -254,7 +258,7 @@
         ;; disable recentf-cleanup on Emacs start, because it can cause
         ;; problems with remote files
         recentf-auto-cleanup 'never)
-  (recentf-mode +1))
+  (recentf-mode 1))
 
 ;; dired
 (use-package dired
@@ -272,14 +276,12 @@
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
-;; ediff ?
-
 ;; hl-todo
 (use-package hl-todo
   :ensure nil                           ;; external installation
   :config
   (setq hl-todo-highlight-punctuation ":")
-  (global-hl-todo-mode +1))
+  (global-hl-todo-mode 1))
 
 ;; xref
 (use-package nerd-icons-xref
@@ -298,7 +300,7 @@
     (server-start)))
 
 
-;; grep
+;;; Grep
 
 ;; grep using ripgrep
 (use-package grep
@@ -310,38 +312,42 @@
 
 ;; nerd icons in grep buffers (buggy, may need fix)
 (use-package nerd-icons-grep
-  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :init
   (setq grep-use-headings t)
   :hook
   (grep-mode . nerd-icons-grep-mode))
 
-;; wgrep - edit grep/occur buffers and apply the changes to the files
+;; wgrep
+;; edit grep/occur buffers and apply the changes to the files
 ;; (press C-c C-p in a grep buffer, edit, then C-c C-e to apply)
 (use-package wgrep
-  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :defer t
   :config
-  (setq wgrep-auto-save-buffer t))      ;; save the affected buffers automatically after applying the edits
+  (setq wgrep-auto-save-buffer t))      ; save the affected buffers automatically after applying the edits
 
 
-;; git
+;;; Git & Version Control
 
 (use-package magit
-  :ensure nil                           ;; external installation
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :bind (("C-x g" . magit-status))
   :config
   (setq
    transient-values-file (expand-file-name "transient-values.el" user-emacs-cache-directory)
    transient-levels-file (expand-file-name "transient-levels.el" user-emacs-cache-directory)
    transient-history-file (expand-file-name "transient-history.el" user-emacs-cache-directory)))
+
 (use-package difftastic-bindings
-  :ensure nil                           ;; external installation
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :config
-  (difftastic-bindings-mode +1))
+  (difftastic-bindings-mode 1))
+
+;; ediff ?
 
 
-;; modeline
+;;; Modeline
 
 (line-number-mode 1)
 (column-number-mode 1)
@@ -628,7 +634,7 @@
   ;; have no default bindings)
   (define-key completion-preview-active-mode-map (kbd "M-n") #'completion-preview-next-candidate)
   (define-key completion-preview-active-mode-map (kbd "M-p") #'completion-preview-prev-candidate)
-  (global-completion-preview-mode +1))
+  (global-completion-preview-mode 1))
 
 
 ;;; Treesitter
@@ -640,7 +646,7 @@
 (use-package tree-sitter-langs ;; grammar bundle
   :ensure nil
   :config
-  (setq major-mode-remap-alist              ;; use ts modes for some of the default modes
+  (setq major-mode-remap-alist               ; use ts modes for some of the default modes
         '((c-mode . c-ts-mode)
           (js-json-mode . json-ts-mode)
           (python-mode . python-ts-mode)
@@ -649,8 +655,9 @@
 
 ;; expand-region, tree-sitter edition
 (use-package expreg
-  :ensure nil                           ;; manual installation
-  :bind (("C-+" . expreg-expand)
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
+  :bind (:map global-map
+         ("C-+" . expreg-expand)
          ("C-=" . expreg-contract))
   :config
   (defvar expreg-repeat-map
@@ -662,71 +669,28 @@
   (put 'expreg-contract 'repeat-map 'expreg-repeat-map))
 
 
-;; Folding
-;; based on https://www.jamescherti.com/emacs-the-definitive-guide-to-code-folding/
+;;; Folding
 
-;; kirigami as code folding frontend: https://github.com/jamescherti/kirigami.el
-(use-package kirigami
-  :ensure nil
-  :commands (kirigami-open-fold
-             kirigami-open-fold-rec
-             kirigami-close-fold
-             kirigami-toggle-fold
-             kirigami-open-folds
-             kirigami-close-folds-except-current
-             kirigami-close-folds)
-
+;; outline
+;; Native package to navigate/hide outlines either based on regex or tree-sitter nodes
+;; as discussed in https://www.masteringemacs.org/article/whats-new-in-emacs-301
+;; This package is the preferred built-in option.
+;; TODO change default elipsis to something more useful https://www.jamescherti.com/emacs-customize-ellipsis-outline-minor-mode/
+;; NOTE all programming modes should add a hook to enable outline-minor-mode
+(use-package outline
+  :ensure nil                                         ; built-in
   :bind
-  ;; Vanilla Emacs keybindings
-  (("C-c z o" . kirigami-open-fold)          ; Open fold at point
-   ("C-c z O" . kirigami-open-fold-rec)      ; Open fold recursively
-   ("C-c z r" . kirigami-open-folds)         ; Open all folds
-   ("C-c z c" . kirigami-close-fold)         ; Close fold at point
-   ("C-c z m" . kirigami-close-folds)        ; Close all folds
-   ("C-c z a" . kirigami-toggle-fold))      ; Toggle fold at point
-  :custom
-  (kirigami-show-context-menu t)
-  :init
-  (kirigami-global-mode 1))
+  ( :map outline-minor-mode-map
+    ("C-c z t" . outline-toggle-children)
+    ("C-c z a" . outline-show-all)
+    ("C-c z h" . outline-hide-body)
+    ("C-c z o" . outline-hide-other)
+    ("C-c z e" . outline-hide-entry)
+    ("C-c z s" . outline-show-entry))
 
-(add-hook 'emacs-lisp-mode-hook #'outline-minor-mode)
-(add-hook 'lisp-interaction-mode-hook #'hs-minor-mode) ;; scratch
-(add-hook 'lisp-mode-hook #'outline-minor-mode)
-
-;; treesit-fold as tree sitter based backend for folding https://github.com/emacs-tree-sitter/treesit-fold
-(use-package treesit-fold
-  :ensure nil                           ; installed through home/editor/emacs/default.nix
-  :commands (treesit-fold-close
-             treesit-fold-close-all
-             treesit-fold-open
-             treesit-fold-toggle
-             treesit-fold-open-all
-             treesit-fold-mode
-             global-treesit-fold-mode
-             treesit-fold-open-recursively
-             treesit-fold-line-comment-mode)
-
-  :custom
-  (treesit-fold-line-count-show t)
-  (treesit-fold-line-count-format " ▼")
-
-  :config
-  ;; TODO these should move to the config blocks of the respective mode packages
-  ;; (add-hook 'bash-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'c-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'dockerfile-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'go-mod-ts-mode-hook #'treesit-fold-mode)
-  ;; (add-hook 'go-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'json-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'makefile-ts-mode-hook #'treesit-fold-mode)
-  ;; (add-hook 'markdown-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'mermaid-ts-mode-hook #'treesit-fold-mode)
-  ;; (add-hook 'nix-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'rust-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'toml-ts-mode-hook #'treesit-fold-mode)
-  (add-hook 'yaml-ts-mode-hook #'treesit-fold-mode)
-  ;; (add-hook 'zig-ts-mode-hook #'treesit-fold-mode)  ;; grouped under zig-ts mode
-  )
+  :hook ((emacs-lisp-mode . outline-minor-mode)       ; NOTE could these be moved toward an elisp prog package?
+         (lisp-interaction-mode . outline-minor-mode) ; scratch config; may require hs-minor-mode instead
+         (lisp-mode . outline-minor-mode)))
 
 
 ;;; Terminal
@@ -749,36 +713,38 @@
   :init
   (direnv-mode 1))
 
-;; editorconfig - honor .editorconfig files (built-in since Emacs 30);
+;; editorconfig
+;; honor .editorconfig files (built-in since Emacs 30);
 ;; automatically adjusts indentation style/size, line endings, final
 ;; newlines, etc. to match the conventions of the project at hand
 (use-package editorconfig
   :config
-  (editorconfig-mode +1))
+  (editorconfig-mode 1))
 
 ;; markdown
 ;; NOTE emacs 31 has this builtin, so when upgrading ensure that we use
 ;; the builting package instead
 (use-package markdown-ts-mode
   :ensure nil                           ; installed through home/editors/emacs/default.nix
-  :hook ((markdown-ts-mode-hook . treesit-fold-mode))
+  :hook ((markdown-ts-mode . outline-minor-mode))
   :mode ("\\.md\\'" . markdown-ts-mode)
   :defer 't)
 
 ;; bash
 (use-package bash-ts-mode
-  :ensure nil                           ; standard package
+  :ensure nil                                 ; built-in
   :hook ((bash-ts-mode . eglot-ensure)
-         (bash-ts-mode . treesit-fold-mode))
+         (bash-ts-mode . outline-minor-mode))
   :defer t)
 
+;; nix
 (use-package nix-ts-mode
-  :ensure nil                           ; standard package
+  :ensure nil                                 ; built-in
   :hook ((nix-ts-mode . eglot-ensure)
-         (nix-ts-mode . treesit-fold-mode))
+         (nix-ts-mode . outline-minor-mode))
   :mode ("\\.nix\\'" . nix-ts-mode)
   :config
-  (with-eval-after-load 'eglot          ; technically not necessary as this is the eglot default
+  (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
                '(nix-ts-mode . ("nixd"))))
   :defer t)
@@ -786,33 +752,32 @@
 ;; golang
 ;; gopls is default language server, so no need to configure
 (use-package go-ts-mode
-  :ensure nil                           ; standard package
+  :ensure nil                               ; built-in
   :hook ((go-ts-mode . eglot-ensure)
          (go-ts-mode . subword-mode)
-         (go-ts-mode . treesit-fold-mode))
+         (go-ts-mode . outline-minor-mode))
 ;;  :mode ("\\.go\\'" . go-ts-mode)
   :defer t)
 
 (use-package go-mod-ts-mode
-  :ensure nil                           ; standard package
+  :ensure nil                               ; built-in
 ;;  :mode ("\\.go.mod\\'" . go-mod-ts-mode)
   :defer t)
 
 ;; yaml
 (use-package yaml-ts-mode
-  :ensure nil                           ; standard package
+  :ensure nil                               ; built-in
   :mode ("\\.ya?ml\\'" . yaml-ts-mode)
   :defer t)
 
 ;; zig
 (use-package zig-ts-mode
-  :ensure nil                             ; installed through home/editors/emacs/default.nix
+  :ensure nil                                ; installed through home/editors/emacs/default.nix
   :hook ((zig-ts-mode . eglot-ensure)
          (zig-ts-mode . subword-mode)
-         (zig-ts-mode . treesit-fold-mode))
+         (zig-ts-mode . outline-minor-mode))
   :defer t
   :config
-  ;; (add-hook 'zig-ts-mode-hook #'treesit-fold-mode)
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
                '(zig-ts-mode . ("zls")))))

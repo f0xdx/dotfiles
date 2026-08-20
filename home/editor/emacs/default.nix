@@ -36,9 +36,8 @@
         embark-consult
         exec-path-from-shell
         expreg
-        # ghostel # currently doesn't build on mac os
+        # ghostel # v0.50.0 doesn't build on mac os, check https://search.nixos.org/packages?channel=unstable&query=emacsPackages.ghostel#show=emacsPackages.ghostel
         hl-todo
-        kirigami
         magit
         marginalia
         markdown-ts-mode
@@ -73,8 +72,6 @@
           p.tree-sitter-yaml
           p.tree-sitter-zig
         ]))
-        treesit-auto
-        treesit-fold
         wgrep
 	ultra-scroll
         vertico
