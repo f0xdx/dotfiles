@@ -333,6 +333,7 @@
 (use-package magit
   :ensure nil                           ; installed through home/editors/emacs/default.nix
   :bind (("C-x g" . magit-status))
+  :defer t
   :config
   (setq
    transient-values-file (expand-file-name "transient-values.el" user-emacs-cache-directory)

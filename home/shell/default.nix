@@ -300,7 +300,7 @@ in {
         wtrm = "!f() { wt=$(git worktree list | fzf --header 'Select worktree to remove' | awk '{print $1}'); [ -n \"$wt\" ] && git worktree remove \"$wt\"; }; f";
       };
       core = {
-        editor = "emacs";
+        editor = "emacsclient -c -a ''";
       };
       push = {
         default = "current";
