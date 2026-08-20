@@ -38,7 +38,6 @@
         expreg
         # ghostel # v0.50.0 doesn't build on mac os, check https://search.nixos.org/packages?channel=unstable&query=emacsPackages.ghostel#show=emacsPackages.ghostel
         hl-todo
-        magit
         marginalia
         markdown-ts-mode
         nerd-icons

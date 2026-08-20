@@ -66,7 +66,6 @@
     (exec-path-from-shell-initialize)))
 
 
-
 ;;; Appearance
 
 ;; minimal distraction
@@ -116,31 +115,28 @@
 (setq next-error-message-highlight t) ;; highlight current error in compilation/grep buffers
 
 
-;;; Quality of Life
+;;; Quality ofy Life
 
-(setq use-short-answers t)                   ; enable y/n answers
-(setq help-window-select t)                  ; automatically select help windows so you can dismiss them with 'q'
-(setq window-combination-resize t)           ; resize all open windows proportionally
-(setq-default indent-tabs-mode nil)          ; don't use tabs to indent
+(setq-default indent-tabs-mode nil)         ; don't use tabs to indent
 (setq-default fill-column 80)
-(setq require-final-newline t)
-(setq save-interprogram-paste-before-kill t) ; preserve system clipboard in kill ring
-(setq kill-do-not-save-duplicates t)
-(setq ffap-machine-p-known 'reject)          ; don't let ffap ping random hostnames
-(setq auto-revert-avoid-polling t)           ; automatic revert when underlying file changes
-(setq next-line-add-newlines t)              ; automatically append new lines at the end of buffer
-(global-auto-revert-mode t)
+(setq use-short-answers t                   ; enable y/n answers
+      help-window-select t                  ; automatically select help windows so you can dismiss them with 'q'
+      window-combination-resize t           ; resize all open windows proportionally
+      require-final-newline t
+      save-interprogram-paste-before-kill t ; preserve system clipboard in kill ring
+      kill-do-not-save-duplicates t
+      ffap-machine-p-known 'reject          ; don't let ffap ping random hostnames
+      auto-revert-avoid-polling t           ; automatic revert when underlying file changes
+      next-line-add-newlines t              ; automatically append new lines at the end of buffer
+      set-mark-command-repeat-pop t         ; after C-u C-SPC, keep popping the mark ring with just C-SPC
+      isearch-lazy-count t                  ; isearch
+      isearch-allow-motion t)
+(global-auto-revert-mode 1)                 ; reload changes from disk
+(delete-selection-mode 1)                   ; delete the selection with a keypress
+(minibuffer-regexp-mode 1)                  ; visual feedback for regex in minibuffer
+(electric-pair-mode 1)                      ; auto pair parenthesis
 
-;; mark
-;; after C-u C-SPC, keep popping the mark ring with just C-SPC
-;; instead of having to repeat the C-u prefix each time
-(setq set-mark-command-repeat-pop t)
-
-;; isearch
-(setq isearch-lazy-count t)
-(setq isearch-allow-motion t)
-(delete-selection-mode 1)     ; delete the selection with a keypress
-(minibuffer-regexp-mode 1)    ; visual feedback for regex in minibuffer
+(add-hook 'before-save-hook 'delete-trailing-whitespace) ; remove trailing whitespace
 
 ;; hippie expand
 (keymap-global-set "M-/" #'hippie-expand)
@@ -155,45 +151,39 @@
 (keymap-global-set "M-o M-b" 'windmove-left)
 (keymap-global-set "M-o M-p" 'windmove-up)
 (keymap-global-set "M-o M-n" 'windmove-down)
-;; alternative: use ace-window https://github.com/abo-abo/ace-window
 
-;; remove trailing whitespace
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; slick cut / copy (emacs fu from https://emacs.stackexchange.com/questions/2347/kill-or-copy-current-line-with-minimal-keystrokes)
+;; slick cut / copy
+;; emacs fu from https://emacs.stackexchange.com/questions/2347/kill-or-copy-current-line-with-minimal-keystrokes
 (defun slick-cut (beg end)
   (interactive
    (if mark-active
        (list (region-beginning) (region-end))
      (list (line-beginning-position) (line-beginning-position 2)))))
-
 (defun slick-copy (beg end)
   (interactive
    (if mark-active
        (list (region-beginning) (region-end))
      (list (line-beginning-position) (line-beginning-position 2)))))
-
 (advice-add 'kill-region :before #'slick-cut)
 (advice-add 'kill-ring-save :before #'slick-copy)
 
-;; discover available keys
-(use-package which-key
-  ;; The :init section is always executed.
+(use-package which-key                  ; discover available keys
+  :ensure nil                           ; built-in
   :init
   ;; which-key is activated in the :init section of use-package such that
   ;; the mode gets enabled right away. Note that this forces loading the
   ;; package.
   (which-key-mode 1))
 
-;; paren context
-(use-package paren
+(use-package paren                      ; show paren context
+  :ensure nil                           ; built-in
   :config
   (show-paren-mode 1)
   ;; show matching paren context when it's offscreen
   (setq show-paren-context-when-offscreen 'overlay))
 
-;; calendar
 (use-package calendar
+  :ensure nil                           ; built-in
   :defer t
   :config
   ;; weeks starting on Monday
@@ -209,30 +199,27 @@
 ;; spell checking
 ;; TODO configure aspell
 
-;; highlight the current line
-(use-package hl-line
+(use-package hl-line                    ; highlight the current line
+  :ensure nil                           ; built-in
   :config
   (global-hl-line-mode 1))
 
-(use-package uniquify
-  :ensure nil ;; external installation
+(use-package uniquify                        ; better buffer names
+  :ensure nil                                ; built-in
   :config
   (setq uniquify-buffer-name-style 'forward)
   (setq uniquify-separator "/")
-  ;; rename after killing uniquified
-  (setq uniquify-after-kill-buffer-p t)
-  ;; don't muck with special buffers
-  (setq uniquify-ignore-buffers-re "^\\*"))
+  (setq uniquify-after-kill-buffer-p t)      ; rename after killing uniquified
+  (setq uniquify-ignore-buffers-re "^\\*"))  ; don't muck with special buffers
 
-;; saveplace remembers your location in a file when saving files
-(use-package saveplace
+(use-package saveplace                  ; remembers your location in a file when saving files
+  :ensure nil                           ; built-in
   :config
   (setq save-place-file (expand-file-name "saveplace" user-emacs-cache-directory))
-  ;; activate it for all buffers
   (save-place-mode 1))
 
-;; persist history over Emacs restarts.
-(use-package savehist
+(use-package savehist                   ; persist history over Emacs restarts
+  :ensure nil                           ; built-in
   :config
   (setq savehist-additional-variables
         ;; search entries, kill ring and vertico's session history
@@ -260,39 +247,36 @@
         recentf-auto-cleanup 'never)
   (recentf-mode 1))
 
-;; dired
-(use-package dired
-  :ensure nil
+(use-package dired                               ; manage directories with emacs
+  :ensure nil                                    ; built-in
   :defer t
   :config
-  (put 'dired-find-alternate-file 'disabled nil) ;; dired - reuse current buffer by pressing 'a'
-  (setq dired-recursive-deletes 'always)         ;; always delete and copy recursively
+  (put 'dired-find-alternate-file 'disabled nil) ; dired - reuse current buffer by pressing 'a'
+  (setq dired-recursive-deletes 'always)         ; always delete and copy recursively
   (setq dired-recursive-copies 'always)
-  (setq dired-dwim-target t)                     ;; use subdir of other window
-  (setq dired-mouse-drag-files t))               ;; drag files from dired to other apps
+  (setq dired-dwim-target t)                     ; use subdir of other window
+  (setq dired-mouse-drag-files t))               ; drag files from dired to other apps
 
-(use-package nerd-icons-dired
-  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+(use-package nerd-icons-dired           ; adds nerdicons for better visuals
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
-;; hl-todo
-(use-package hl-todo
-  :ensure nil                           ;; external installation
+(use-package hl-todo                    ; high-lights todo, note, etc. markers
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :config
   (setq hl-todo-highlight-punctuation ":")
   (global-hl-todo-mode 1))
 
 ;; xref
 (use-package nerd-icons-xref
-  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :hook
   (xref--xref-buffer-mode . nerd-icons-xref-mode))
 ;;  (after-init-hook . nerd-icons-xref-mode))
 
 ;; server
-;; automatically start a server for emacsclient connections
-(use-package server
+(use-package server ; automatically start a server for emacsclient connections
   :ensure nil
   :defer 1
   :config
@@ -302,8 +286,7 @@
 
 ;;; Grep
 
-;; grep using ripgrep
-(use-package grep
+(use-package grep                       ; grep using ripgrep
   :config
   (grep-apply-setting 'grep-command "rg --no-heading -Hn0 ")
   (grep-apply-setting 'grep-find-command '("rg -Hn --no-heading -e '' -g '**/*' $(git rev-parse --show-toplevel || pwd)" . 25))
@@ -330,22 +313,17 @@
 
 ;;; Git & Version Control
 
-(use-package magit
+(use-package difftastic
   :ensure nil                           ; installed through home/editors/emacs/default.nix
-  :bind (("C-x g" . magit-status))
-  :defer t
-  :config
-  (setq
-   transient-values-file (expand-file-name "transient-values.el" user-emacs-cache-directory)
-   transient-levels-file (expand-file-name "transient-levels.el" user-emacs-cache-directory)
-   transient-history-file (expand-file-name "transient-history.el" user-emacs-cache-directory)))
+  :defer t)
 
 (use-package difftastic-bindings
   :ensure nil                           ; installed through home/editors/emacs/default.nix
   :config
   (difftastic-bindings-mode 1))
 
-;; ediff ?
+;; ediff
+;; TODO evaluate whether ediff config is required
 
 
 ;;; Modeline
@@ -364,13 +342,12 @@
 ;;; LSP Support
 
 (use-package eglot
-  :ensure nil                           ;; standard package
+  :ensure nil                           ; built-in
   :defer t
   :config
   (setq eglot-extend-to-xref t)
   :custom
-  ;; shut down LSP server when last managed buffer is killed
-  (eglot-autoshutdown t)
+  (eglot-autoshutdown t)                ; shut down LSP server when last managed buffer is killed
   ;; don't log every LSP event to the events buffer - the logging adds
   ;; overhead with chatty servers; set :size back to nil (unlimited)
   ;; temporarily when you need to debug an LSP session
@@ -379,61 +356,52 @@
 ;; eglot keybindings for common lsp commands
 
 
-;; modal editing
+;;; Modal Editing
 ;; TODO decide on modal editing support:
 ;; * contextual, e.g., hydra: https://github.com/abo-abo/hydra
 ;; * absolute, e.g., meow: https://github.com/abo-abo/hydra
-;; completion
 
 
 ;;; Completion
 
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
+(use-package marginalia                 ; rich annotations using the Marginalia package
   :ensure nil
   ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
   ;; available in the *Completions* buffer, add it to the
   ;; `completion-list-mode-map'.
   :bind (:map minibuffer-local-map
          ("M-A" . marginalia-cycle))
-
   :init
   ;; Marginalia must be activated in the :init section of use-package such that
   ;; the mode gets enabled right away. Note that this forces loading the
   ;; package.
   (marginalia-mode))
 
-(use-package nerd-icons-completion
-  :ensure nil                           ;; installed through home/editors/emacs/default.nix
+(use-package nerd-icons-completion      ; better visuals for mini-buffer completions
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
   :after marginalia
   :config
   (nerd-icons-completion-mode)
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
-
-;; vertico for vertical command completion: https://github.com/minad/vertico
-;; Vertico sorts by history position.
-(use-package vertico
+(use-package vertico                    ; vertical command completion: https://github.com/minad/vertico
   :ensure nil
   :custom
-  (vertico-scroll-margin 0) ;; different scroll margin
-  (vertico-count 10)        ;; show 10 candidates
-  (vertico-resize nil)      ;; one of t, nil, "grow-only" (default)
-  (vertico-cycle t)         ;; enable cycling for `vertico-next/previous'
+  (vertico-scroll-margin 0)             ; different scroll margin
+  (vertico-count 10)                    ; show 10 candidates
+  (vertico-resize nil)                  ; one of t, nil, "grow-only" (default)
+  (vertico-cycle t)                     ; enable cycling for `vertico-next/previous'
   :init
   (vertico-mode))
 
-;; Configure directory extension.
-(use-package vertico-directory
+(use-package vertico-directory          ; vertico to navigate directories
   :after vertico
   :ensure nil
-  ;; More convenient directory navigation commands
-  :bind (:map vertico-map
+  :bind (:map vertico-map               ; more convenient directory navigation commands
               ("RET" . vertico-directory-enter)
               ("DEL" . vertico-directory-delete-char)
               ("M-DEL" . vertico-directory-delete-word))
-  ;; Tidy shadowed file names
-  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))   ; Tidy shadowed file names
 
 ;; vertico-repeat - resume the last minibuffer session with its input
 ;; and candidate intact (also ships with vertico).  Handy after you
@@ -445,8 +413,7 @@
   :hook (minibuffer-setup . vertico-repeat-save)
   :bind ("M-R" . vertico-repeat))
 
-;; Emacs minibuffer configurations.
-(use-package emacs
+(use-package emacs                      ; Emacs minibuffer configurations.
   :custom
   ;; Enable context menu. `vertico-multiform-mode' adds a menu in the minibuffer
   ;; to switch display modes.
@@ -464,8 +431,7 @@
   (read-extended-command-predicate
    #'command-completion-default-include-p))
 
-;; orderless for fuzzy matching: https://github.com/oantolin/orderless
-(use-package orderless
+(use-package orderless                  ; quick selection through partial matches
   :ensure nil
   :custom
   ;; Configure a custom style dispatcher (see the Consult wiki)
@@ -476,9 +442,7 @@
   (completion-category-defaults nil) ;; Disable defaults, use our settings
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 
-;; consult
-;; improve minibuffer completions
-(use-package consult
+(use-package consult                    ; completions hooked into default mechanism
   :ensure nil
   ;; Replace bindings. Lazily loaded by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
@@ -489,32 +453,31 @@
          ("C-c i" . consult-info)
          ([remap Info-search] . consult-info)
          ;; C-x bindings in `ctl-x-map'
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
-         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-x M-:" . consult-complex-command)     ; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ; orig. switch-to-buffer-other-frame
+         ("C-x t b" . consult-buffer-other-tab)    ; orig. switch-to-buffer-other-tab
+         ("C-x r b" . consult-bookmark)            ; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer)      ; orig. project-switch-to-buffer
+         ("M-#" . consult-register-load)           ; Custom M-# bindings for fast register access
+         ("M-'" . consult-register-store)          ; orig. abbrev-prefix-mark (unrelated)
          ("C-M-#" . consult-register)
          ;; Other custom bindings
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ("M-y" . consult-yank-pop)                ; orig. yank-pop
          ;; M-g bindings in `goto-map'
          ("M-g e" . consult-compile-error)
          ("M-g r" . consult-grep-match)
-         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)             ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g f" . consult-flymake)               ; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)             ; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ; orig. goto-line
+         ("M-g o" . consult-outline)               ; Alternative: consult-org-heading
          ("M-g m" . consult-mark)
          ("M-g k" . consult-global-mark)
          ("M-g i" . consult-imenu)
          ("M-g I" . consult-imenu-multi)
          ;; M-s bindings in `search-map'
-         ("M-s f" . consult-fd)                    ;; Alternative: consult-find
+         ("M-s f" . consult-fd)                    ; Alternative: consult-find
          ("M-s G" . consult-git-grep)
          ("M-s g" . consult-ripgrep)
          ("M-s M-g" . consult-ripgrep)
@@ -525,18 +488,17 @@
          ;; Isearch integration
          ("M-s e" . consult-isearch-history)
          :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ("M-e" . consult-isearch-history)         ; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ; needed by consult-line to detect isearch
          ;; Minibuffer history
          :map minibuffer-local-map
-         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+         ("M-s" . consult-history)                 ; orig. next-matching-history-element
+         ("M-r" . consult-history))                ; orig. previous-matching-history-element
 
   ;; The :init configuration is always executed (Not lazy)
   :init
-
   ;; Tweak the register preview for `consult-register-load',
   ;; `consult-register-store' and the built-in commands.  This improves the
   ;; register formatting, adds thin separator lines, register sorting and hides
@@ -583,7 +545,7 @@
   :bind(;; M-g bindings in `goto-map'
         ("M-g s" . consult-eglot-symbols)))
 
-;; TODO consult-todo: https://github.com/eki3z/consult-todo ;; brows all todos in project
+;; TODO consult-todo: https://github.com/eki3z/consult-todo ;; browse all todos in project
 
 (use-package embark
   :ensure nil
