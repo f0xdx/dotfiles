@@ -19,28 +19,7 @@
 ;; see also https://discourse.nixos.org/t/how-to-use-emacs-packages-installed-via-home-manager/2513
 ;; TODO after Emacs 31 upgrade implement diminish style functionality, see https://emacsredux.com/blog/2025/12/24/hide-minor-modes-in-the-modeline-in-emacs-31/
 
-
 ;;; Basic Settings
-
-(setq user-full-name "Felix Heinrichs"
-      user-email-address "felix.heinrichs@gmail.com")
-
-;; file encoding
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-
-;; performance
-;; data read from sub-processes, e.g., LSP (default is just 4KB)
-(setq read-process-output-max (* 1024 1024)) ; 1MB
-;; defer fontification while there is input pending -- this keeps
-;; typing responsive in large/complex buffers where font-lock is slow
-(setq redisplay-skip-fontification-on-input t)
-;; warn when opening files bigger than 100MB
-(setq large-file-warning-threshold 100000000)
-;; quit Emacs directly even if there are running processes
-(setq confirm-kill-processes nil)
 
 ;; cache
 (defconst user-emacs-cache-directory
@@ -49,14 +28,64 @@
 (unless (file-exists-p user-emacs-cache-directory)
   (make-directory user-emacs-cache-directory :parents))
 
-;; environmental protection
-;; auto-save
-(setq auto-save-list-file-prefix (expand-file-name "saves-" user-emacs-cache-directory))
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
+;; core
+(use-package emacs                                     ; basic Emacs settings
+  :init                                                ; performance
+  (setq read-process-output-max (* 1024 1024)          ; 1MB - data read from sub-processes, e.g., LSP (default is just 4KB)
+        redisplay-skip-fontification-on-input t        ; keep typing responsive by defering fontification
+        large-file-warning-threshold 100000000         ; warn when opening files bigger than 100MB
+        confirm-kill-processes nil)                    ; quit Emacs directly even if there are running processes
+
+  :config
+  (setq user-full-name "Felix Heinrichs"
+        user-email-address "felix.heinrichs@gmail.com"
+
+        ;; auto-save
+        auto-save-list-file-prefix (expand-file-name "saves-" user-emacs-cache-directory)
+        backup-directory-alist `((".*" . ,temporary-file-directory))
+
+        ;; sensible defaults
+        use-short-answers t                            ; enable y/n answers
+        help-window-select t                           ; automatically select help windows so you can dismiss them with 'q'
+        window-combination-resize t                    ; resize all open windows proportionally
+        require-final-newline t
+        save-interprogram-paste-before-kill t          ; preserve system clipboard in kill ring
+        kill-do-not-save-duplicates t
+        ffap-machine-p-known 'reject                   ; don't let ffap ping random hostnames
+        auto-revert-avoid-polling t                    ; automatic revert when underlying file changes
+        next-line-add-newlines t                       ; automatically append new lines at the end of buffer
+        set-mark-command-repeat-pop t                  ; after C-u C-SPC, keep popping the mark ring with just C-SPC
+        isearch-lazy-count t                           ; isearch shows number matches
+        isearch-allow-motion t                         ; quickly move between search results
+        )
+  (setq-default indent-tabs-mode nil)                  ; don't use tabs to indent
+  (setq-default fill-column 80)
+
+  ;; file encoding
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+
+  ;; helpful modes
+  (global-auto-revert-mode 1)                          ; reload changes from disk
+  (delete-selection-mode 1)                            ; delete the selection with a keypress
+  (minibuffer-regexp-mode 1)                           ; visual feedback for regex in minibuffer
+
+  :hook
+  (before-save-hook . delete-trailing-whitespace)      ; remove trailing whitespace
+
+  :bind (:map global-map
+         ("M-o M-o" . other-window)                    ; fast window movement
+         ("M-o o" . other-window)
+         ("M-o M-f" . windmove-right)
+         ("M-o M-b" . windmove-left)
+         ("M-o M-p" . windmove-up)
+         ("M-o M-n" . windmove-down)
+         ("C-c C-o" . browse-url))                     ; open url in browser
+  )
 
 ;; mac specifics
-;; exec-path-from-shell
 ;; sync PATH and env vars from the shell on macOS
 ;; only needed for GUI Emacs on macOS, where the shell env isn't inherited
 (when (memq window-system '(mac ns))
@@ -68,21 +97,32 @@
 
 ;;; Appearance
 
-;; minimal distraction
-(setq inhibit-startup-message t)
-(setq ring-bell-function 'ignore) ; no bell
-(blink-cursor-mode -1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(set-fringe-mode 10)
-(menu-bar-mode -1)
-;; TODO use a short flash of mode line as bell https://emacs.stackexchange.com/questions/28906/how-to-switch-off-the-sounds
+(use-package emacs                        ; Emacs minimal appearance, minimal distraction
+  :hook
+  (conf-mode . display-line-numbers-mode) ; line numbers in all programming modes
+  (text-mode . display-line-numbers-mode)
+  (prog-mode . display-line-numbers-mode)
 
-;; line
-(setq-default truncate-lines t)		                       ; no wrapping lines
-(dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
-  (add-hook hook #'display-line-numbers-mode))
+  :config
+  (setq-default truncate-lines t)         ; no wrapping lines
+  (setq inhibit-startup-message t         ; no startup message
+        ring-bell-function 'ignore        ; no bell
+        next-error-message-highlight t)   ; highlight current error in compilation/grep buffers
+
+  ;; fonts and theme
+  (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 160)
+  ;; (load-theme 'modus-operandi)
+  (load-theme 'modus-vivendi)
+
+  ;; minimal visuals
+  (blink-cursor-mode -1)                  ; blinking cursors are annoying
+  (scroll-bar-mode -1)                    ; scroll bar not required
+  (tool-bar-mode -1)                      ; no tool-bar - M-x is the way
+  (tooltip-mode -1)
+  (set-fringe-mode 14)                    ; fringe width both sides in px
+  (menu-bar-mode -1))                     ; no menu bar
+;; TODO automatic theme switching based on system: https://emacsredux.com/blog/2026/03/29/automatic-light-dark-theme-switching/
+;; TODO use a short flash of mode line as bell https://emacs.stackexchange.com/questions/28906/how-to-switch-off-the-sounds
 
 ;; scrolling
 (use-package ultra-scroll
@@ -93,12 +133,6 @@
     scroll-preserve-screen-position 1)
   :config
   (ultra-scroll-mode 1))
-
-;; fonts and theme
-(set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 160)
-;; (load-theme 'modus-operandi)
-(load-theme 'modus-vivendi)
-;; TODO automatic switching based on system: https://emacsredux.com/blog/2026/03/29/automatic-light-dark-theme-switching/
 
 ;; nerd-icons
 ;; see also https://github.com/rainstormstudio/nerd-icons.el
@@ -111,61 +145,35 @@
   ;; but you can use any other Nerd Font if you want
   (nerd-icons-font-family "FiraCode Nerd Font"))
 
-;; misc
-(setq next-error-message-highlight t) ;; highlight current error in compilation/grep buffers
-
 
 ;;; Quality ofy Life
 
-(setq-default indent-tabs-mode nil)         ; don't use tabs to indent
-(setq-default fill-column 80)
-(setq use-short-answers t                   ; enable y/n answers
-      help-window-select t                  ; automatically select help windows so you can dismiss them with 'q'
-      window-combination-resize t           ; resize all open windows proportionally
-      require-final-newline t
-      save-interprogram-paste-before-kill t ; preserve system clipboard in kill ring
-      kill-do-not-save-duplicates t
-      ffap-machine-p-known 'reject          ; don't let ffap ping random hostnames
-      auto-revert-avoid-polling t           ; automatic revert when underlying file changes
-      next-line-add-newlines t              ; automatically append new lines at the end of buffer
-      set-mark-command-repeat-pop t         ; after C-u C-SPC, keep popping the mark ring with just C-SPC
-      isearch-lazy-count t                  ; isearch
-      isearch-allow-motion t)
-(global-auto-revert-mode 1)                 ; reload changes from disk
-(delete-selection-mode 1)                   ; delete the selection with a keypress
-(minibuffer-regexp-mode 1)                  ; visual feedback for regex in minibuffer
-(electric-pair-mode 1)                      ; auto pair parenthesis
+(use-package emacs                      ; quality of life in Emacs
+  :config
+  (defun slick-cut (beg end)            ; slick cut / copy
+    (interactive
+     (if mark-active
+         (list (region-beginning) (region-end))
+       (list (line-beginning-position) (line-beginning-position 2)))))
+  (defun slick-copy (beg end)
+    (interactive
+     (if mark-active
+         (list (region-beginning) (region-end))
+       (list (line-beginning-position) (line-beginning-position 2)))))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace) ; remove trailing whitespace
+  ;; emacs fu from https://emacs.stackexchange.com/questions/2347/kill-or-copy-current-line-with-minimal-keystrokes
+  (advice-add 'kill-region :before #'slick-cut)
+  (advice-add 'kill-ring-save :before #'slick-copy)
 
-;; hippie expand
-(keymap-global-set "M-/" #'hippie-expand)
-(keymap-global-set "s-/" #'hippie-expand)
+  ;; hippie expand
+  :bind (:map global-map
+         ("M-/" . hippie-expand)
+         ("s-/" . hippie-expand)))
 
-;; movement
-;; window movement is common, so we need to bind these as well. This is one of the rare cases
-;; where deviating from devault helps me being faster.
-(keymap-global-set "M-o M-o" 'other-window)
-(keymap-global-set "M-o o" 'other-window)
-(keymap-global-set "M-o M-f" 'windmove-right)
-(keymap-global-set "M-o M-b" 'windmove-left)
-(keymap-global-set "M-o M-p" 'windmove-up)
-(keymap-global-set "M-o M-n" 'windmove-down)
-
-;; slick cut / copy
-;; emacs fu from https://emacs.stackexchange.com/questions/2347/kill-or-copy-current-line-with-minimal-keystrokes
-(defun slick-cut (beg end)
-  (interactive
-   (if mark-active
-       (list (region-beginning) (region-end))
-     (list (line-beginning-position) (line-beginning-position 2)))))
-(defun slick-copy (beg end)
-  (interactive
-   (if mark-active
-       (list (region-beginning) (region-end))
-     (list (line-beginning-position) (line-beginning-position 2)))))
-(advice-add 'kill-region :before #'slick-cut)
-(advice-add 'kill-ring-save :before #'slick-copy)
+(use-package elec-pair                  ; auto pair parenthesis
+  :ensure nil                           ; built-in
+  :config
+  (electric-pair-mode 1))
 
 (use-package which-key                  ; discover available keys
   :ensure nil                           ; built-in
@@ -182,7 +190,7 @@
   ;; show matching paren context when it's offscreen
   (setq show-paren-context-when-offscreen 'overlay))
 
-(use-package calendar
+(use-package calendar                   ; calendar view
   :ensure nil                           ; built-in
   :defer t
   :config
@@ -328,15 +336,14 @@
 
 ;;; Modeline
 
-(line-number-mode 1)
-(column-number-mode 1)
-(size-indication-mode 1)
-
 ;; TODO evaluate customizing it https://protesilaos.com/codelog/2023-07-29-emacs-custom-modeline-tutorial/
 ;;      vs. https://github.com/seagle0128/doom-modeline
 ;;      vs. https://codeberg.org/Lambda-Emacs/lambda-line
 ;; NOTE we can take inspiration from https://github.com/domtronn/all-the-icons.el/wiki/Mode-Line on how to
 ;;      build a custom mode line with icons
+(line-number-mode 1)
+(column-number-mode 1)
+(size-indication-mode 1)
 
 
 ;;; LSP Support
@@ -413,7 +420,7 @@
   :hook (minibuffer-setup . vertico-repeat-save)
   :bind ("M-R" . vertico-repeat))
 
-(use-package emacs                      ; Emacs minibuffer configurations.
+(use-package emacs                      ; Emacs minibuffer configurations for vertico.
   :custom
   ;; Enable context menu. `vertico-multiform-mode' adds a menu in the minibuffer
   ;; to switch display modes.
@@ -648,8 +655,8 @@
     ("C-c z a" . outline-show-all)
     ("C-c z h" . outline-hide-body)
     ("C-c z o" . outline-hide-other)
-    ("C-c z e" . outline-hide-entry)
-    ("C-c z s" . outline-show-entry))
+    ("C-c z e" . outline-hide-subtree)
+    ("C-c z s" . outline-show-subtree))
 
   :hook ((emacs-lisp-mode . outline-minor-mode)       ; NOTE could these be moved toward an elisp prog package?
          (lisp-interaction-mode . outline-minor-mode) ; scratch config; may require hs-minor-mode instead
