@@ -56,6 +56,7 @@
         next-line-add-newlines t                       ; automatically append new lines at the end of buffer
         set-mark-command-repeat-pop t                  ; after C-u C-SPC, keep popping the mark ring with just C-SPC
         isearch-lazy-count t                           ; isearch shows number matches
+        search-whitespace-regexp ".*?"                 ; orderless style searching in isearch etc.
         isearch-allow-motion t                         ; quickly move between search results
         )
   (setq-default indent-tabs-mode nil)                  ; don't use tabs to indent
