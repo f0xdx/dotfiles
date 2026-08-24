@@ -14,9 +14,9 @@
 
     programs.ghostty = {
       enable = true;
-      package = if pkgs.stdenv.isDarwin then null else pkgs.ghostty;
+      package = if pkgs.stdenv.hostPlatform.isDarwin then null else pkgs.ghostty;
       enableBashIntegration = true;
-      installBatSyntax = ! pkgs.stdenv.isDarwin;
+      installBatSyntax = ! pkgs.stdenv.hostPlatform.isDarwin;
       clearDefaultKeybinds = true;
 
       settings = {
@@ -104,7 +104,7 @@
         window-save-state = "always";
       };
 
-      systemd.enable = ! pkgs.stdenv.isDarwin;
+      systemd.enable = ! pkgs.stdenv.hostPlatform.isDarwin;
     };
 
     programs.bash.initExtra = ''

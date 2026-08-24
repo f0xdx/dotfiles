@@ -273,7 +273,7 @@ in {
     };
   };
 
-  services.ssh-agent = lib.mkIf (! pkgs.stdenv.isDarwin) {
+  services.ssh-agent = lib.mkIf (! pkgs.stdenv.hostPlatform.isDarwin) {
     enable = true;
   };
 

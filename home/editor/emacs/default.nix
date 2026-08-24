@@ -14,7 +14,7 @@
     programs.emacs = {
       enable = true;
       package =
-        if pkgs.stdenv.isLinux
+        if pkgs.stdenv.hostPlatform.isLinux
         then
           (
             if (pkgs ? emacs30-pgtk)

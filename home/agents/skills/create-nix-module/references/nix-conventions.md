@@ -28,15 +28,15 @@ config = lib.mkIf cfg.enable {
 
 ## OS Specificity
 
-Use `pkgs.stdenv.isDarwin` and `pkgs.stdenv.isLinux` to handle system differences.
+Use `pkgs.stdenv.hostPlatform.isDarwin` and `pkgs.stdenv.hostPlatform.isLinux` to handle system differences.
 
 ```nix
 # In config section
-(lib.mkIf pkgs.stdenv.isDarwin {
+(lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
   # Darwin-specific options
 })
 
-(lib.mkIf pkgs.stdenv.isLinux {
+(lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
   # Linux-specific options
 })
 ```

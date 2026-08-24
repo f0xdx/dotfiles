@@ -74,7 +74,7 @@
           inherit host;
           inherit locale;
           home =
-            if pkgs.stdenv.isDarwin
+            if pkgs.stdenv.hostPlatform.isDarwin
             then "/Users/${user}"
             else "/home/${user}";
           theme = "modus-vivendi";

@@ -14,7 +14,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     # System-specific logic
-    # home.packages = if pkgs.stdenv.isDarwin then [ ... ] else [ ... ];
+    # home.packages = if pkgs.stdenv.hostPlatform.isDarwin then [ ... ] else [ ... ];
 
     # Common configuration
     # programs.<module_name> = {
@@ -24,9 +24,9 @@ in {
 
     # Darwin-specific configuration
     # nix-darwin specific options if applicable
-    # (lib.mkIf pkgs.stdenv.isDarwin { ... })
+    # (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin { ... })
 
     # Linux-specific configuration
-    # (lib.mkIf pkgs.stdenv.isLinux { ... })
+    # (lib.mkIf pkgs.stdenv.hostPlatform.isLinux { ... })
   };
 }

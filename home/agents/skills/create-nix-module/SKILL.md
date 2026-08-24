@@ -34,7 +34,7 @@ description:
     *   **Bundle Enhancements**: Include shell completions
         and helper functions (e.g., fzf pickers) within the same activation
         block as the main tool.
-    *   Use `pkgs.stdenv.isDarwin` and `pkgs.stdenv.isLinux` for system-specific
+    *   Use `pkgs.stdenv.hostPlatform.isDarwin` and `pkgs.stdenv.hostPlatform.isLinux` for system-specific
         logic.
 8.  **Register Module**: Add the new module to the appropriate `default.nix`
     (e.g., `home/default.nix` or `system/default.nix`) or include it in the

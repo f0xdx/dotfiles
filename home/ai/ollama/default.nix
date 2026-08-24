@@ -81,12 +81,12 @@ in {
         {
           OLLAMA_NO_CLOUD = "1";
         }
-        // lib.optionalAttrs pkgs.stdenv.isDarwin {
+        // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
           OLLAMA_MLX = "1";
         };
     };
 
-    systemd.user.services.ollama-model-loader = lib.mkIf (!pkgs.stdenv.isDarwin) {
+    systemd.user.services.ollama-model-loader = lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
       Unit = {
         Description = "Synchronize specified Ollama models";
         After = ["ollama.service"];
@@ -101,7 +101,7 @@ in {
       };
     };
 
-    launchd.agents.ollama-model-loader = lib.mkIf (pkgs.stdenv.isDarwin) {
+    launchd.agents.ollama-model-loader = lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin) {
       enable = true;
       config = {
         ProgramArguments = ["${syncScript}"];
