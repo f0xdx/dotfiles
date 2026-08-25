@@ -44,8 +44,10 @@
         auto-save-list-file-prefix (expand-file-name "saves-" user-emacs-cache-directory)
         backup-directory-alist `((".*" . ,temporary-file-directory))
 
+        ;; custom
+        custom-file (locate-user-emacs-file "custom.el")
+
         ;; sensible defaults
-        use-short-answers t                            ; enable y/n answers
         help-window-select t                           ; automatically select help windows so you can dismiss them with 'q'
         window-combination-resize t                    ; resize all open windows proportionally
         require-final-newline t
@@ -58,15 +60,19 @@
         isearch-lazy-count t                           ; isearch shows number matches
         search-whitespace-regexp ".*?"                 ; orderless style searching in isearch etc.
         isearch-allow-motion t                         ; quickly move between search results
-        )
-  (setq-default indent-tabs-mode nil)                  ; don't use tabs to indent
-  (setq-default fill-column 80)
+        global-auto-revert-non-file-buffers t)         ; keep dired up to date
+
+  (setq-default indent-tabs-mode nil                   ; don't use tabs to indent
+                fill-column 80)                        ; default text length
 
   ;; file encoding
   (prefer-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
+
+  ;; custom
+  (load custom-file 'noerror 'nomessage)               ; load the configured custom file
 
   ;; helpful modes
   (global-auto-revert-mode 1)                          ; reload changes from disk
@@ -108,6 +114,8 @@
   (setq-default truncate-lines t)         ; no wrapping lines
   (setq inhibit-startup-message t         ; no startup message
         ring-bell-function 'ignore        ; no bell
+        use-dialog-box nil                ; only text dialogs
+        use-short-answers t               ; enable y/n answers
         next-error-message-highlight t)   ; highlight current error in compilation/grep buffers
 
   ;; fonts and theme
@@ -231,12 +239,10 @@
   :ensure nil                           ; built-in
   :config
   (setq savehist-additional-variables
-        ;; search entries, kill ring and vertico's session history
-        '(search-ring regexp-search-ring kill-ring vertico-repeat-history)
-        ;; save every minute
-        savehist-autosave-interval 60
-        ;; keep the home clean
-        savehist-file (expand-file-name "savehist" user-emacs-cache-directory))
+        '(search-ring regexp-search-ring kill-ring vertico-repeat-history)      ; search entries, kill ring and vertico's session history
+        history-length 30                                                       ; remember last n entries
+        savehist-autosave-interval 60                                           ; save every minute
+        savehist-file (expand-file-name "savehist" user-emacs-cache-directory)) ; keep the home clean
   ;; strip text properties from kill-ring entries before saving to disk --
   ;; propertized strings cause errors and bloat the savehist file
   (add-hook 'savehist-save-hook
@@ -609,12 +615,9 @@
 
 
 ;;; Treesitter
-
-;; TODO refactor, this package seems to not be necessary, as we install the grammars through
-;;      nix in home/editor/emacs/default.nix; we would want to load the builtin package through
-;;      use package macro though, as this provides a nice structure for setting the mode remap etc.
-;; tree-sitter-langs provides compiled grammars; but we don't actually
-(use-package tree-sitter-langs ;; grammar bundle
+;;
+;; Note that installed grammars are managed through home/editor/emacs/default.nix
+(use-package emacs                           ; tree-sitter specific settings for Emacs
   :ensure nil
   :config
   (setq major-mode-remap-alist               ; use ts modes for some of the default modes

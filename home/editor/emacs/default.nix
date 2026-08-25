@@ -36,7 +36,7 @@
         embark-consult
         exec-path-from-shell
         expreg
-        # ghostel # v0.50.0 doesn't build on mac os, check https://search.nixos.org/packages?channel=unstable&query=emacsPackages.ghostel#show=emacsPackages.ghostel
+        # ghostel # v0.51.0 doesn't build on mac os, check https://search.nixos.org/packages?channel=unstable&query=emacsPackages.ghostel#show=emacsPackages.ghostel
         hl-todo
         marginalia
         markdown-ts-mode
@@ -47,7 +47,6 @@
         nerd-icons-completion
         nix-ts-mode
         orderless
-        tree-sitter-langs
         (treesit-grammars.with-grammars (p: [
           p.tree-sitter-bash
           p.tree-sitter-c
