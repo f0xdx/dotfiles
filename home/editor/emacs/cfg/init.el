@@ -83,12 +83,19 @@
   (before-save-hook . delete-trailing-whitespace)      ; remove trailing whitespace
 
   :bind (:map global-map
-         ("M-o M-o" . other-window)                    ; fast window movement
+         ;; window movement
+         ("M-o M-o" . other-window)
          ("M-o o" . other-window)
          ("M-o M-f" . windmove-right)
          ("M-o M-b" . windmove-left)
          ("M-o M-p" . windmove-up)
          ("M-o M-n" . windmove-down)
+
+         ;; expanding
+         ("M-/" . hippie-expand)
+         ("s-/" . hippie-expand)
+
+         ;; urls and files
          ("C-c C-o" . browse-url))                     ; open url in browser
   )
 
@@ -156,28 +163,6 @@
 
 
 ;;; Quality ofy Life
-
-(use-package emacs                      ; quality of life in Emacs
-  :config
-  (defun slick-cut (beg end)            ; slick cut / copy
-    (interactive
-     (if mark-active
-         (list (region-beginning) (region-end))
-       (list (line-beginning-position) (line-beginning-position 2)))))
-  (defun slick-copy (beg end)
-    (interactive
-     (if mark-active
-         (list (region-beginning) (region-end))
-       (list (line-beginning-position) (line-beginning-position 2)))))
-
-  ;; emacs fu from https://emacs.stackexchange.com/questions/2347/kill-or-copy-current-line-with-minimal-keystrokes
-  (advice-add 'kill-region :before #'slick-cut)
-  (advice-add 'kill-ring-save :before #'slick-copy)
-
-  ;; hippie expand
-  :bind (:map global-map
-         ("M-/" . hippie-expand)
-         ("s-/" . hippie-expand)))
 
 (use-package elec-pair                  ; auto pair parenthesis
   :ensure nil                           ; built-in
@@ -343,7 +328,7 @@
 
 ;;; Modeline
 
-;; TODO evaluate customizing it https://protesilaos.com/codelog/2023-07-29-emacs-custom-modeline-tutorial/
+;; TODO (1) evaluate customizing it https://protesilaos.com/codelog/2023-07-29-emacs-custom-modeline-tutorial/
 ;;      vs. https://github.com/seagle0128/doom-modeline
 ;;      vs. https://codeberg.org/Lambda-Emacs/lambda-line
 ;; NOTE we can take inspiration from https://github.com/domtronn/all-the-icons.el/wiki/Mode-Line on how to
@@ -759,6 +744,11 @@
 
 ;;; Work-in-Progress
 
+;; TODO optimize early startup time and analyze basic settings that we could apply from
+;;      https://protesilaos.com/emacs/dotemacs
+;; TODO check whether using IBuffer for a buffer overview makes more sense:
+;;      https://protesilaos.com/codelog/2020-04-02-emacs-intro-ibuffer/
+;;      with some nerdfont icons
 ;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L1209
 ;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
 ;; TODO take inspiration from: https://github.com/LionyxML/emacs-solo
