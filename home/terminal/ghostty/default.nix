@@ -20,7 +20,7 @@
       clearDefaultKeybinds = true;
 
       settings = {
-        font-family = "FiraCode Nerd Font"; 
+        font-family = "FiraCode Nerd Font";
         theme = "light:Modus Operandi,dark:Modus Vivendi";
         font-size = 14;
         confirm-close-surface = false;
@@ -101,6 +101,7 @@
           "performable:copy=copy_to_clipboard:mixed"
           "performable:paste=paste_from_clipboard"
         ];
+        macos-option-as-alt = "left";
         window-save-state = "always";
       };
 
@@ -156,4 +157,3 @@
     '';
   };
 }
-
