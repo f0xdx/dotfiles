@@ -99,7 +99,7 @@
 
          ;; dwim (do what I mean)
          ("M-u" . upcase-dwim)
-         ("M-d" . downcase-dwim)
+         ("M-l" . downcase-dwim)
          ("M-c" . capitalize-dwim)
 
          ;; urls and files
