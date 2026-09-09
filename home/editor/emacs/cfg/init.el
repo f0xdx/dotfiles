@@ -325,6 +325,12 @@
 
 ;;; Git & Version Control
 
+(use-package emacs                      ; version control through vc
+  :custom
+  (vc-auto-revert-mode t)
+  (vc-allow-rewriting-published-history 'ask)
+  (vc-dir-auto-hide-up-to-date 'revert))
+
 (use-package difftastic
   :ensure nil                           ; installed through home/editors/emacs/default.nix
   :defer t)
