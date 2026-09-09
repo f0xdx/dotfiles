@@ -1,4 +1,4 @@
-;;; early-init.el --- f0xdx's Emacs early init file
+;;; early-init.el --- f0xdx's Emacs early init file  -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2016-2026 Felix Heinrichs
 ;;
@@ -60,6 +60,8 @@
         isearch-lazy-count t                           ; isearch shows number matches
         search-whitespace-regexp ".*?"                 ; orderless style searching in isearch etc.
         isearch-allow-motion t                         ; quickly move between search results
+        exchange-point-and-mark-highlight-region nil   ; do not activate region for C-x C-x
+        delete-pair-push-mark t                        ; push a mark when deleting contents of pair
         global-auto-revert-non-file-buffers t)         ; keep dired up to date
 
   (setq-default indent-tabs-mode nil                   ; don't use tabs to indent
@@ -95,6 +97,11 @@
          ("M-/" . hippie-expand)
          ("s-/" . hippie-expand)
 
+         ;; dwim (do what I mean)
+         ("M-u" . upcase-dwim)
+         ("M-d" . downcase-dwim)
+         ("M-c" . capitalize-dwim)
+
          ;; urls and files
          ("C-c C-o" . browse-url))                     ; open url in browser
   )
@@ -118,12 +125,16 @@
   (prog-mode . display-line-numbers-mode)
 
   :config
-  (setq-default truncate-lines t)         ; no wrapping lines
-  (setq inhibit-startup-message t         ; no startup message
-        ring-bell-function 'ignore        ; no bell
-        use-dialog-box nil                ; only text dialogs
-        use-short-answers t               ; enable y/n answers
-        next-error-message-highlight t)   ; highlight current error in compilation/grep buffers
+  (setq-default truncate-lines t)                   ; no wrapping lines
+  (setq inhibit-startup-message t                   ; no startup message
+        ring-bell-function 'ignore                  ; no bell
+        use-dialog-box nil                          ; only text dialogs
+        use-short-answers t                         ; enable y/n answers
+        view-read-only t                            ; enable view-mode for read-only buffers, e.g., C-x C-q
+        rectangle-indicate-zero-width-rectangle nil ; do not show zero width rectangles to avoid flickering
+        mode-line-collapse-minor-modes t            ; collapse all minor modes
+        mode-line-collapse-minor-modes-to ""       ; use this log for collapsed minor modes
+        next-error-message-highlight t)             ; highlight current error in compilation/grep buffers
 
   ;; fonts and theme
   (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 160)
@@ -139,7 +150,7 @@
   (menu-bar-mode -1))                     ; no menu bar
 ;; TODO automatic theme switching based on system: https://emacsredux.com/blog/2026/03/29/automatic-light-dark-theme-switching/
 ;; TODO use a short flash of mode line as bell https://emacs.stackexchange.com/questions/28906/how-to-switch-off-the-sounds
-
+;;      for this you can use https://karthinks.com/software/batteries-included-with-emacs/#pulse--pulse-dot-el
 ;; scrolling
 (use-package ultra-scroll
   :ensure nil                           ; installed through home/editors/emacs/default.nix
@@ -269,6 +280,7 @@
   (global-hl-todo-mode 1))
 
 ;; xref
+;; TODO figure how to setup and use xref in particular with LSP
 (use-package nerd-icons-xref
   :ensure nil                           ; installed through home/editors/emacs/default.nix
   :hook
@@ -346,7 +358,8 @@
   :config
   (setq eglot-extend-to-xref t)
   :custom
-  (eglot-autoshutdown t)                ; shut down LSP server when last managed buffer is killed
+  (eglot-autoshutdown t)                                ; shut down LSP server when last managed buffer is killed
+  (eglot-documentation-renderer 'markdown-ts-view-mode) ; use markdown viewer for documentation
   ;; don't log every LSP event to the events buffer - the logging adds
   ;; overhead with chatty servers; set :size back to nil (unlimited)
   ;; temporarily when you need to debug an LSP session
@@ -437,6 +450,7 @@
   ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
   ;; (orderless-component-separator #'orderless-escapable-split-on-space)
   (completion-styles '(orderless basic))
+  ;; TODO consider flex  and initials as well https://karthinks.com/software/more-batteries-included-with-emacs/#minibuffer-completion-styles--c-h-v-completion-styles
   (completion-category-overrides '((file (styles partial-completion))))
   (completion-category-defaults nil) ;; Disable defaults, use our settings
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
@@ -591,11 +605,12 @@
 ;; all candidates.
 (use-package completion-preview
   :ensure nil
+  :bind
+  ( :map completion-preview-active-mode-map
+    ("M-n" . completion-preview-next-candidate)
+    ("M-p" . completion-preview-prev-candidate))
   :config
-  ;; cycle through the other candidates (these commands exist, but
-  ;; have no default bindings)
-  (define-key completion-preview-active-mode-map (kbd "M-n") #'completion-preview-next-candidate)
-  (define-key completion-preview-active-mode-map (kbd "M-p") #'completion-preview-prev-candidate)
+  (setq completion-preview-minimum-symbol-length 2)
   (global-completion-preview-mode 1))
 
 
@@ -605,11 +620,13 @@
 (use-package emacs                           ; tree-sitter specific settings for Emacs
   :ensure nil
   :config
-  (setq major-mode-remap-alist               ; use ts modes for some of the default modes
-        '((c-mode . c-ts-mode)
-          (js-json-mode . json-ts-mode)
-          (python-mode . python-ts-mode)
-          (conf-toml-mode . toml-ts-mode)))
+  (setq treesit-enabled-modes t             ; use ts modes as default modes
+        treesit-auto-install-grammar nil)   ; do not install grammars - handled through home/editors/emacs/default.nix
+  ;; (setq major-mode-remap-alist
+  ;;       '((c-mode . c-ts-mode)
+  ;;         (js-json-mode . json-ts-mode)
+  ;;         (python-mode . python-ts-mode)
+  ;;         (conf-toml-mode . toml-ts-mode)))
   :custom (global-tree-sitter-mode t))
 
 ;; expand-region, tree-sitter edition
@@ -681,7 +698,6 @@
   (editorconfig-mode 1))
 
 ;; markdown
-;; NOTE emacs 31 has this builtin, so when upgrading ensure that we use
 ;; the builting package instead
 (use-package markdown-ts-mode
   :ensure nil                           ; installed through home/editors/emacs/default.nix
@@ -748,7 +764,7 @@
 ;;      https://protesilaos.com/emacs/dotemacs
 ;; TODO check whether using IBuffer for a buffer overview makes more sense:
 ;;      https://protesilaos.com/codelog/2020-04-02-emacs-intro-ibuffer/
-;;      with some nerdfont icons
+;;      with some nerdfont icons; this should be the buffer editing buffer for C-x C-b
 ;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L1209
 ;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
 ;; TODO take inspiration from: https://github.com/LionyxML/emacs-solo

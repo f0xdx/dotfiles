@@ -1,4 +1,4 @@
-;;; early-init.el --- f0xdx's Emacs early init file
+;;; early-init.el --- f0xdx's Emacs early init file  -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2016-2026 Felix Heinrichs
 ;;

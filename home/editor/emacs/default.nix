@@ -17,14 +17,14 @@
         if pkgs.stdenv.hostPlatform.isLinux
         then
           (
-            if (pkgs ? emacs30-pgtk)
-            then pkgs.emacs30-pgtk
+            if (pkgs ? emacs31-pgtk)
+            then pkgs.emacs31-pgtk
             else pkgs.emacs-pgtk
           )
         else
           (
-            if (pkgs ? emacs30)
-            then pkgs.emacs30
+            if (pkgs ? emacs31)
+            then pkgs.emacs31
             else pkgs.emacs
           );
       extraPackages = epkgs: with epkgs; [
@@ -39,7 +39,7 @@
         # ghostel # v0.51.0 doesn't build on mac os, check https://search.nixos.org/packages?channel=unstable&query=emacsPackages.ghostel#show=emacsPackages.ghostel
         hl-todo
         marginalia
-        markdown-ts-mode
+        # markdown-ts-mode
         nerd-icons
         nerd-icons-grep
         nerd-icons-xref
@@ -54,6 +54,7 @@
           p.tree-sitter-elisp
           p.tree-sitter-go
           p.tree-sitter-gomod
+          p.tree-sitter-gowork
           p.tree-sitter-gotmpl
           p.tree-sitter-hcl
           p.tree-sitter-json
