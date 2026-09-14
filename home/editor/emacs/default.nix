@@ -32,6 +32,7 @@
         consult-eglot
         difftastic
         direnv
+        doom-modeline
         embark
         embark-consult
         exec-path-from-shell

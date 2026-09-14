@@ -119,10 +119,27 @@
 ;;; Appearance
 
 (use-package emacs                        ; Emacs minimal appearance, minimal distraction
+  :init
+  (defun fx-style-mode-line ()
+  ;; mode-line styling
+  ;; TODO evaluate if that needs to be executed by a hook after setting theme
+  ;; `mode-line', `mode-line-inactive'
+  (modus-themes-with-colors
+    (set-face-attribute 'mode-line-active nil
+                        :background bg-active
+                        :foreground fg-main
+                        :box bg-active
+                        )
+    (set-face-attribute 'mode-line-inactive nil
+                        :background bg-inactive
+                        :foreground fg-dim
+                        :box bg-inactive
+                        )))
   :hook
   (conf-mode . display-line-numbers-mode) ; line numbers in all programming modes
   (text-mode . display-line-numbers-mode)
   (prog-mode . display-line-numbers-mode)
+  (modus-themes-after-load-theme . fx-style-mode-line)
 
   :config
   (setq-default truncate-lines t)                   ; no wrapping lines
@@ -130,16 +147,16 @@
         ring-bell-function 'ignore                  ; no bell
         use-dialog-box nil                          ; only text dialogs
         use-short-answers t                         ; enable y/n answers
+        Buffer-menu-human-readable-sizes t          ; KB/MB instead of byte counts
         view-read-only t                            ; enable view-mode for read-only buffers, e.g., C-x C-q
         rectangle-indicate-zero-width-rectangle nil ; do not show zero width rectangles to avoid flickering
-        mode-line-collapse-minor-modes t            ; collapse all minor modes
-        mode-line-collapse-minor-modes-to ""       ; use this log for collapsed minor modes
         next-error-message-highlight t)             ; highlight current error in compilation/grep buffers
 
   ;; fonts and theme
   (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height 160)
   ;; (load-theme 'modus-operandi)
   (load-theme 'modus-vivendi)
+  (fx-style-mode-line)
 
   ;; minimal visuals
   (blink-cursor-mode -1)                  ; blinking cursors are annoying
@@ -222,7 +239,7 @@
   :config
   (setq uniquify-buffer-name-style 'forward)
   (setq uniquify-separator "/")
-  (setq uniquify-after-kill-buffer-p t)      ; rename after killing uniquified
+  (setq uniquify-after-kill-buffer-flag t)   ; rename after killing uniquified
   (setq uniquify-ignore-buffers-re "^\\*"))  ; don't muck with special buffers
 
 (use-package saveplace                  ; remembers your location in a file when saving files
@@ -281,6 +298,9 @@
 
 ;; xref
 ;; TODO figure how to setup and use xref in particular with LSP
+;; TODO in consult section we configure to use consult-xref as an xref buffer;
+;;      this prevents us from editable xref buffers (since emacs 31 supported)
+;;      consider switching back to standard xref buffers to leverage this feature
 (use-package nerd-icons-xref
   :ensure nil                           ; installed through home/editors/emacs/default.nix
   :hook
@@ -329,7 +349,7 @@
   :custom
   (vc-auto-revert-mode t)
   (vc-allow-rewriting-published-history 'ask)
-  (vc-dir-auto-hide-up-to-date 'revert))
+  (vc-dir-auto-hide-up-to-date t))
 
 (use-package difftastic
   :ensure nil                           ; installed through home/editors/emacs/default.nix
@@ -344,16 +364,42 @@
 ;; TODO evaluate whether ediff config is required
 
 
-;;; Modeline
+;;; Mode Line
+
+(use-package emacs                               ; mode-line
+  :config
+  (setq-default mode-line-modes-delimiters nil
+                mode-line-right-align-edge 'right-fringe
+                mode-line-format '("%e"
+                                   mode-line-front-space
+                                   mode-line-mule-info
+                                   mode-line-client
+                                   mode-line-modified
+                                   mode-line-remote
+                                   mode-line-window-dedicated
+                                   mode-line-frame-identification
+                                   (:eval (nerd-icons-icon-for-mode major-mode))
+                                   " "
+                                   mode-line-buffer-identification
+                                   "   "
+                                   (project-mode-line project-mode-line-format)
+                                   (vc-mode vc-mode)
+                                   "  "
+                                   mode-line-misc-info
+                                   mode-line-format-right-align
+                                   ;; mode-line-modes
+                                   "%l:%c"
+                                   mode-line-end-spaces))
+  (setq mode-line-collapse-minor-modes t         ; collapse all minor modes
+        mode-line-collapse-minor-modes-to "")   ; use this log for collapsed minor modes
+
+  (line-number-mode 1)
+  (column-number-mode 1)
+  (size-indication-mode nil))
 
 ;; TODO (1) evaluate customizing it https://protesilaos.com/codelog/2023-07-29-emacs-custom-modeline-tutorial/
-;;      vs. https://github.com/seagle0128/doom-modeline
-;;      vs. https://codeberg.org/Lambda-Emacs/lambda-line
 ;; NOTE we can take inspiration from https://github.com/domtronn/all-the-icons.el/wiki/Mode-Line on how to
 ;;      build a custom mode line with icons
-(line-number-mode 1)
-(column-number-mode 1)
-(size-indication-mode 1)
 
 
 ;;; LSP Support
@@ -658,7 +704,7 @@
 ;; as discussed in https://www.masteringemacs.org/article/whats-new-in-emacs-301
 ;; This package is the preferred built-in option.
 ;; TODO change default elipsis to something more useful https://www.jamescherti.com/emacs-customize-ellipsis-outline-minor-mode/
-;; NOTE all programming modes should add a hook to enable outline-minor-mode
+; NOTE all programming modes should add a hook to enable outline-minor-mode
 (use-package outline
   :ensure nil                                         ; built-in
   :bind
@@ -771,6 +817,7 @@
 ;; TODO check whether using IBuffer for a buffer overview makes more sense:
 ;;      https://protesilaos.com/codelog/2020-04-02-emacs-intro-ibuffer/
 ;;      with some nerdfont icons; this should be the buffer editing buffer for C-x C-b
+;;      here we should also (setq         ibuffer-human-readable-size t) when ibuffer loaded
 ;; TODO continue editing from https://github.com/bbatsov/emacs.d/blob/master/init.el L1209
 ;; TODO also check this out: https://github.com/konrad1977/emacs  -modularized vanilla
 ;; TODO take inspiration from: https://github.com/LionyxML/emacs-solo
