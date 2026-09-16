@@ -402,6 +402,22 @@
 ;;      build a custom mode line with icons
 
 
+;;; Tabs
+
+(use-package emacs
+  :init
+  (defun fx-tab-name-current ()
+    (let ((prj (project-current)))
+      (if prj
+          (format "%s %s" (nerd-icons-icon-for-dir (project-root prj)) (project-name prj))
+        (format "%s %s" (nerd-icons-icon-for-buffer (tab-bar-tab-name-current)) (tab-bar-tab-name-current)))))
+
+  :custom
+  (tab-bar-tab-name-function #'fx-tab-name-current))
+
+;; NOTE The current implementation works reasonably well, but we may want to consider uniquify styled
+;;      names for the different projects with same project name
+
 ;;; LSP Support
 
 (use-package eglot
