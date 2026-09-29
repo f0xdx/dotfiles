@@ -37,7 +37,7 @@
         embark-consult
         exec-path-from-shell
         expreg
-        # ghostel # v0.51.0 doesn't build on mac os, check https://search.nixos.org/packages?channel=unstable&query=emacsPackages.ghostel#show=emacsPackages.ghostel
+        # ghostel # v0.53.0 doesn't build on mac os, check https://search.nixos.org/packages?channel=unstable&query=emacsPackages.ghostel#show=emacsPackages.ghostel
         hl-todo
         marginalia
         # markdown-ts-mode

@@ -395,7 +395,7 @@
 
   (line-number-mode 1)
   (column-number-mode 1)
-  (size-indication-mode nil))
+  (size-indication-mode nil) )
 
 ;; TODO (1) evaluate customizing it https://protesilaos.com/codelog/2023-07-29-emacs-custom-modeline-tutorial/
 ;; NOTE we can take inspiration from https://github.com/domtronn/all-the-icons.el/wiki/Mode-Line on how to
@@ -417,6 +417,8 @@
 
 ;; NOTE The current implementation works reasonably well, but we may want to consider uniquify styled
 ;;      names for the different projects with same project name
+;; TODO should use the same strategy as in https://github.com/domtronn/all-the-icons.el/wiki/Mode-Line recipes
+;;      to display the icon only property
 
 ;;; LSP Support
 
