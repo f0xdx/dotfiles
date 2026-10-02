@@ -41,9 +41,11 @@ A Wayland-based setup centered around [Hyprland](https://hyprland.org/) and its 
 ## How to Apply
 
 ### Prerequisites
+
 Ensure Nix is installed with `nix-command` and `flakes` enabled.
 
 ### Apply Configuration
+
 1. Update dependencies: `nix flake update`
 2. Apply System (NixOS): `sudo nixos-rebuild switch --flake .#`
 3. Apply User (Home Manager): `home-manager switch --flake .`
@@ -56,4 +58,5 @@ Ensure Nix is installed with `nix-command` and `flakes` enabled.
 > On macOS, the [Ghostty](https://ghostty.org) terminal application must be installed manually. Home Manager automatically manages its configuration at `$XDG_CONFIG_HOME/ghostty/config` (`~/.config/ghostty/config`).
 
 ## Roadmap
+
 See [tasks.md](tasks.md) for planned improvements and upcoming migrations.

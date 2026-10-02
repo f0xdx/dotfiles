@@ -147,6 +147,7 @@
         ring-bell-function 'ignore                  ; no bell
         use-dialog-box nil                          ; only text dialogs
         use-short-answers t                         ; enable y/n answers
+        frame-title-format ""                       ; do not display frame title
         Buffer-menu-human-readable-sizes t          ; KB/MB instead of byte counts
         view-read-only t                            ; enable view-mode for read-only buffers, e.g., C-x C-q
         rectangle-indicate-zero-width-rectangle nil ; do not show zero width rectangles to avoid flickering
@@ -771,7 +772,19 @@
 ;; the builting package instead
 (use-package markdown-ts-mode
   :ensure nil                           ; installed through home/editors/emacs/default.nix
+  :init
+  (defun fx-editable-markdown-ts-mode ()
+    (interactive)
+    (markdown-ts-mode)
+    (read-only-mode -1))
+
   :hook ((markdown-ts-mode . outline-minor-mode))
+  :bind ( :map markdown-ts-mode-map
+          ("C-x C-q" . markdown-ts-view-mode)
+
+          :map markdown-ts-view-mode-map
+          ("C-x C-q" . fx-editable-markdown-ts-mode)) ; NOTE necessary in emacs 31, test whether workaround necessary for emacs >= 32
+
   :mode ("\\.md\\'" . markdown-ts-mode)
   :defer 't)
 
@@ -808,6 +821,14 @@
   :ensure nil                               ; built-in
 ;;  :mode ("\\.go.mod\\'" . go-mod-ts-mode)
   :defer t)
+
+;; terraform
+;;
+;; NOTE terraform-mode is the better supported package https://github.com/hcl-emacs/terraform-mode
+;;      we need to observe when https://codeberg.org/ccbash-oss/terraform-ts-mode or
+;;      a similar treesitter based mode is becoming the community default - and then
+;;      switch
+
 
 ;; yaml
 (use-package yaml-ts-mode
