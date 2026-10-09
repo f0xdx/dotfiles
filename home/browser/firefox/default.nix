@@ -78,6 +78,14 @@
               Description = "NixOS Wiki";
               IconURL = "https://search.nixos.org/images/nix-logo.png";
             }
+            {
+              Name = "yt";
+              URLTemplate = "https://www.youtube.com/results?search_query={searchTerms}";
+              Method = "GET";
+              Alias = "@yt";
+              Description = "Youtube.com";
+              IconURL = "https://www.youtube.com/s/desktop/4b4754d9/img/favicon_32x32.png";
+            }
           ];
         };
       };
