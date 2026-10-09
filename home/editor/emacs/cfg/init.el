@@ -828,7 +828,15 @@
 ;;      we need to observe when https://codeberg.org/ccbash-oss/terraform-ts-mode or
 ;;      a similar treesitter based mode is becoming the community default - and then
 ;;      switch
+(use-package terraform-mode
+  :ensure nil                                ; installed through home/editors/emacs/default.nix
+  :defer t
+  :hook ((terraform-mode . eglot-ensure)
+         (terraform-mode . subword-mode)
+         (terraform-mode . outline-minor-mode))
+  ;; :mode ("\\.tf\\'" . terraform-mode)
 
+  )
 
 ;; yaml
 (use-package yaml-ts-mode

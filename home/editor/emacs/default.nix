@@ -40,7 +40,6 @@
         # ghostel # v0.53.0 doesn't build on mac os, check https://search.nixos.org/packages?channel=unstable&query=emacsPackages.ghostel#show=emacsPackages.ghostel
         hl-todo
         marginalia
-        # markdown-ts-mode
         nerd-icons
         nerd-icons-grep
         nerd-icons-xref
@@ -48,6 +47,7 @@
         nerd-icons-completion
         nix-ts-mode
         orderless
+        terraform-mode
         (treesit-grammars.with-grammars (p: [
           p.tree-sitter-bash
           p.tree-sitter-c
@@ -85,8 +85,6 @@
     };
 
     home.packages = with pkgs; [
-
-
       # bash
       shellcheck
       shfmt
@@ -98,10 +96,15 @@
       gofumpt
       golangci-lint
 
-      #nix
+      # nix
       nixd
       nil
       nixfmt
+
+      # terraform
+      terraform-ls
+      terraform
+      tflint
 
       # zig
       zig
