@@ -744,11 +744,41 @@
 
 ;; ghostel
 ;; provided libghostty based terminal in emacs: https://github.com/dakra/ghostel
-;; TODO libghostty-vt currently doesn't build on mac os, revisit after fix; see also in default.nix
-;;(use-package ghostel
-;;  :ensure nil                          ; installed through home/editors/emacs/default.nix
-;;  )
+(use-package ghostel
+  :ensure nil                          ; installed through home/editors/emacs/default.nix
+  :config
+  (setq ghostel-tramp-shell-integration t)
+  (add-to-list 'project-switch-commands '(ghostel-project "Ghostel") t)
+  (add-to-list 'project-switch-commands '(ghostel-project-list-buffers "Ghostel buffers") t)
+  :bind
+  ( :map global-map
+    ("C-c C-s" . ghostel)
+    :map ghostel-semi-char-mode-map
+    ("C-s" . consult-line)
+    ("C-k"  . (lambda () (interactive) (kill-ring-save (point) (line-end-position)) (ghostel-send-key "k" "ctrl")))
+    ("M-p" . (lambda () (interactive) (ghostel-send-key "p" "ctrl")))
+    ("M-n" . (lambda () (interactive) (ghostel-send-key "n" "ctrl")))
+    :map project-prefix-map
+    ("s" . ghostel-project)
+    ("S" . ghostel-project-list-buffers)))
 
+;; (use-package consult-ghostel
+;;   :ensure nil
+;;   :hook (after-init . consult-ghostel-mode)
+;;   :bind (("C-c C-s" . consult-ghostel)
+;;          :map project-prefix-map
+;;          ("s" . consult-ghostel-project)
+;;          :map ghostel-semi-char-mode-map
+;;          ("C-c h" . consult-ghostel-history)))
+
+(use-package ghostel-eshell
+  :hook (eshell-load . ghostel-eshell-visual-command-mode))
+
+(use-package ghostel-compile
+  :hook (after-init . ghostel-compile-global-mode))
+
+(use-package ghostel-comint
+  :hook (after-init . ghostel-comint-global-mode))
 
 ;;; Programming Support
 
@@ -859,6 +889,7 @@
 
 ;;; Work-in-Progress
 
+;; TODO evaluate consult-project-extra https://github.com/Qkessler/consult-project-extra
 ;; TODO optimize early startup time and analyze basic settings that we could apply from
 ;;      https://protesilaos.com/emacs/dotemacs
 ;; TODO check whether using IBuffer for a buffer overview makes more sense:
