@@ -775,7 +775,11 @@
   :hook (eshell-load . ghostel-eshell-visual-command-mode))
 
 (use-package ghostel-compile
-  :hook (after-init . ghostel-compile-global-mode))
+  :config
+  (defun fx-compilation-switch (buf msg) (switch-to-buffer-other-window buf))
+  (add-hook 'ghostel-compile-finish-functions 'fx-compilation-switch)         ; select compilation window
+  :hook
+  (after-init . ghostel-compile-global-mode))
 
 (use-package ghostel-comint
   :hook (after-init . ghostel-comint-global-mode))
@@ -881,6 +885,9 @@
          (zig-ts-mode . subword-mode)
          (zig-ts-mode . outline-minor-mode))
   :defer t
+  :bind
+  ( :map zig-ts-mode-map
+    ("C-c C-c" . zig-ts-build))
   :config
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
