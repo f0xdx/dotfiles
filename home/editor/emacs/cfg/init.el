@@ -753,6 +753,8 @@
   :bind
   ( :map global-map
     ("C-c C-s" . ghostel)
+    :map ghostel-mode-map
+    ("C-c C-o" . ghostel-find-file-at-point)
     :map ghostel-semi-char-mode-map
     ("C-s" . consult-line)
     ("C-k"  . (lambda () (interactive) (kill-ring-save (point) (line-end-position)) (ghostel-send-key "k" "ctrl")))
@@ -785,6 +787,15 @@
   :hook (after-init . ghostel-comint-global-mode))
 
 ;;; Programming Support
+
+(use-package flymake
+  :ensure nil                           ; packaged with emacs
+  :bind
+  ( :map flymake-mode-map
+    ("M-]" . flymake-goto-next-error)
+    ("M-[" . flymake-goto-prev-error)))
+;; NOTE this works, but a unified next error that would either go to the next
+;; compilation error or to the next flymake error would be preferable
 
 ;; direnv
 ;; supports flake based tooling on a project level
