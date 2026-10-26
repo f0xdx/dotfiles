@@ -867,6 +867,13 @@
 ;;  :mode ("\\.go.mod\\'" . go-mod-ts-mode)
   :defer t)
 
+(use-package python-ts-mode
+  :ensure nil                               ; built-in
+  :hook ((python-ts-mode . eglot-ensure)
+         (python-ts-mode . subword-mode)
+         (python-ts-mode . outline-minor-mode))
+  :defer t)
+
 ;; terraform
 ;;
 ;; NOTE terraform-mode is the better supported package https://github.com/hcl-emacs/terraform-mode
