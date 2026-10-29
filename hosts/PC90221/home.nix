@@ -3,6 +3,8 @@
   modules.firefox.enable = true;
   modules.ghostty.enable = true;
   modules.spotify.enable = false;
+  modules.agents.codex.enable = true;
+
   modules.ollama = {
     enable = true;
     models = [
