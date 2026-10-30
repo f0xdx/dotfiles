@@ -28,6 +28,7 @@
             else pkgs.emacs
           );
       extraPackages = epkgs: with epkgs; [
+        agent-shell
         consult
         consult-eglot
         difftastic

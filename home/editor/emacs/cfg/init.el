@@ -676,10 +676,14 @@
 ;; all candidates.
 (use-package completion-preview
   :ensure nil
+  :demand t
   :bind
   ( :map completion-preview-active-mode-map
     ("M-n" . completion-preview-next-candidate)
-    ("M-p" . completion-preview-prev-candidate))
+    ("M-p" . completion-preview-prev-candidate)
+    ("M-i" . completion-preview-insert-word)
+    ("M-<return>" . completion-preview-insert)
+    ("<tab>" . completion-preview-complete))
   :config
   (setq completion-preview-minimum-symbol-length 2)
   (global-completion-preview-mode 1))
@@ -746,6 +750,8 @@
 ;; provided libghostty based terminal in emacs: https://github.com/dakra/ghostel
 (use-package ghostel
   :ensure nil                          ; installed through home/editors/emacs/default.nix
+  :after
+  project
   :config
   (setq ghostel-tramp-shell-integration t)
   (add-to-list 'project-switch-commands '(ghostel-project "Ghostel") t)
@@ -785,6 +791,22 @@
 
 (use-package ghostel-comint
   :hook (after-init . ghostel-comint-global-mode))
+
+
+;;; Agents
+
+(use-package agent-shell
+  :ensure nil                           ; installed through home/editors/emacs/default.nix
+  ;; TODO implement required configurations
+  :defer t
+  :config
+  ;; codex
+  (setq agent-shell-openai-authentication    (agent-shell-antigravity-make-authentication :none t)
+        agent-shell-openai-codex-environment (agent-shell-make-environment-variables
+                                              "CODEX_PATH" "central run codex --")
+        )
+  )
+
 
 ;;; Programming Support
 
@@ -831,7 +853,7 @@
           ("C-x C-q" . fx-editable-markdown-ts-mode)) ; NOTE necessary in emacs 31, test whether workaround necessary for emacs >= 32
 
   :mode ("\\.md\\'" . markdown-ts-mode)
-  :defer 't)
+  :defer t)
 
 ;; bash
 (use-package bash-ts-mode
