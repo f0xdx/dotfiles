@@ -839,6 +839,7 @@
 ;; the builting package instead
 (use-package markdown-ts-mode
   :ensure nil                           ; installed through home/editors/emacs/default.nix
+  :defer t
   :init
   (defun fx-editable-markdown-ts-mode ()
     (interactive)
@@ -853,7 +854,8 @@
           ("C-x C-q" . fx-editable-markdown-ts-mode)) ; NOTE necessary in emacs 31, test whether workaround necessary for emacs >= 32
 
   :mode ("\\.md\\'" . markdown-ts-mode)
-  :defer t)
+  :config
+  (require 'markdown-ts-mode-x))
 
 ;; bash
 (use-package bash-ts-mode
