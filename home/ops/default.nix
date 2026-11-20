@@ -28,7 +28,7 @@
 
     programs.bash.initExtra = ''
       # kubectl completion on `k` alias
-      source <(kubectl completion bash | sed 's|__start_kubectl kubectl|__start_kubectl k|g')
+      eval "$(kubectl completion bash | sed 's|__start_kubectl kubectl|__start_kubectl k|g')"
     '';
   };
 }

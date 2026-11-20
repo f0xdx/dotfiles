@@ -117,7 +117,7 @@
       # fzf session picker (zmx-select)
       zmx-select() {
         local display
-        display=$(zmx list 2>/dev/null | while IFS=$'\t' read -r name pid clients created dir; do
+        display=$(zmx list 2>/dev/null | while IFS=$'\t' read -r name pid clients _ dir; do
           name=''${name#session_name=}
           pid=''${pid#pid=}
           clients=''${clients#clients=}
@@ -146,7 +146,7 @@
           if [[ -n "$query" ]]; then
             zmx attach "$query"
           else
-            read -p "Session name: " name
+            read -r -p "Session name: " name
             [[ -n "$name" ]] && zmx attach "$name"
           fi
         elif [[ -n "$selected" ]]; then
