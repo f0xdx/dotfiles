@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   theme,
@@ -79,10 +80,39 @@ in {
       "histappend"
     ];
 
-    initExtra = ''
-      # fzf path completion for eza and others
-      _fzf_setup_completion path eza lsx bat nvim.sh
-    '';
+    initExtra = lib.mkMerge [
+      (lib.mkIf (config.programs.readline.enable && config.home.preferXdgDirectories) (
+        lib.mkOrder 50 ''
+          # TODO(upstream): Check after Bash / Home Manager updates if this
+          # workaround can be removed (tracked in tasks.md).
+          # GNU Bash does not sync exported INPUTRC into C environ before
+          # fzf's bind calls trigger rl_initialize() in fresh login shells
+          # when home.preferXdgDirectories = true.
+          # Recheck with:
+          #   env -u INPUTRC -u __HM_SESS_VARS_SOURCED bash --noprofile --norc -ic 'source ~/.profile; bind -q history-search-backward'
+          if [[ -n "''${INPUTRC-}" && -r "$INPUTRC" ]]; then
+            bind -f "$INPUTRC"
+          fi
+        ''
+      ))
+      ''
+        # fzf path completion for eza and others
+        _fzf_setup_completion path eza lsx bat nvim.sh
+
+        # Preserve erasedups across sessions while keeping histappend safe for
+        # concurrent shells by flushing new entries and deduplicating HISTFILE
+        # (keeping the most recent occurrence of each command) on exit.
+        __dedup_history() {
+          [[ -o history && -n "''${HISTFILE-}" ]] || return 0
+          builtin history -a && [[ -f "$HISTFILE" ]] || return 0
+          ${pkgs.coreutils}/bin/tac "$HISTFILE" \
+            | ${pkgs.gawk}/bin/awk '!seen[$0]++' \
+            | ${pkgs.coreutils}/bin/tac \
+            | ${pkgs.moreutils}/bin/sponge "$HISTFILE"
+        }
+        trap __dedup_history EXIT
+      ''
+    ];
 
     # note: can also source complete files like this
     # initExtra = ''
@@ -97,6 +127,8 @@ in {
       "\\e[Z" = "menu-complete-backward";
       "\\e[A" = "history-search-backward";
       "\\e[B" = "history-search-forward";
+      "\\eOA" = "history-search-backward";
+      "\\eOB" = "history-search-forward";
     };
     variables = {
       editing-mode = "emacs";
@@ -105,6 +137,7 @@ in {
       menu-complete-display-prefix = true;
       show-all-if-ambiguous = true;
       completion-ignore-case = true;
+      completion-map-case = true;
     };
   };
 

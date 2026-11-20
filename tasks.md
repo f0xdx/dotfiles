@@ -31,3 +31,12 @@ usage where possible.
 * [ ] Build a migration plan, including how to configure new components based on
 existing settings for replaced components; validate this plan
 * [ ] Migrate components and verify setup
+
+## Upstream Workarounds
+
+* [ ] re-check whether the `bind -f "$INPUTRC"` workaround in
+  [home/shell/default.nix](home/shell/default.nix) is still required after
+  updating Bash or Home Manager (`nix flake update`): test with
+  `env -u INPUTRC -u __HM_SESS_VARS_SOURCED bash --noprofile --norc -ic 'source ~/.profile; bind -q history-search-backward'`
+  and check if `home-manager`'s `programs.readline` module handles Bash
+  initialization when `home.preferXdgDirectories = true`
