@@ -1,4 +1,7 @@
-{pkgs, ...}: {
+{ pkgs, inputs, ... }: {
+  imports = [
+    inputs.agents.homeManagerModules.air-gateway
+  ];
   modules.desktop.enable = false;
   modules.firefox.enable = true;
   modules.ghostty.enable = true;
@@ -36,6 +39,15 @@
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
+  };
+
+  # JetBrains Air Gateway (Central CLI)
+  programs.air-gateway = {
+    enable = true;
+    settings = {
+      proxy_port = 19516;
+      log_level = "info";
+    };
   };
 
   programs.firefox = {

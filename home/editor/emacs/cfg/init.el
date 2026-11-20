@@ -801,10 +801,10 @@
   :defer t
   :config
   ;; codex
-  (setq agent-shell-openai-authentication    (agent-shell-antigravity-make-authentication :none t)
-        agent-shell-openai-codex-environment (agent-shell-make-environment-variables
-                                              "CODEX_PATH" "central run codex --")
-        )
+  ;; (setq agent-shell-openai-authentication    (agent-shell-antigravity-make-authentication :none t) ; this breaks things
+  ;;       agent-shell-openai-codex-environment (agent-shell-make-environment-variables
+  ;;                                             "CODEX_PATH" "central run codex") ; this also does not work for codex
+  ;;       )
   )
 
 

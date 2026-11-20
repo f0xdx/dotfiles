@@ -2,16 +2,22 @@
   config,
   lib,
   home,
+  inputs,
   ...
-}: {
+}:
+{
+  imports = [
+    inputs.agents.homeManagerModules.antigravity-acp
+  ];
+
   options = {
-    modules.agents.antigravity.enable =
-      lib.mkEnableOption "Enables support for the Antigravity agent CLI.";
+    modules.agents.antigravity.enable = lib.mkEnableOption "Enables support for the Antigravity agent CLI.";
   };
 
   config = lib.mkIf config.modules.agents.antigravity.enable {
     programs.antigravity-cli = {
       enable = true;
+      acp.enable = true;
       settings = {
         # security = {
         #   auth = {
@@ -69,5 +75,6 @@
 
       skills = ../skills;
     };
+
   };
 }

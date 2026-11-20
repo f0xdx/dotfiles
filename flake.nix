@@ -11,6 +11,7 @@
       url = "github:NixNeovim/NixNeovimPlugins";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agents.url = "github:f0xdx/agents";
   };
 
   outputs = {
