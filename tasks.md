@@ -40,3 +40,19 @@ existing settings for replaced components; validate this plan
   `env -u INPUTRC -u __HM_SESS_VARS_SOURCED bash --noprofile --norc -ic 'source ~/.profile; bind -q history-search-backward'`
   and check if `home-manager`'s `programs.readline` module handles Bash
   initialization when `home.preferXdgDirectories = true`
+
+## State Version 26.11 Rollout
+
+* [x] on `PC90221`, apply Home Manager `26.11` from [home/default.nix](home/default.nix)
+  with `home-manager switch --flake .` and verify `~/Applications/Home Manager Apps/Firefox.app`
+  opens the migrated profile in `~/Library/Application Support/org.nixos.firefox`
+* [ ] on `PC90221`, remove backup `~/Library/Application Support/Firefox.bak-26.05`
+  after confirming Firefox profile integrity
+* [ ] on `buildr`, apply NixOS `26.11` from [hosts/buildr/configuration.nix](hosts/buildr/configuration.nix)
+  (`sudo nixos-rebuild switch --flake .#`) and Home Manager `26.11`
+  (`home-manager switch --flake .`)
+* [ ] fix `allowUnfree` loss on `f0xdx@buildr`: setting `nixpkgs.config.cudaSupport = true`
+  in [hosts/buildr/home.nix](hosts/buildr/home.nix) causes Home Manager to re-import
+  `nixpkgs` without `allowUnfree = true` from [flake.nix](flake.nix), blocking evaluation
+  of unfree packages such as `antigravity-cli` and `spotify`
+

@@ -20,7 +20,6 @@
 
     # silent boot (press ESC to select)
     consoleLogLevel = 3;
-    initrd.verbose = false;
 
     kernelParams = [
       # airplane mode button on msi ws65 (to fix suspend wireless deactivation)
@@ -32,8 +31,8 @@
       # "acpi_osi=\"Windows 2020\""
       "quiet"
       "splash"
-      "boot.shell_on_fail"
-      "udev.log_priority=3"
+      "udev.log_level=3"
+      "rd.udev.log_level=3"
       "rd.systemd.show_status=auto"
     ];
 
@@ -103,5 +102,5 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
 
-  system.stateVersion = "26.05"; # Did you read the comment?
+  system.stateVersion = "26.11"; # Did you read the comment?
 }

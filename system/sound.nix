@@ -15,7 +15,6 @@
         support32Bit = true;
       };
       pulse.enable = true;
-      jack.enable = true;
 
       wireplumber.extraConfig."10-bluez" = {
         "monitor.bluez.properties" = {
@@ -44,6 +43,7 @@
 
     environment.systemPackages = with pkgs; [
       pipewire
+      pipewire.jack
     ];
 
   };
